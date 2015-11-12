@@ -39,7 +39,7 @@ public final class JSONTests
   {
     Map<String, String> properties = new LinkedHashMap<String, String>();
     properties.put("blob_key", "user_xml");
-    properties.put("blob_namespace", "org_eclipse_oomph");
+    properties.put("blob_namespace", "org_eclipse_userstorage");
     properties.put("blob_hash", "8e6706262c374adacd1048c5497e03cb4c5ea585c07d5e36c15150d4f7a40812");
     properties.put("created", "1445368225");
     properties.put("changed", "1445368225");
@@ -52,7 +52,7 @@ public final class JSONTests
   public static void testDecode() throws IOException
   {
     String response = "{\"blob_key\":\"user_xml\"," //
-        + "\"blob_namespace\":\"org_eclipse_oomph\"," //
+        + "\"blob_namespace\":\"org_eclipse_userstorage\"," //
         + "\"blob_hash\":\"8e6706262c374adacd1048c5497e03cb4c5ea585c07d5e36c15150d4f7a40812\"," //
         + "\"created\":\"1445368225\"," //
         + "\"changed\":\"1445368225\"," //
@@ -70,7 +70,7 @@ public final class JSONTests
   {
     Map<String, String> properties = new LinkedHashMap<String, String>();
     properties.put("blob_key", "user_xml");
-    properties.put("blob_namespace", "org_eclipse_oomph");
+    properties.put("blob_namespace", "org_eclipse_userstorage");
     properties.put("blob_hash", "8e6706262c374adacd1048c5497e03cb4c5ea585c07d5e36c15150d4f7a40812");
     properties.put("created", "1445368225");
     properties.put("changed", "1445368225");

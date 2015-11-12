@@ -236,10 +236,9 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
     IBlob blob = storageSpace.getBlob(makeKey());
-    boolean exists = initFromRemote(blob);
 
     String value = "A short UTF-8 string value";
-    assertThat(blob.setContentsUTF(value), is(!exists));
+    assertThat(blob.setContentsUTF(value), is(true));
 
     if (hasLocalServer())
     {
@@ -254,10 +253,9 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
     IBlob blob = storageSpace.getBlob(makeKey());
-    boolean exists = initFromRemote(blob);
 
     String value = "A short UTF-8 string value";
-    assertThat(blob.setContentsUTF(value), is(!exists));
+    assertThat(blob.setContentsUTF(value), is(true));
     assertThat(readCache(blob.getKey(), null), is(value));
     assertThat(readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
   }
@@ -275,7 +273,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -295,7 +292,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -310,7 +306,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -348,7 +343,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -384,7 +378,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -412,7 +405,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -435,7 +427,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -470,7 +461,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -520,7 +510,6 @@ public final class StorageTests extends AbstractTest
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
     IBlob blob = storageSpace.getBlob(makeKey());
-    initFromRemote(blob);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -627,25 +616,6 @@ public final class StorageTests extends AbstractTest
     tmpBlob.setETag(blob.getETag());
     tmpBlob.setContentsUTF(value);
     return tmpBlob.getETag();
-  }
-
-  /**
-   * @return <code>true</code> if the server is a remote server and the blob already exists there.
-   */
-  private boolean initFromRemote(IBlob blob) throws IOException
-  {
-    int xxx;
-    // if (!hasLocalServer())
-    // {
-    // BlobInfo blobInfo = readServer(blob);
-    // if (blobInfo != null)
-    // {
-    // blob.setETag(blobInfo.eTag);
-    // return true;
-    // }
-    // }
-
-    return false;
   }
 
   private String makeKey()
