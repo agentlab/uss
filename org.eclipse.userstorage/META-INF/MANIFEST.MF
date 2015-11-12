@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse User Storage
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.userstorage;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.userstorage.internal.Activator
@@ -18,3 +18,4 @@ Export-Package: org.eclipse.userstorage;version="1.0.0",
  org.eclipse.userstorage.internal.util;version="1.0.0";x-friends:="org.eclipse.userstorage.tests,org.eclipse.userstorage.ui",
  org.eclipse.userstorage.spi;version="1.0.0",
  org.eclipse.userstorage.util;version="1.0.0"
+Bundle-Vendor: %providerName

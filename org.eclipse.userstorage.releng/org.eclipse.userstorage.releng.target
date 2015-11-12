@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="User Storage Target Platform" sequenceNumber="1">
+  <locations>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+      <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.5"/>
+    </location>
+  </locations>
+</target>
