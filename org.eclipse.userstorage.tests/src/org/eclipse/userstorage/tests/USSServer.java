@@ -10,6 +10,12 @@
  */
 package org.eclipse.userstorage.tests;
 
+import org.eclipse.userstorage.internal.Blob;
+import org.eclipse.userstorage.internal.Credentials;
+import org.eclipse.userstorage.internal.util.IOUtil;
+import org.eclipse.userstorage.internal.util.JSONUtil;
+import org.eclipse.userstorage.internal.util.StringUtil;
+
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.server.Request;
@@ -17,11 +23,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
-import org.eclipse.userstorage.internal.Blob;
-import org.eclipse.userstorage.internal.Credentials;
-import org.eclipse.userstorage.internal.util.IOUtil;
-import org.eclipse.userstorage.internal.util.JSONUtil;
-import org.eclipse.userstorage.internal.util.StringUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -207,7 +208,7 @@ public final class USSServer
     }
 
     String etag = IOUtil.readUTF(etagFile);
-    String ifNonMatch = request.getHeader("If-Non-Match");
+    String ifNonMatch = getETag(request, "If-Non-Match");
     if (ifNonMatch != null && ifNonMatch.equals(etag))
     {
       response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
@@ -216,7 +217,7 @@ public final class USSServer
 
     response.setStatus(HttpServletResponse.SC_OK);
     response.setContentType("application/json");
-    response.setHeader("ETag", etag);
+    response.setHeader("ETag", "\"" + etag + "\"");
 
     InputStream body = JSONUtil.encode(Blob.NO_PROPERTIES, "value", new FileInputStream(blobFile));
 
@@ -237,10 +238,10 @@ public final class USSServer
     if (exists)
     {
       String etag = IOUtil.readUTF(etagFile);
-      String ifMatch = request.getHeader("If-Match");
+      String ifMatch = getETag(request, "If-Match");
       if (ifMatch != null && !ifMatch.equals(etag))
       {
-        response.setHeader("ETag", etag);
+        response.setHeader("ETag", "\"" + etag + "\"");
         response.sendError(HttpServletResponse.SC_CONFLICT);
         return;
       }
@@ -304,6 +305,18 @@ public final class USSServer
     Session session = new Session(user);
     sessions.put(session.getID(), session);
     return session;
+  }
+
+  private static String getETag(HttpServletRequest request, String headerName)
+  {
+    String eTag = request.getHeader(headerName);
+    if (eTag != null)
+    {
+      // Remove the quotes.
+      eTag = eTag.substring(1, eTag.length() - 1);
+    }
+
+    return eTag;
   }
 
   /**

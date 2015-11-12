@@ -96,7 +96,7 @@ public class Session implements Headers, Codes
           String eTag = properties.get(Blob.ETAG);
           if (!StringUtil.isEmpty(eTag))
           {
-            request.setHeader(IF_NON_MATCH, eTag);
+            request.setHeader(IF_NON_MATCH, "\"" + eTag + "\"");
           }
         }
 
@@ -142,10 +142,10 @@ public class Session implements Headers, Codes
       {
         Request request = configureRequest(Request.Put(uri), uri);
 
-        String etag = properties.get(Blob.ETAG);
-        if (!StringUtil.isEmpty(etag))
+        String eTag = properties.get(Blob.ETAG);
+        if (!StringUtil.isEmpty(eTag))
         {
-          request.setHeader(IF_MATCH, etag);
+          request.setHeader(IF_MATCH, "\"" + eTag + "\"");
         }
 
         body = JSONUtil.encode(Blob.NO_PROPERTIES, "value", in);
@@ -178,10 +178,15 @@ public class Session implements Headers, Codes
 
   private static String getETag(HttpResponse response)
   {
-    Header[] headers = response.getHeaders("ETag");
+    Header[] headers = response.getHeaders(Headers.ETAG);
     if (headers != null && headers.length != 0)
     {
-      return headers[0].getValue();
+      String eTag = headers[0].getValue();
+
+      // Remove the quotes.
+      eTag = eTag.substring(1, eTag.length() - 1);
+
+      return eTag;
     }
 
     return null;
