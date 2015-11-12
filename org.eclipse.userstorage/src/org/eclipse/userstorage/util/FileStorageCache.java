@@ -10,6 +10,8 @@
  */
 package org.eclipse.userstorage.util;
 
+import org.eclipse.userstorage.IBlob;
+import org.eclipse.userstorage.IStorageSpace;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.StorageCache;
@@ -27,29 +29,59 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
+ * A local file system based {@link StorageCache cache}.
+ *
  * @author Eike Stepper
  */
 public class FileStorageCache extends StorageCache
 {
-  private static final String PROPERTIES = ".properties";
+  /**
+   * The file name extension of the files that contain the blobs' properties.
+   */
+  protected static final String PROPERTIES = ".properties";
 
   private final File folder;
 
+  /**
+   * Constructs this cache with a randomly named folder in the user's temp directory.
+   *
+   * @see #getFolder()
+   */
   public FileStorageCache()
   {
     this(createTempFolder());
   }
 
+  /**
+   * Constructs this cache with the given folder.
+   *
+   * @param folder the folder in which to create this cache, must not be <code>null</code>.<p>
+   *
+   * @see #getFolder()
+   */
   public FileStorageCache(File folder)
   {
+    if (folder == null)
+    {
+      throw new IllegalArgumentException("Folder is null");
+    }
+
     this.folder = folder;
   }
 
+  /**
+   * Returns the file system folder of this cache.
+   *
+   * @return the file system folder of this cache, never <code>null</code>.<p>
+   */
   public final File getFolder()
   {
     return folder;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Iterator<String> getKeys(String applicationToken) throws IOException
   {
@@ -74,6 +106,9 @@ public class FileStorageCache extends StorageCache
     return keys.iterator();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected void loadProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
   {
@@ -101,6 +136,9 @@ public class FileStorageCache extends StorageCache
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected void saveProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
   {
@@ -127,6 +165,9 @@ public class FileStorageCache extends StorageCache
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected InputStream getInputStream(String applicationToken, String key) throws IOException
   {
@@ -134,6 +175,9 @@ public class FileStorageCache extends StorageCache
     return new FileInputStream(file);
   }
 
+  /**
+  * {@inheritDoc}
+  */
   @Override
   protected OutputStream getOutputStream(String applicationToken, String key) throws IOException
   {
@@ -142,6 +186,9 @@ public class FileStorageCache extends StorageCache
     return new FileOutputStream(file);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected void delete(String applicationToken, String key) throws IOException
   {
@@ -149,6 +196,23 @@ public class FileStorageCache extends StorageCache
     getFile(applicationToken, key, null).delete();
   }
 
+  /**
+   * Returns the {@link File} object that represents the blob with the given
+   * {@link IStorageSpace#getApplicationToken() application token} and {@link IBlob#getKey() key} into this cache.
+   * <p>
+   * This cache stores the properties and the contents of a blob in two different files.
+   * Which of the two files is returned is determined by the value of the extension parameter.
+   * <p>
+   *
+   * @param applicationToken the {@link IStorageSpace#getApplicationToken() application token} for which to return the file,
+   *        must not be <code>null</code>.<p>
+   * @param key the {@link IBlob#getKey() key} for which to return the file,
+   *        must not be <code>null</code>.<p>
+   * @param extension the value of {@link #PROPERTIES} to return the file that contains the blob's properties,
+   *        or <code>null</code> to return the file that contains the blob's contents.<p>
+   * @return the file that contains the blob's properties if the value of {@link #PROPERTIES} was passed into the <code>extension</code> parameter,
+   *         or the file that contains the blob's contents if <code>null</code> was passed into the <code>extension</code> parameter.<p>
+   */
   protected File getFile(String applicationToken, String key, String extension)
   {
     return new File(new File(folder, applicationToken), key + StringUtil.safe(extension));

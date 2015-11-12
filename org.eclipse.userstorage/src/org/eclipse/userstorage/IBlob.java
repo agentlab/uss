@@ -146,7 +146,7 @@ public interface IBlob
    * returned input stream is fully read and closed.
    * <p>
    *
-   * @return an {@link InputStream} that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
+   * @return an {@link InputStream} that represents the current contents of this blob, or <code>null</code> if this blob does not exist on the server.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *

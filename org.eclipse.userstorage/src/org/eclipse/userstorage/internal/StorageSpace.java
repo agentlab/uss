@@ -155,7 +155,7 @@ public final class StorageSpace implements IStorageSpace
     {
       if (contents == Blob.NOT_MODIFIED)
       {
-        return cache.getInputStream(applicationToken, key);
+        return cache.internalGetInputStream(applicationToken, key);
       }
 
       if (contents == null)
