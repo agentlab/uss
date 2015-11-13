@@ -10,10 +10,11 @@
  */
 package org.eclipse.userstorage.internal.util;
 
+import org.eclipse.userstorage.internal.Activator;
+
 import org.eclipse.core.internal.net.ProxyManager;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
-import org.eclipse.userstorage.internal.Activator;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

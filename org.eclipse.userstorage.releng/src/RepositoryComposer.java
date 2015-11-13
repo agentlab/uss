@@ -32,6 +32,7 @@ public final class RepositoryComposer
 
   private static final Comparator<String> ALPHA_COMPARATOR = new Comparator<String>()
   {
+    @Override
     public int compare(String n1, String n2)
     {
       if (n1 == null)
@@ -50,6 +51,7 @@ public final class RepositoryComposer
 
   private static final Comparator<String> VERSION_COMPARATOR = new Comparator<String>()
   {
+    @Override
     public int compare(String n1, String n2)
     {
       return new Version(n2).compareTo(new Version(n1));

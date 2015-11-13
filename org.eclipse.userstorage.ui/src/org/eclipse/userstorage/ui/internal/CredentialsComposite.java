@@ -10,6 +10,11 @@
  */
 package org.eclipse.userstorage.ui.internal;
 
+import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.internal.Credentials;
+import org.eclipse.userstorage.internal.Storage;
+import org.eclipse.userstorage.internal.util.StringUtil;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -22,10 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.internal.Credentials;
-import org.eclipse.userstorage.internal.Storage;
-import org.eclipse.userstorage.internal.util.StringUtil;
 
 import java.net.URI;
 

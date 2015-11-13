@@ -12,7 +12,6 @@ package org.eclipse.userstorage.tests;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.eclipse.jetty.util.log.Log;
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageSpace;
@@ -27,6 +26,8 @@ import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.FileStorageCache;
 import org.eclipse.userstorage.util.ProtocolException;
+
+import org.eclipse.jetty.util.log.Log;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;

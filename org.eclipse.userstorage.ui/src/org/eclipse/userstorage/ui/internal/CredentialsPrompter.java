@@ -10,10 +10,11 @@
  */
 package org.eclipse.userstorage.ui.internal;
 
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
+
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper

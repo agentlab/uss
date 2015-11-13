@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
@@ -45,6 +46,7 @@ public final class BreeAnalyzer
       {
         ZIPUtil.unzip(file, new UnzipHandler()
         {
+          @Override
           public void unzipFile(String name, InputStream zipStream) throws IOException
           {
             if (name.equals("META-INF/MANIFEST.MF"))
@@ -53,6 +55,7 @@ public final class BreeAnalyzer
             }
           }
 
+          @Override
           public void unzipDirectory(String name) throws IOException
           {
           }

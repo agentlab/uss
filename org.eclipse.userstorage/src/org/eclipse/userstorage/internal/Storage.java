@@ -10,13 +10,14 @@
  */
 package org.eclipse.userstorage.internal;
 
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.util.ConflictException;
+
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 
 import java.io.IOException;
 import java.io.InputStream;
