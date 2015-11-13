@@ -445,7 +445,8 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value1);
 
     // Prepare the conflict.
-    writeServer(blob, "Different content");
+    String value2 = "Different content";
+    String eTag2 = writeServer(blob, value2);
 
     String value3 = "And now a conflicting string";
 
@@ -456,7 +457,7 @@ public final class StorageTests extends AbstractTest
     }
     catch (ConflictException expected)
     {
-      blob.setETag(null);
+      blob.setETag(eTag2);
     }
 
     blob.setContentsUTF(value3);
@@ -476,7 +477,8 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value1);
 
     // Prepare the conflict.
-    writeServer(blob, "Different content");
+    String value2 = "Different content";
+    String eTag2 = writeServer(blob, value2);
 
     String value3 = "And now a conflicting string";
 
@@ -487,7 +489,7 @@ public final class StorageTests extends AbstractTest
     }
     catch (ConflictException expected)
     {
-      blob.setETag(null); // Delete cache.
+      blob.setETag(eTag2); // Delete cache.
 
       try
       {

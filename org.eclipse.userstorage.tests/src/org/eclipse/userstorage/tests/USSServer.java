@@ -268,7 +268,7 @@ public final class USSServer
 
     IOUtil.writeUTF(etagFile, etag);
 
-    response.setStatus(exists ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
+    response.setStatus(exists ? HttpServletResponse.SC_OK : HttpServletResponse.SC_CREATED);
     response.setHeader("ETag", "\"" + etag + "\"");
   }
 

@@ -156,7 +156,7 @@ public class Session implements Headers, Codes
       @Override
       protected Boolean handleResponse(HttpResponse response, HttpEntity responseEntity) throws IOException
       {
-        int statusCode = getStatusCode("PUT", uri, response, CREATED, NO_CONTENT, CONFLICT);
+        int statusCode = getStatusCode("PUT", uri, response, OK, CREATED, CONFLICT);
         String eTag = getETag(response);
 
         if (statusCode == CONFLICT)
