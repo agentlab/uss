@@ -28,6 +28,8 @@ import java.util.zip.ZipEntry;
  */
 public final class RepositoryComposer
 {
+  public static final String PROJECT = "User Storage";
+
   private static final String REMOVE_MARKER = "REMOVE";
 
   private static final Comparator<String> ALPHA_COMPARATOR = new Comparator<String>()
@@ -176,8 +178,9 @@ public final class RepositoryComposer
       name = "Nightly Builds";
     }
 
-    composeRepository(updateTypeFolder, "Oomph " + name, drops);
-    composeRepository(new File(updateTypeFolder, "latest"), "Oomph Latest " + name.substring(0, name.length() - 1), Collections.singletonList(drops.get(0)));
+    composeRepository(updateTypeFolder, PROJECT + " " + name, drops);
+    composeRepository(new File(updateTypeFolder, "latest"), PROJECT + " Latest " + name.substring(0, name.length() - 1),
+        Collections.singletonList(drops.get(0)));
     return true;
   }
 
