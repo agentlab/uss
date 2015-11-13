@@ -241,12 +241,9 @@ public final class StorageTests extends AbstractTest
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
 
-    if (hasLocalServer())
-    {
-      BlobInfo blobInfo = readServer(blob);
-      assertThat(blobInfo.contents, is(value));
-      assertThat(blobInfo.eTag, is(blob.getETag()));
-    }
+    BlobInfo blobInfo = readServer(blob);
+    assertThat(blobInfo.contents, is(value));
+    assertThat(blobInfo.eTag, is(blob.getETag()));
   }
 
   @Test
@@ -280,12 +277,9 @@ public final class StorageTests extends AbstractTest
 
     assertThat(blob.getContentsUTF(), is(value));
 
-    if (hasLocalServer())
-    {
-      BlobInfo blobInfo = readServer(blob);
-      assertThat(blobInfo.contents, is(value));
-      assertThat(blobInfo.eTag, is(blob.getETag()));
-    }
+    BlobInfo blobInfo = readServer(blob);
+    assertThat(blobInfo.contents, is(value));
+    assertThat(blobInfo.eTag, is(blob.getETag()));
   }
 
   @Test
@@ -303,6 +297,31 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
+  public void testUpdateMulti() throws Exception
+  {
+    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
+    IBlob blob = storageSpace.getBlob(makeKey());
+
+    blob.setContentsUTF("Text 1");
+    blob.setContentsUTF("Text 2");
+    blob.setContentsUTF("Text 3");
+  }
+
+  @Test
+  public void testRetrieveMulti() throws Exception
+  {
+    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
+    IBlob blob = storageSpace.getBlob(makeKey());
+    blob.setContentsUTF("A short UTF-8 string value");
+
+    blob.getContents();
+    blob.getContents();
+    blob.getContents();
+    blob.getContents();
+    blob.getContents();
+  }
+
+  @Test
   public void testConflict() throws Exception
   {
     IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
@@ -312,7 +331,7 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value1);
     String eTag1 = blob.getETag();
 
-    // Simulate the conflict.
+    // Prepare the conflict.
     String value2 = "Different content";
     String eTag2 = writeServer(blob, value2);
 
@@ -326,17 +345,14 @@ public final class StorageTests extends AbstractTest
     catch (ConflictException expected)
     {
       assertThat(expected.getStatusCode(), is(409)); // Conflict.
-      assertThat(expected.getETag(), is(eTag2));
+      assertThat(expected.getETag(), isNull());
     }
 
     assertThat(blob.getETag(), is(eTag1));
 
-    if (hasLocalServer())
-    {
-      BlobInfo blobInfo = readServer(blob);
-      assertThat(blobInfo.contents, is(value2));
-      assertThat(blobInfo.eTag, is(eTag2));
-    }
+    BlobInfo blobInfo = readServer(blob);
+    assertThat(blobInfo.contents, is(value2));
+    assertThat(blobInfo.eTag, is(eTag2));
   }
 
   @Test
@@ -349,9 +365,8 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value1);
     String eTag1 = blob.getETag();
 
-    // Simulate the conflict.
-    String value2 = "Different content";
-    String eTag2 = writeServer(blob, value2);
+    // Prepare the conflict.
+    writeServer(blob, "Different content");
 
     String value3 = "And now a conflicting string";
 
@@ -363,7 +378,7 @@ public final class StorageTests extends AbstractTest
     catch (ConflictException expected)
     {
       assertThat(expected.getStatusCode(), is(409)); // Conflict.
-      assertThat(expected.getETag(), is(eTag2));
+      assertThat(expected.getETag(), isNull());
     }
 
     // It's okay for the cache to have the new value. The old ETag (see below) will cause cache refresh...
@@ -383,7 +398,7 @@ public final class StorageTests extends AbstractTest
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
 
-    // Simulate the conflict.
+    // Prepare the conflict.
     String value2 = "Different content";
     String eTag2 = writeServer(blob, value2);
 
@@ -393,12 +408,9 @@ public final class StorageTests extends AbstractTest
     String value3 = "And now a non-conflicting string";
     blob.setContentsUTF(value3);
 
-    if (hasLocalServer())
-    {
-      BlobInfo blobInfo = readServer(blob);
-      assertThat(blobInfo.contents, is(value3));
-      assertThat(blobInfo.eTag, is(blob.getETag()));
-    }
+    BlobInfo blobInfo = readServer(blob);
+    assertThat(blobInfo.contents, is(value3));
+    assertThat(blobInfo.eTag, is(blob.getETag()));
   }
 
   @Test
@@ -410,7 +422,7 @@ public final class StorageTests extends AbstractTest
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
 
-    // Simulate the conflict.
+    // Prepare the conflict.
     String value2 = "Different content";
     String eTag2 = writeServer(blob, value2);
 
@@ -432,7 +444,7 @@ public final class StorageTests extends AbstractTest
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
 
-    // Simulate the conflict.
+    // Prepare the conflict.
     writeServer(blob, "Different content");
 
     String value3 = "And now a conflicting string";
@@ -449,12 +461,9 @@ public final class StorageTests extends AbstractTest
 
     blob.setContentsUTF(value3);
 
-    if (hasLocalServer())
-    {
-      BlobInfo blobInfo = readServer(blob);
-      assertThat(blobInfo.contents, is(value3));
-      assertThat(blobInfo.eTag, is(blob.getETag()));
-    }
+    BlobInfo blobInfo = readServer(blob);
+    assertThat(blobInfo.contents, is(value3));
+    assertThat(blobInfo.eTag, is(blob.getETag()));
   }
 
   @Test
@@ -466,7 +475,7 @@ public final class StorageTests extends AbstractTest
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
 
-    // Simulate the conflict.
+    // Prepare the conflict.
     writeServer(blob, "Different content");
 
     String value3 = "And now a conflicting string";
@@ -523,11 +532,12 @@ public final class StorageTests extends AbstractTest
 
     assertThat(blob.getContentsUTF(), is(value));
 
+    BlobInfo blobInfo = readServer(blob);
+    assertThat(blobInfo.contents, is(value));
+    assertThat(blobInfo.eTag, is(blob.getETag()));
+
     if (hasLocalServer())
     {
-      BlobInfo blobInfo = readServer(blob);
-      assertThat(blobInfo.contents, is(value));
-      assertThat(blobInfo.eTag, is(blob.getETag()));
       assertThat(server.getSessions().size(), is(1));
     }
   }

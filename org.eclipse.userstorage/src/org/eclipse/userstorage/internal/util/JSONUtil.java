@@ -33,7 +33,7 @@ import java.util.Vector;
  */
 public final class JSONUtil
 {
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = Boolean.getBoolean(JSONUtil.class.getName() + ".debug");
 
   private JSONUtil()
   {
@@ -124,7 +124,6 @@ public final class JSONUtil
     return builder.toString();
   }
 
-  @SuppressWarnings("resource")
   public static InputStream encode(Map<String, String> properties, String streamKey, InputStream in)
   {
     StringBuilder builder = new StringBuilder();
@@ -156,7 +155,7 @@ public final class JSONUtil
 
       if (DEBUG)
       {
-        result = new DebugInputStream(result, "ENCODE ");
+        return new DebugInputStream(result, "ENCODE ");
       }
 
       return result;
@@ -300,9 +299,12 @@ public final class JSONUtil
       {
         InputStream result = parseObject(properties, streamKey);
 
-        if (DEBUG && streamKey == null)
+        if (DEBUG)
         {
-          System.out.println();
+          if (streamKey == null)
+          {
+            System.out.println();
+          }
         }
 
         return result;
@@ -644,9 +646,12 @@ public final class JSONUtil
 
         int c = reader.read();
 
-        if (DEBUG && c != -1)
+        if (DEBUG)
         {
-          System.out.print((char)c);
+          if (c != -1)
+          {
+            System.out.print((char)c);
+          }
         }
 
         if (c == '"')

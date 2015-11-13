@@ -47,6 +47,8 @@ import java.util.UUID;
  */
 public final class USSServer
 {
+  private static final boolean DEBUG = Boolean.getBoolean(USSServer.class.getName() + ".debug");
+
   private final USSHandler handler = new USSHandler();
 
   private final Set<String> applicationTokens = new HashSet<String>();
@@ -241,7 +243,6 @@ public final class USSServer
       String ifMatch = getETag(request, "If-Match");
       if (ifMatch != null && !ifMatch.equals(etag))
       {
-        response.setHeader("ETag", "\"" + etag + "\"");
         response.sendError(HttpServletResponse.SC_CONFLICT);
         return;
       }
@@ -340,7 +341,11 @@ public final class USSServer
 
         String path = request.getPathInfo();
         String method = request.getMethod();
-        System.out.println(method + " " + path);
+
+        if (DEBUG)
+        {
+          System.out.println(method + " " + path);
+        }
 
         if (path != null && method != null)
         {
