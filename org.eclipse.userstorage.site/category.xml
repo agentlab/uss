@@ -12,7 +12,7 @@
 <site>
 
    <!-- All -->
-   <category-def name="org.eclipse.userstorage.category" label="Others"/>
+   <category-def name="org.eclipse.userstorage.category" label="Runtime"/>
    <feature id="org.eclipse.userstorage" version="0.0.0">
       <category name="org.eclipse.userstorage.category"/>
    </feature>
