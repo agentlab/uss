@@ -10,9 +10,23 @@
  */
 package org.eclipse.userstorage.util;
 
+import org.eclipse.userstorage.IBlob;
+
+import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
+ * Signals that the lexical conventions for {@link IBlob#getKey() keys} have been violated.
+ * <p>
+ * The lexical conventions for keys are:
+ * <p>
+ * <ul>
+ * <li> 5-25 characters are required.
+ * <li> Lower case letters, upper case letters, digits, and underscores are valid characters.
+ * <li> First character must be a lower case or upper case letter.
+ * </ul>
+ * <p>
+ *
  * @author Eike Stepper
  */
 public final class BadKeyException extends RuntimeException
@@ -25,6 +39,9 @@ public final class BadKeyException extends RuntimeException
 
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Public constructor to make this exception {@link Serializable}.
+   */
   public BadKeyException()
   {
   }
@@ -34,6 +51,16 @@ public final class BadKeyException extends RuntimeException
     super(message);
   }
 
+  /**
+   * Validates that the given {@link IBlob#getKey() key} complies
+   * with the {@link BadKeyException lexical conventions} for keys.
+   * <p>
+   *
+   * @param key the key to validate.<p>
+   * @return the passed key if it complies with the lexical conventions, i.e.,
+   *         if no BadKeyException is thrown.<p>
+   * @throws BadKeyException if the passed key violates the lexical conventions.
+   */
   public static String validate(String key) throws BadKeyException
   {
     if (key == null)

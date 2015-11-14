@@ -89,7 +89,7 @@ public interface IStorageSpace
    * Provides access to a specific piece of data that this storage space maintains for the logged-in user under the given <code>key</code>.
    * <p>
    * This method does not cause the remote service being contacted. It only performs minimal
-   * {@link BadKeyException#validate(String) syntactic validation} of the given <code>key</code>
+   * {@link BadKeyException#validate(String) lexical validation} of the given <code>key</code>
    * and returns an {@link IBlob} instance that can be used to read or write the actual blob content.
    * <p>
    * This storage space ensures that at no time two different IBlob instances for the same logged-in user and the same <code>key</code> exist in the same storage space.
@@ -97,8 +97,8 @@ public interface IStorageSpace
    * <p>
    *
    * @param key the key that uniquely identifies this blob in the scope of the logged-in user and of this storage space.
-   *        Minimal {@link BadKeyException#validate(String) syntactic validation} is performed on the passed key.<p>
-   * @throws BadKeyException if {@link BadKeyException#validate(String) syntactic validation} of the passed key fails.<p>
+   *        Minimal {@link BadKeyException#validate(String) lexical validation} is performed on the passed key.<p>
+   * @throws BadKeyException if {@link BadKeyException#validate(String) lexical validation} of the passed key fails.<p>
    * @returns the IBlob instance that represents the piece of data that this storage space
    *          maintains for the logged-in user under the given <code>key</code>, never <code>null</code>.<p>
    */
@@ -118,10 +118,10 @@ public interface IStorageSpace
      * <p>
      *
      * @param applicationToken the application token that identifies the application of the storage space to be created.
-     *        Minimal {@link BadApplicationTokenException#validate(String) syntactic validation} is performed on the passed application token.<p>
+     *        Minimal {@link BadApplicationTokenException#validate(String) lexical validation} is performed on the passed application token.<p>
      * @return the newly created storage space, never <code>null</code>.<p>
      * @throws NoSuchElementException if the {@link IStorage.Registry storage registry} is empty and, hence, there is no default storage available.<p>
-     * @throws BadApplicationTokenException if {@link BadApplicationTokenException#validate(String) syntactic validation} of the passed application token fails.<p>
+     * @throws BadApplicationTokenException if {@link BadApplicationTokenException#validate(String) lexical validation} of the passed application token fails.<p>
      *
      * @see #create(String, StorageCache)
      */
@@ -134,11 +134,11 @@ public interface IStorageSpace
      * Creates a storage space for application identified by the given <code>application token</code> and associates it with a given {@link StorageCache storage cache}.
      * <p>
      * @param applicationToken the application token that identifies the application of the storage space to be created.
-     *        Minimal {@link BadApplicationTokenException#validate(String) syntactic validation} is performed on the passed application token.<p>
+     *        Minimal {@link BadApplicationTokenException#validate(String) lexical validation} is performed on the passed application token.<p>
      * @param cache a local storage cache to be used as a locally persistent optimization, or <code>null</code> if local caching is not wanted.<p>
      * @return the newly created storage space, never <code>null</code>.<p>
      * @throws NoSuchElementException if the {@link IStorage.Registry storage registry} is empty and, hence, there is no default storage available.<p>
-     * @throws BadApplicationTokenException if {@link BadApplicationTokenException#validate(String) syntactic validation} of the passed application token fails.<p>
+     * @throws BadApplicationTokenException if {@link BadApplicationTokenException#validate(String) lexical validation} of the passed application token fails.<p>
      *
      * @see #create(String)
      * @see StorageCache

@@ -164,7 +164,7 @@ public class Session implements Headers, Codes
         if (statusCode == CONFLICT)
         {
           StatusLine statusLine = response.getStatusLine();
-          throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), statusCode, statusLine.getReasonPhrase(), eTag);
+          throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase(), eTag);
         }
 
         if (eTag == null)

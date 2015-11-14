@@ -10,9 +10,23 @@
  */
 package org.eclipse.userstorage.util;
 
+import org.eclipse.userstorage.IStorageSpace;
+
+import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
+ * Signals that the lexical conventions for {@link IStorageSpace#getApplicationToken() application tokens} have been violated.
+ * <p>
+ * The lexical conventions for application tokens are:
+ * <p>
+ * <ul>
+ * <li> 5-27 characters are required.
+ * <li> Lower case letters, upper case letters, digits, and underscores are valid characters.
+ * <li> First character must be a lower case or upper case letter.
+ * </ul>
+ * <p>
+ *
  * @author Eike Stepper
  */
 public final class BadApplicationTokenException extends RuntimeException
@@ -25,6 +39,9 @@ public final class BadApplicationTokenException extends RuntimeException
 
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Public constructor to make this exception {@link Serializable}.
+   */
   public BadApplicationTokenException()
   {
   }
@@ -34,6 +51,16 @@ public final class BadApplicationTokenException extends RuntimeException
     super(message);
   }
 
+  /**
+   * Validates that the given {@link IStorageSpace#getApplicationToken() application token} complies
+   * with the {@link BadApplicationTokenException lexical conventions} for application tokens.
+   * <p>
+   *
+   * @param applicationToken the application token to validate.<p>
+   * @return the passed application token if it complies with the lexical conventions, i.e.,
+   *         if no BadApplicationTokenException is thrown.<p>
+   * @throws BadApplicationTokenException if the passed application token violates the lexical conventions.
+   */
   public static String validate(String applicationToken) throws BadApplicationTokenException
   {
     if (applicationToken == null)
