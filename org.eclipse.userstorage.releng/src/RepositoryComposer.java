@@ -117,8 +117,8 @@ public final class RepositoryComposer
       composeRepositories(dropTypeFolder, updateTypeFolder, ALPHA_COMPARATOR, 5);
     }
 
-    composeRepository(updatesFolder, "Oomph All", getComposites(updatesFolder));
-    composeRepository(new File(updatesFolder, "latest"), "Oomph Latest", Collections.singletonList(dropFolder));
+    composeRepository(updatesFolder, PROJECT + " All", getComposites(updatesFolder));
+    composeRepository(new File(updatesFolder, "latest"), PROJECT + " Latest", Collections.singletonList(dropFolder));
   }
 
   private static void composeMilestoneRepositories(File dropsFolder, File updateTypeFolder) throws IOException
@@ -135,8 +135,8 @@ public final class RepositoryComposer
         drops.add(new File(releasesFolder, names.get(0)));
       }
 
-      composeRepository(updateTypeFolder, "Oomph Milestones", drops);
-      composeRepository(new File(updateTypeFolder, "latest"), "Oomph Latest Milestone", drops);
+      composeRepository(updateTypeFolder, PROJECT + " Milestones", drops);
+      composeRepository(new File(updateTypeFolder, "latest"), PROJECT + " Latest Milestone", drops);
     }
   }
 
