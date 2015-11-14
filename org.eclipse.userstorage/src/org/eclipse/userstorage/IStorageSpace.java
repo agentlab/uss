@@ -81,6 +81,7 @@ public interface IStorageSpace
    * @param storage the storage to set into this storage space, must not be <code>null</code>.<p>
    *
    * @see #getStorage()
+   * @noreference This method is provisional and not intended to be referenced by clients.
    */
   public void setStorage(IStorage storage);
 
