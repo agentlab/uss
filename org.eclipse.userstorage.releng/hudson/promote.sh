@@ -30,7 +30,7 @@ if [[ "$GIT" == "" ]]; then
 fi
 
 if [[ "$SCRIPTS" == "" ]]; then
-  SCRIPTS=$GIT/releng/org.eclipse.userstorage.releng/hudson
+  SCRIPTS=$GIT/org.eclipse.userstorage.releng/hudson
 fi
 
 if [[ "$DOWNLOADS" == "" ]]; then
