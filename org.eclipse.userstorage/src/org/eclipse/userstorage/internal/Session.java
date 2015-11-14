@@ -19,6 +19,8 @@ import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.ProtocolException;
 
+import org.eclipse.core.runtime.OperationCanceledException;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -258,7 +260,8 @@ public class Session implements Headers, Codes
     {
       if (sessionID == null)
       {
-        // Make sure no old session session cookies are sent, which would make the server reply with "401: CSRF Validation Failed".
+        // Make sure no old session session cookies are sent.
+        // Otherwise the server would reply with "401: CSRF Validation Failed".
         cookieStore.clear();
 
         InputStream body = null;
@@ -491,7 +494,7 @@ public class Session implements Headers, Codes
       return "HTTP";
     }
 
-    protected final Credentials getCredentials(ICredentialsProvider credentialsProvider)
+    protected final Credentials getCredentials(ICredentialsProvider credentialsProvider) throws OperationCanceledException
     {
       Credentials credentials = storage.getCredentials();
       if (credentials == null)
@@ -504,6 +507,11 @@ public class Session implements Headers, Codes
             storage.setCredentials(credentials);
           }
         }
+      }
+
+      if (credentials == null)
+      {
+        throw new OperationCanceledException("No credentials provided");
       }
 
       return credentials;

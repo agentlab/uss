@@ -31,6 +31,8 @@ import java.util.Map;
  */
 public class Storage implements IStorage
 {
+  private static final boolean TRANSIENT_CREDENTIALS = Boolean.getBoolean(Storage.class.getName() + ".transientCredentials");
+
   private static final String USERNAME_KEY = "username";
 
   private static final String PASSWORD_KEY = "password";
@@ -260,7 +262,7 @@ public class Storage implements IStorage
 
   private ISecurePreferences getPreferences()
   {
-    if (Activator.PLATFORM_RUNNING)
+    if (Activator.PLATFORM_RUNNING && !TRANSIENT_CREDENTIALS)
     {
       String serviceNode = getServiceNode();
       return SecurePreferencesFactory.getDefault().node(Activator.PLUGIN_ID).node(serviceNode);

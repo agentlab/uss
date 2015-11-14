@@ -37,6 +37,8 @@ public final class StorageRegistry implements IStorage.Registry
 {
   public static final StorageRegistry INSTANCE = new StorageRegistry();
 
+  private static final boolean TRANSIENT_APPLICATIONS = Boolean.getBoolean(StorageRegistry.class.getName() + ".transientApplications");
+
   private static final ExtensionPointHandler HANDLER = new ExtensionPointHandler();
 
   private final Map<URI, IStorage> storages = new LinkedHashMap<URI, IStorage>();
@@ -67,7 +69,7 @@ public final class StorageRegistry implements IStorage.Registry
 
   public IStorage getStorage(String applicationToken) throws NoSuchElementException
   {
-    if (Activator.PLATFORM_RUNNING)
+    if (Activator.PLATFORM_RUNNING && !TRANSIENT_APPLICATIONS)
     {
       try
       {
@@ -94,7 +96,7 @@ public final class StorageRegistry implements IStorage.Registry
 
   public void setStorage(String applicationToken, IStorage storage)
   {
-    if (Activator.PLATFORM_RUNNING)
+    if (Activator.PLATFORM_RUNNING && !TRANSIENT_APPLICATIONS)
     {
       try
       {
