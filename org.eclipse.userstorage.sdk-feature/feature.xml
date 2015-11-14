@@ -10,7 +10,7 @@
     Eike Stepper - initial API and implementation
 -->
 <feature
-      id="org.eclipse.userstorage"
+      id="org.eclipse.userstorage.sdk"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName"
@@ -29,15 +29,26 @@
       %license
    </license>
 
-   <plugin
+   <includes
          id="org.eclipse.userstorage"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.userstorage.sdk"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.userstorage.ui"
+         id="org.eclipse.userstorage.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.userstorage.ui.source"
          download-size="0"
          install-size="0"
          version="0.0.0"

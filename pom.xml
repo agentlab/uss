@@ -162,6 +162,11 @@ Eike Stepper - initial API and implementation
         </plugin>
         <plugin>
           <groupId>org.eclipse.tycho.extras</groupId>
+          <artifactId>tycho-source-feature-plugin</artifactId>
+          <version>${tycho-version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.tycho.extras</groupId>
           <artifactId>tycho-pack200a-plugin</artifactId>
           <version>${tycho-version}</version>
         </plugin>
@@ -178,11 +183,6 @@ Eike Stepper - initial API and implementation
         <plugin>
           <groupId>org.eclipse.tycho</groupId>
           <artifactId>tycho-p2-plugin</artifactId>
-          <version>${tycho-version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.eclipse.tycho.extras</groupId>
-          <artifactId>tycho-source-feature-plugin</artifactId>
           <version>${tycho-version}</version>
         </plugin>
       </plugins>
@@ -203,6 +203,8 @@ Eike Stepper - initial API and implementation
         <module>org.eclipse.userstorage-feature</module>
         <module>org.eclipse.userstorage.license-feature</module>
         <module>org.eclipse.userstorage.releng</module>
+        <module>org.eclipse.userstorage.sdk</module>
+        <module>org.eclipse.userstorage.sdk-feature</module>
         <module>org.eclipse.userstorage.site</module>
         <module>org.eclipse.userstorage.tests</module>
         <module>org.eclipse.userstorage.ui</module>

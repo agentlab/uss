@@ -12,8 +12,11 @@
 <site>
 
    <!-- All -->
-   <category-def name="org.eclipse.userstorage.category" label="Runtime"/>
+   <category-def name="org.eclipse.userstorage.category" label="User Storage"/>
    <feature id="org.eclipse.userstorage" version="0.0.0">
+      <category name="org.eclipse.userstorage.category"/>
+   </feature>
+   <feature id="org.eclipse.userstorage.sdk" version="0.0.0">
       <category name="org.eclipse.userstorage.category"/>
    </feature>
 
