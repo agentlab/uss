@@ -162,10 +162,16 @@ public final class Settings
    */
   public static final class MemorySettings implements ISettings
   {
-    private final Map<String, String> map = new HashMap<String, String>();
+    private final Map<String, String> map;
+
+    public MemorySettings(Map<String, String> map)
+    {
+      this.map = map;
+    }
 
     public MemorySettings()
     {
+      this(new HashMap<String, String>());
     }
 
     /**
