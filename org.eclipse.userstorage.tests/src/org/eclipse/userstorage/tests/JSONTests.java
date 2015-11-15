@@ -14,6 +14,10 @@ import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -26,16 +30,11 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public final class JSONTests
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public final class JSONTests extends AbstractTest
 {
-  public static void main(String[] args) throws Exception
-  {
-    // testEncode();
-    // testDecode();
-    testEncodeDecode();
-  }
-
-  public static void testEncode() throws Exception
+  @Test
+  public void testEncode() throws Exception
   {
     Map<String, String> properties = new LinkedHashMap<String, String>();
     properties.put("blob_key", "user_xml");
@@ -49,7 +48,8 @@ public final class JSONTests
     IOUtil.close(stream);
   }
 
-  public static void testDecode() throws IOException
+  @Test
+  public void testDecode() throws Exception
   {
     String response = "{\"blob_key\":\"user_xml\"," //
         + "\"blob_namespace\":\"org_eclipse_userstorage\"," //
@@ -66,7 +66,8 @@ public final class JSONTests
     dump(stream);
   }
 
-  public static void testEncodeDecode() throws IOException
+  @Test
+  public void testEncodeDecode() throws Exception
   {
     Map<String, String> properties = new LinkedHashMap<String, String>();
     properties.put("blob_key", "user_xml");

@@ -30,6 +30,8 @@ import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.FileStorageCache;
 import org.eclipse.userstorage.util.ProtocolException;
+import org.eclipse.userstorage.util.Settings;
+import org.eclipse.userstorage.util.Settings.MemorySettings;
 
 import org.eclipse.jetty.util.log.Log;
 
@@ -41,6 +43,7 @@ import org.junit.runners.MethodSorters;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -81,9 +84,11 @@ public final class StorageTests extends AbstractTest
     super.setUp();
     Activator.start();
 
+    ISettings settings;
+
     if (REMOTE)
     {
-      factory = StorageFactory.DEFAULT;
+      settings = Settings.NONE;
     }
     else
     {
@@ -97,20 +102,10 @@ public final class StorageTests extends AbstractTest
       final String serviceURI = "http://localhost:" + port;
       service = IStorageService.Registry.INSTANCE.addService("Test Service", StringUtil.newURI(serviceURI));
 
-      factory = new StorageFactory(new ISettings()
-      {
-        @Override
-        public String getValue(String key) throws Exception
-        {
-          return serviceURI;
-        }
-
-        @Override
-        public void setValue(String key, String value) throws Exception
-        {
-        }
-      });
+      settings = new MemorySettings(Collections.singletonMap(APPLICATION_TOKEN, serviceURI));
     }
+
+    factory = new StorageFactory(settings);
 
     IOUtil.deleteFiles(CACHE);
     cache = new TestCache(CACHE);
