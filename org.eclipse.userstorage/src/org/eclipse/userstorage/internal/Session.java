@@ -10,7 +10,7 @@
  */
 package org.eclipse.userstorage.internal;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.ProxyUtil;
@@ -62,29 +62,28 @@ public class Session implements Headers, Codes
   @SuppressWarnings("restriction")
   private final CookieStore cookieStore = new org.apache.http.impl.client.BasicCookieStore();
 
-  private final Storage storage;
+  private final Executor executor = Executor.newInstance().cookieStore(cookieStore);
 
-  private final Executor executor;
+  private final StorageService service;
 
   private String sessionID;
 
   private String csrfToken;
 
-  public Session(Storage storage)
+  public Session(StorageService service)
   {
-    this.storage = storage;
-    executor = Executor.newInstance().cookieStore(cookieStore);
+    this.service = service;
   }
 
-  public IStorage getStorage()
+  public IStorageService getService()
   {
-    return storage;
+    return service;
   }
 
   public InputStream retrieveBlob(String appToken, String key, final Map<String, String> properties, final boolean useETag,
       ICredentialsProvider credentialsProvider) throws IOException
   {
-    URI uri = StringUtil.newURI(storage.getServiceURI(), "api/blob/" + appToken + "/" + key);
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + appToken + "/" + key);
 
     return new RequestTemplate<InputStream>(uri)
     {
@@ -135,7 +134,7 @@ public class Session implements Headers, Codes
   public boolean updateBlob(String appToken, String key, final Map<String, String> properties, final InputStream in, ICredentialsProvider credentialsProvider)
       throws IOException, ConflictException
   {
-    URI uri = StringUtil.newURI(storage.getServiceURI(), "api/blob/" + appToken + "/" + key);
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + appToken + "/" + key);
 
     return new RequestTemplate<Boolean>(uri)
     {
@@ -275,7 +274,7 @@ public class Session implements Headers, Codes
           arguments.put("username", credentials.getUsername());
           arguments.put("password", credentials.getPassword());
 
-          URI uri = StringUtil.newURI(storage.getServiceURI(), "api/user/login");
+          URI uri = StringUtil.newURI(service.getServiceURI(), "api/user/login");
 
           Request request = configureRequest(Request.Post(uri), uri);
           body = JSONUtil.encode(arguments, null, null);
@@ -326,7 +325,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          URI uri = StringUtil.newURI(storage.getServiceURI(), "api/user/token");
+          URI uri = StringUtil.newURI(service.getServiceURI(), "api/user/token");
 
           Request request = configureRequest(Request.Post(uri), uri);
           HttpResponse response = sendRequest(request, uri);
@@ -496,15 +495,15 @@ public class Session implements Headers, Codes
 
     protected final Credentials getCredentials(ICredentialsProvider credentialsProvider) throws OperationCanceledException
     {
-      Credentials credentials = storage.getCredentials();
+      Credentials credentials = service.getCredentials();
       if (credentials == null)
       {
         if (credentialsProvider != null)
         {
-          credentials = credentialsProvider.provideCredentials(storage);
+          credentials = credentialsProvider.provideCredentials(service);
           if (credentials != null)
           {
-            storage.setCredentials(credentials);
+            service.setCredentials(credentials);
           }
         }
       }

@@ -8,9 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.tests;
+package org.eclipse.userstorage.tests.util;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 
@@ -28,7 +28,7 @@ public class FixedCredentialsProvider implements ICredentialsProvider
   }
 
   @Override
-  public Credentials provideCredentials(IStorage storage)
+  public Credentials provideCredentials(IStorageService service)
   {
     return credentials;
   }

@@ -10,23 +10,23 @@
  */
 package org.eclipse.userstorage.spi;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
 
 /**
- * Provides the user's credentials for a given {@link IStorage storage}.
+ * Provides the user's credentials for a given {@link IStorageService storage service}.
  *
  * @author Eike Stepper
  */
 public interface ICredentialsProvider
 {
   /**
-   * Provides the user's credentials for the given {@link IStorage storage}.
+   * Provides the user's credentials for the given {@link IStorageService storage service}.
    * <p>
    *
-   * @param storage the storage for which to provide the user's credentials, must not be <code>null</code>.<p>
-   * @return the user's credentials for the given {@link IStorage storage},
+   * @param service the storage service for which to provide the user's credentials, must not be <code>null</code>.<p>
+   * @return the user's credentials for the given storage service,
    *         or <code>null</code> as an indication to cancel the authentication process.<p>
    */
-  public Credentials provideCredentials(IStorage storage);
+  public Credentials provideCredentials(IStorageService service);
 }

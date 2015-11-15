@@ -10,6 +10,8 @@
  */
 package org.eclipse.userstorage;
 
+import org.eclipse.userstorage.spi.StorageCache;
+import org.eclipse.userstorage.spi.StorageFactory;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.ProtocolException;
 
@@ -19,19 +21,19 @@ import java.io.InputStream;
 import java.util.Map;
 
 /**
- * Represents a piece of data that a {@link #getSpace() storage space}
- * maintains for the logged-in user under under the associated {@link #getKey() key}.
+ * Represents a piece of data that a {@link #getStorage() storage}
+ * maintains for the logged-in user under the associated {@link #getKey() key}.
  * <p>
- * The actual data get be read from the {@link InputStream} returned by the {@link #getContents() getContents()} method.
+ * The actual data can be read from the {@link InputStream} returned by the {@link #getContents() getContents()} method.
  * It can be written by passing an {@link InputStream} to the {@link #setContents(InputStream) setContents()} method.
  * <p>
  * On top of this scalable I/O model a few methods are provided to get or set the blob's contents in
- * more convenient formats, such as UTF strings - see {@link DataInput#readUTF()}, integers, or booleans.
+ * more convenient formats, such as {@link DataInput#readUTF() UTF strings}, integers, or booleans.
  * <p>
- * In no case the contents of this blob are kept in memory. If the {@link #getSpace() storage space} of this blob was
- * created with a {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+ * In no case the contents of this blob are kept in memory. If the {@link #getStorage() storage} of this blob was
+ * created with a {@link StorageFactory#create(String, StorageCache) storage cache}
  * the contents are possibly served from that cache. In any case all read and write access contacts the remote service
- * behind storage space's storage, even if only to validate that a possibly cached version of the contents is still up-to-date,
+ * behind storage's service, even if only to validate that a possibly cached version of the contents is still up-to-date,
  * see {@link #getETag()}.
  * <p>
  *
@@ -42,11 +44,11 @@ import java.util.Map;
 public interface IBlob
 {
   /**
-   * Returns the storage space of this blob.
+   * Returns the storage of this blob.
    *
-   * @return the storage space of this blob, never <code>null</code>.
+   * @return the storage of this blob, never <code>null</code>.
    */
-  public IStorageSpace getSpace();
+  public IStorage getStorage();
 
   /**
    * Returns the key of this blob.
@@ -62,8 +64,8 @@ public interface IBlob
    * The only property that service providers are required to provide is the {@link #getETag() ETag} property.
    * <p>
    * The properties map is only updated during any of the getContents() or setContents() methods.
-   * If the {@link #getSpace() storage space} of this blob was
-   * created with a {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+   * If the {@link #getStorage() storage} of this blob was
+   * created with a {@link StorageFactory#create(String, StorageCache) storage cache}
    * the properties are possibly served from that cache.
    * <p>
    *
@@ -83,8 +85,8 @@ public interface IBlob
    * (of the contents) of the blob. This value serves two purposes:
    * <p>
    * <ul>
-   * <li> If the {@link #getSpace() storage space} of this blob was created with a
-   *      {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+   * <li> If the {@link #getStorage() storage} of this blob was created with a
+   *      {@link StorageFactory#create(String, StorageCache) storage cache}
    *      and the cache contains the current version of this blob
    *      all getContents() methods use the ETag to prevent the server from sending the blob's contents again.
    *      The cached contents are returned instead.
@@ -107,8 +109,8 @@ public interface IBlob
    * (of the contents) of the blob. This value serves two purposes:
    * <p>
    * <ul>
-   * <li> If the {@link #getSpace() storage space} of this blob was created with a
-   *      {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+   * <li> If the {@link #getStorage() storage} of this blob was created with a
+   *      {@link StorageFactory#create(String, StorageCache) storage cache}
    *      and the cache contains the current version of this blob
    *      all getContents() methods use the ETag to prevent the server from sending the blob's contents again.
    *      The cached contents are returned instead.
@@ -116,8 +118,8 @@ public interface IBlob
    *      changes. A conflicting change is updating a blob with new contents that is based on an out-dated ETag.
    * </ul>
    * <p>
-   * If the {@link #getSpace() storage space} of this blob was created with a
-   * {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+   * If the {@link #getStorage() storage} of this blob was created with a
+   * {@link StorageFactory#create(String, StorageCache) storage cache}
    * and the new ETag is different from the cached ETag the cached blob is deleted locally.
    * <p>
    *
@@ -133,8 +135,8 @@ public interface IBlob
    * <p>
    * This method always contacts the server.
    * <p>
-   * If the {@link #getSpace() storage space} of this blob was created with a
-   * {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+   * If the {@link #getStorage() storage} of this blob was created with a
+   * {@link StorageFactory#create(String, StorageCache) storage cache}
    * and the cache contains the current version of this blob (i.e., the blob's ETag is up-to-date)
    * the server will not send the blob's contents again. The cached contents are returned instead.
    * If the cache does not contain the current version of this blob (i.e., the blob's ETag is out-of-date)
@@ -164,8 +166,8 @@ public interface IBlob
    * The ETag of this blob can be {@link #setETag(String) set} to <code>null</code> if server-side conflict detection is not desired.
    * Server-side conflicts are indicated by throwing a {@link ConflictException}.
    * <p>
-   * If the {@link #getSpace() storage space} of this blob was created with a
-   * {@link IStorageSpace.Factory#create(String, org.eclipse.userstorage.spi.StorageCache) storage cache}
+   * If the {@link #getStorage() storage} of this blob was created with a
+   * {@link StorageFactory#create(String, StorageCache) storage cache}
    * and the server successfully updated the blob (i.e., the blob's ETag was up-to-date)
    * the cache will be updated with the new version of the contents.
    * <p>
@@ -286,12 +288,12 @@ public interface IBlob
   /**
    * Returns <code>true</code> if this blob is disposed, <code>false</code> otherwise.
    * <p>
-   * The only way for a blob to become disposed is when the storage of the {@link IStorageSpace storage space} of that blob
-   * is changed after that blob was created. Applications must call {@link IStorageSpace#getBlob(String) getBlob()} to acquire
+   * The only way for a blob to become disposed is when the storage of the {@link IStorage storage} of that blob
+   * is changed after that blob was created. Applications must call {@link IStorage#getBlob(String) getBlob()} to acquire
    * a new, valid blob instance in that case.
    * <p>
    *
-   * @see IStorageSpace#getBlob(String) getBlob()
+   * @see IStorage#getBlob(String) getBlob()
    */
   public boolean isDisposed();
 }

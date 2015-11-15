@@ -10,7 +10,7 @@
  */
 package org.eclipse.userstorage.ui.internal;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -36,7 +36,7 @@ public class CredentialsDialog extends TitleAreaDialog implements ModifyListener
 {
   private static final String TITLE = "User Storage Login";
 
-  private IStorage storage;
+  private IStorageService storage;
 
   private Credentials credentials;
 
@@ -44,7 +44,7 @@ public class CredentialsDialog extends TitleAreaDialog implements ModifyListener
 
   private Button okButton;
 
-  public CredentialsDialog(Shell parentShell, IStorage storage)
+  public CredentialsDialog(Shell parentShell, IStorageService storage)
   {
     super(parentShell);
     this.storage = storage;
@@ -52,7 +52,7 @@ public class CredentialsDialog extends TitleAreaDialog implements ModifyListener
     setShellStyle(SWT.SHELL_TRIM | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 
-  public IStorage getStorage()
+  public IStorageService getStorage()
   {
     return storage;
   }

@@ -10,7 +10,7 @@
  */
 package org.eclipse.userstorage.ui.internal;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 
@@ -24,7 +24,7 @@ public final class CredentialsPrompter implements ICredentialsProvider
   public static final CredentialsPrompter INSTANCE = new CredentialsPrompter();
 
   @Override
-  public Credentials provideCredentials(final IStorage storage)
+  public Credentials provideCredentials(final IStorageService service)
   {
     final Credentials[] credentials = { null };
 
@@ -36,7 +36,7 @@ public final class CredentialsPrompter implements ICredentialsProvider
         @Override
         public void run()
         {
-          CredentialsDialog dialog = new CredentialsDialog(shell, storage);
+          CredentialsDialog dialog = new CredentialsDialog(shell, service);
           if (dialog.open() == CredentialsDialog.OK)
           {
             credentials[0] = dialog.getCredentials();

@@ -10,13 +10,13 @@
  */
 package org.eclipse.userstorage.util;
 
-import org.eclipse.userstorage.IStorageSpace;
+import org.eclipse.userstorage.IStorage;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
- * Signals that the lexical conventions for {@link IStorageSpace#getApplicationToken() application tokens} have been violated.
+ * Signals that the lexical conventions for {@link IStorage#getApplicationToken() application tokens} have been violated.
  * <p>
  * The lexical conventions for application tokens are:
  * <p>
@@ -52,7 +52,7 @@ public final class BadApplicationTokenException extends RuntimeException
   }
 
   /**
-   * Validates that the given {@link IStorageSpace#getApplicationToken() application token} complies
+   * Validates that the given {@link IStorage#getApplicationToken() application token} complies
    * with the {@link BadApplicationTokenException lexical conventions} for application tokens.
    * <p>
    *

@@ -10,9 +10,9 @@
  */
 package org.eclipse.userstorage.ui.internal;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
-import org.eclipse.userstorage.internal.Storage;
+import org.eclipse.userstorage.internal.StorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -45,7 +45,7 @@ public class CredentialsComposite extends Composite
     }
   };
 
-  private IStorage storage;
+  private IStorageService storage;
 
   private Credentials credentials;
 
@@ -72,12 +72,12 @@ public class CredentialsComposite extends Composite
     createUI(this, layout.numColumns);
   }
 
-  public IStorage getStorage()
+  public IStorageService getStorage()
   {
     return storage;
   }
 
-  public void setStorage(IStorage storage)
+  public void setStorage(IStorageService storage)
   {
     signupLink.setVisible(false);
 
@@ -93,7 +93,7 @@ public class CredentialsComposite extends Composite
         signupLink.setVisible(true);
       }
 
-      setCredentials(((Storage)storage).getCredentials());
+      setCredentials(((StorageService)storage).getCredentials());
     }
   }
 
@@ -172,7 +172,7 @@ public class CredentialsComposite extends Composite
   {
   }
 
-  private String getServiceLabel(IStorage storage)
+  private String getServiceLabel(IStorageService storage)
   {
     String label = storage.getServiceLabel();
     if (label == null || label.length() == 0)

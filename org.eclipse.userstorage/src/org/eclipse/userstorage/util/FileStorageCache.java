@@ -11,7 +11,7 @@
 package org.eclipse.userstorage.util;
 
 import org.eclipse.userstorage.IBlob;
-import org.eclipse.userstorage.IStorageSpace;
+import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.StorageCache;
@@ -198,13 +198,13 @@ public class FileStorageCache extends StorageCache
 
   /**
    * Returns the {@link File} object that represents the blob with the given
-   * {@link IStorageSpace#getApplicationToken() application token} and {@link IBlob#getKey() key} into this cache.
+   * {@link IStorage#getApplicationToken() application token} and {@link IBlob#getKey() key} into this cache.
    * <p>
    * This cache stores the properties and the contents of a blob in two different files.
    * Which of the two files is returned is determined by the value of the extension parameter.
    * <p>
    *
-   * @param applicationToken the {@link IStorageSpace#getApplicationToken() application token} for which to return the file,
+   * @param applicationToken the {@link IStorage#getApplicationToken() application token} for which to return the file,
    *        must not be <code>null</code>.<p>
    * @param key the {@link IBlob#getKey() key} for which to return the file,
    *        must not be <code>null</code>.<p>

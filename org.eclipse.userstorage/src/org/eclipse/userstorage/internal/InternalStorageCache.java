@@ -10,7 +10,7 @@
  */
 package org.eclipse.userstorage.internal;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.util.IOUtil.EndOfFileAware;
 
 import java.io.IOException;
@@ -24,22 +24,26 @@ import java.util.Map;
  */
 public abstract class InternalStorageCache
 {
-  private IStorage storage;
+  private IStorageService service;
 
-  public IStorage getStorage()
+  public InternalStorageCache()
   {
-    return storage;
   }
 
-  void setStorage(IStorage storage)
+  public IStorageService getService()
   {
-    IStorage oldStorage = this.storage;
-    this.storage = storage;
-
-    storageChanged(oldStorage, storage);
+    return service;
   }
 
-  protected abstract void storageChanged(IStorage oldStorage, IStorage newStorage);
+  void setService(IStorageService service)
+  {
+    IStorageService oldService = this.service;
+    this.service = service;
+
+    storageChanged(oldService, service);
+  }
+
+  protected abstract void storageChanged(IStorageService oldService, IStorageService newService);
 
   void internalLoadProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
   {

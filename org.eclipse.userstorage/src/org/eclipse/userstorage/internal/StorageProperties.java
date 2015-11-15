@@ -15,6 +15,8 @@ package org.eclipse.userstorage.internal;
  */
 public final class StorageProperties
 {
+  public static final String SETTINGS = "org.eclipse.userstorage.settings";
+
   public static final String CREDENTIALS_PROVIDER = "org.eclipse.userstorage.credentialsProvider";
 
   public static final String CONNECT_TIMEOUT = "org.eclipse.userstorage.connectTimeout";

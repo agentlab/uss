@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.jetty.util;bundle-version="[9.0.0,10.0.0)",
  javax.servlet;bundle-version="[3.0.0,4.0.0)",
  org.junit;bundle-version="[4.11.0,5.0.0)"
-Export-Package: org.eclipse.userstorage.tests;version="1.0.0";x-internal:=true
+Export-Package: org.eclipse.userstorage.tests;version="1.0.0";x-internal:=true,
+ org.eclipse.userstorage.tests.util;version="1.0.0";x-internal:=true
 Bundle-Vendor: %providerName
 Eclipse-RegisterBuddy: org.eclipse.userstorage

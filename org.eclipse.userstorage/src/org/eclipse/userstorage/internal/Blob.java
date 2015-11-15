@@ -11,7 +11,7 @@
 package org.eclipse.userstorage.internal;
 
 import org.eclipse.userstorage.IBlob;
-import org.eclipse.userstorage.IStorageSpace;
+import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.util.BadKeyException;
@@ -42,7 +42,7 @@ public class Blob implements IBlob
 
   public static final String ETAG = "etag";
 
-  private final StorageSpace space;
+  private final Storage storage;
 
   private final String key;
 
@@ -50,17 +50,17 @@ public class Blob implements IBlob
 
   private boolean disposed;
 
-  public Blob(StorageSpace space, String key, Map<String, String> properties) throws BadKeyException
+  public Blob(Storage storage, String key, Map<String, String> properties) throws BadKeyException
   {
-    this.space = space;
+    this.storage = storage;
     this.key = BadKeyException.validate(key);
     this.properties = properties;
   }
 
   @Override
-  public IStorageSpace getSpace()
+  public IStorage getStorage()
   {
-    return space;
+    return storage;
   }
 
   @Override
@@ -87,21 +87,21 @@ public class Blob implements IBlob
   public void setETag(String eTag) throws IllegalStateException
   {
     checkNotDisposed();
-    space.setETag(key, properties, eTag);
+    storage.setETag(key, properties, eTag);
   }
 
   @Override
   public InputStream getContents() throws IOException, IllegalStateException
   {
     checkNotDisposed();
-    return space.retrieveBlob(key, properties);
+    return storage.retrieveBlob(key, properties);
   }
 
   @Override
   public boolean setContents(InputStream in) throws IOException, ConflictException, IllegalStateException
   {
     checkNotDisposed();
-    return space.updateBlob(key, properties, in);
+    return storage.updateBlob(key, properties, in);
   }
 
   @Override
@@ -154,7 +154,7 @@ public class Blob implements IBlob
   @Override
   public String toString()
   {
-    return space.getStorage() + " (" + space.getApplicationToken() + "/" + key + ")";
+    return storage.getService() + " (" + storage.getApplicationToken() + "/" + key + ")";
   }
 
   @Override

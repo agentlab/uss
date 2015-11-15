@@ -8,7 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.tests;
+package org.eclipse.userstorage.tests.util;
 
 import org.eclipse.userstorage.internal.Blob;
 import org.eclipse.userstorage.internal.Credentials;

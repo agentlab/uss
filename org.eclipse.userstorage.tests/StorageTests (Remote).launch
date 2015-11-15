@@ -6,11 +6,15 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
 <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
 <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.userstorage.tests.StorageTests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.userstorage.tests"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DXXXorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.TestCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.tests.StorageTests.remote=true&#13;&#10;-Dorg.eclipse.userstorage.internal.Session.debug=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DXXXorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.TestCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.internal.Session.debug=true&#13;&#10;-Dorg.eclipse.userstorage.tests.StorageTests.remote=true"/>
 </launchConfiguration>

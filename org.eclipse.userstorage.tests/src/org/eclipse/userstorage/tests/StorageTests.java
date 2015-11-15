@@ -14,13 +14,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.IStorageSpace;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Activator;
 import org.eclipse.userstorage.internal.Session;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
-import org.eclipse.userstorage.tests.USSServer.NOOPLogger;
-import org.eclipse.userstorage.tests.USSServer.User;
+import org.eclipse.userstorage.spi.StorageFactory;
+import org.eclipse.userstorage.tests.util.FixedCredentialsProvider;
+import org.eclipse.userstorage.tests.util.USSServer;
+import org.eclipse.userstorage.tests.util.USSServer.NOOPLogger;
+import org.eclipse.userstorage.tests.util.USSServer.User;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
@@ -37,7 +40,6 @@ import org.junit.runners.MethodSorters;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -60,7 +62,9 @@ public final class StorageTests extends AbstractTest
 
   private User user;
 
-  private IStorage.Dynamic storage;
+  private IStorageService.Dynamic service;
+
+  private StorageFactory factory;
 
   private TestCache cache;
 
@@ -76,7 +80,11 @@ public final class StorageTests extends AbstractTest
     super.setUp();
     Activator.start();
 
-    if (!REMOTE)
+    if (REMOTE)
+    {
+      factory = StorageFactory.DEFAULT;
+    }
+    else
     {
       IOUtil.deleteFiles(SERVER);
 
@@ -85,9 +93,17 @@ public final class StorageTests extends AbstractTest
       server.getApplicationTokens().add(APPLICATION_TOKEN);
       int port = server.start();
 
-      URI serviceURI = StringUtil.newURI("http://localhost:" + port);
-      storage = IStorage.Registry.INSTANCE.addStorage("Test Server", serviceURI);
-      IStorage.Registry.INSTANCE.setDefaultStorage(storage);
+      final String serviceURI = "http://localhost:" + port;
+      service = IStorageService.Registry.INSTANCE.addService("Test Service", StringUtil.newURI(serviceURI));
+
+      factory = new StorageFactory()
+      {
+        @Override
+        protected String getPreferredServiceURI(String applicationToken)
+        {
+          return serviceURI;
+        }
+      };
     }
 
     IOUtil.deleteFiles(CACHE);
@@ -97,12 +113,13 @@ public final class StorageTests extends AbstractTest
   @Override
   public void tearDown() throws Exception
   {
+    factory = null;
     cache = null;
 
     if (hasLocalServer())
     {
-      storage.remove();
-      storage = null;
+      service.remove();
+      service = null;
 
       server.stop();
       server = null;
@@ -119,7 +136,7 @@ public final class StorageTests extends AbstractTest
   {
     try
     {
-      IStorageSpace.Factory.create(null);
+      factory.create(null);
       fail("BadApplicationTokenException expected");
     }
     catch (BadApplicationTokenException expected)
@@ -129,7 +146,7 @@ public final class StorageTests extends AbstractTest
 
     try
     {
-      IStorageSpace.Factory.create("aaaa"); // Too short.
+      factory.create("aaaa"); // Too short.
       fail("BadApplicationTokenException expected");
     }
     catch (BadApplicationTokenException expected)
@@ -139,7 +156,7 @@ public final class StorageTests extends AbstractTest
 
     try
     {
-      IStorageSpace.Factory.create("aaaaaaaaaaaaaaaaaaaaaaaaaaaa"); // Too long.
+      factory.create("aaaaaaaaaaaaaaaaaaaaaaaaaaaa"); // Too long.
       fail("BadApplicationTokenException expected");
     }
     catch (BadApplicationTokenException expected)
@@ -149,7 +166,7 @@ public final class StorageTests extends AbstractTest
 
     try
     {
-      IStorageSpace.Factory.create("1aaaaaaaaa"); // Too long.
+      factory.create("1aaaaaaaaa"); // Too long.
       fail("BadApplicationTokenException expected");
     }
     catch (BadApplicationTokenException expected)
@@ -157,18 +174,18 @@ public final class StorageTests extends AbstractTest
       // SUCCESS
     }
 
-    IStorageSpace.Factory.create("aaaaa"); // Just short enough.
-    IStorageSpace.Factory.create("aaaaaaaaaaaaaaaaaaaaaaaaaaa"); // Just long enough.
+    factory.create("aaaaa"); // Just short enough.
+    factory.create("aaaaaaaaaaaaaaaaaaaaaaaaaaa"); // Just long enough.
   }
 
   @Test
   public void testKey() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
+    IStorage storage = factory.create(APPLICATION_TOKEN);
 
     try
     {
-      storageSpace.getBlob(null);
+      storage.getBlob(null);
       fail("BadKeyException expected");
     }
     catch (BadKeyException expected)
@@ -178,7 +195,7 @@ public final class StorageTests extends AbstractTest
 
     try
     {
-      storageSpace.getBlob("aaaa"); // Too short.
+      storage.getBlob("aaaa"); // Too short.
       fail("BadKeyException expected");
     }
     catch (BadKeyException expected)
@@ -188,7 +205,7 @@ public final class StorageTests extends AbstractTest
 
     try
     {
-      storageSpace.getBlob("aaaaaaaaaaaaaaaaaaaaaaaaaaa"); // Too long.
+      storage.getBlob("aaaaaaaaaaaaaaaaaaaaaaaaaaa"); // Too long.
       fail("BadKeyException expected");
     }
     catch (BadKeyException expected)
@@ -198,7 +215,7 @@ public final class StorageTests extends AbstractTest
 
     try
     {
-      storageSpace.getBlob("1aaaaaaaaa"); // Too long.
+      storage.getBlob("1aaaaaaaaa"); // Too long.
       fail("BadKeyException expected");
     }
     catch (BadKeyException expected)
@@ -206,19 +223,19 @@ public final class StorageTests extends AbstractTest
       // SUCCESS
     }
 
-    storageSpace.getBlob("aaaaa"); // Just short enough.
-    storageSpace.getBlob("aaaaaaaaaaaaaaaaaaaaaaaaa"); // Just long enough.
+    storage.getBlob("aaaaa"); // Just short enough.
+    storage.getBlob("aaaaaaaaaaaaaaaaaaaaaaaaa"); // Just long enough.
   }
 
   @Test
   public void testUserAgent() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
+    IStorage storage = factory.create(APPLICATION_TOKEN);
     System.setProperty(Session.USER_AGENT_PROPERTY, "malicious/client");
 
     try
     {
-      IBlob blob = storageSpace.getBlob("any_blob");
+      IBlob blob = storage.getBlob("any_blob");
       blob.getContents();
       fail("ProtocolException expected");
     }
@@ -235,8 +252,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testUpdate() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
@@ -249,8 +266,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testUpdateWithCache() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN, cache);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
@@ -259,18 +276,29 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
+  public void testUpdateMulti() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+
+    blob.setContentsUTF("Text 1");
+    blob.setContentsUTF("Text 2");
+    blob.setContentsUTF("Text 3");
+  }
+
+  @Test
   public void testRetrieveNotFound() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob("aaaaaaaaaa");
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob("aaaaaaaaaa");
     assertThat(blob.getContents(), isNull());
   }
 
   @Test
   public void testRetrieve() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -285,8 +313,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testRetrieveWithCache() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN, cache);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -297,21 +325,10 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
-  public void testUpdateMulti() throws Exception
-  {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
-
-    blob.setContentsUTF("Text 1");
-    blob.setContentsUTF("Text 2");
-    blob.setContentsUTF("Text 3");
-  }
-
-  @Test
   public void testRetrieveMulti() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
     blob.setContentsUTF("A short UTF-8 string value");
 
     blob.getContents();
@@ -324,8 +341,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testConflict() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -358,8 +375,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testConflictWithCache() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN, cache);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -392,8 +409,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testConflictResolution1() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -416,8 +433,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testConflictResolution1WithCache() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN, cache);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -438,8 +455,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testConflictResolution2() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -470,8 +487,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testConflictResolution2WithCache() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN, cache);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -520,8 +537,8 @@ public final class StorageTests extends AbstractTest
   @Test
   public void testReauthenticate() throws Exception
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create(APPLICATION_TOKEN);
-    IBlob blob = storageSpace.getBlob(makeKey());
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -566,7 +583,7 @@ public final class StorageTests extends AbstractTest
   {
     BlobInfo result = new BlobInfo();
 
-    String applicationToken = blob.getSpace().getApplicationToken();
+    String applicationToken = blob.getStorage().getApplicationToken();
     String key = blob.getKey();
 
     if (hasLocalServer())
@@ -596,8 +613,8 @@ public final class StorageTests extends AbstractTest
     }
     else
     {
-      IStorageSpace tmpStorageSpace = IStorageSpace.Factory.create(applicationToken);
-      IBlob tmpBlob = tmpStorageSpace.getBlob(key);
+      IStorage tmpStorage = factory.create(applicationToken);
+      IBlob tmpBlob = tmpStorage.getBlob(key);
 
       result.contents = tmpBlob.getContentsUTF();
       if (result.contents == null)
@@ -613,7 +630,7 @@ public final class StorageTests extends AbstractTest
 
   private String writeServer(IBlob blob, String value) throws IOException
   {
-    String applicationToken = blob.getSpace().getApplicationToken();
+    String applicationToken = blob.getStorage().getApplicationToken();
     String key = blob.getKey();
 
     if (hasLocalServer())
@@ -624,8 +641,8 @@ public final class StorageTests extends AbstractTest
       return eTag;
     }
 
-    IStorageSpace tmpStorageSpace = IStorageSpace.Factory.create(applicationToken);
-    IBlob tmpBlob = tmpStorageSpace.getBlob(key);
+    IStorage tmpStorage = factory.create(applicationToken);
+    IBlob tmpBlob = tmpStorage.getBlob(key);
     tmpBlob.setETag(blob.getETag());
     tmpBlob.setContentsUTF(value);
     return tmpBlob.getETag();

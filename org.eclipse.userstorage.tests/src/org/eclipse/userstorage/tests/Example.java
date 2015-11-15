@@ -11,34 +11,29 @@
 package org.eclipse.userstorage.tests;
 
 import org.eclipse.userstorage.IBlob;
-import org.eclipse.userstorage.IStorageSpace;
+import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.internal.util.IOUtil;
+import org.eclipse.userstorage.spi.StorageFactory;
 import org.eclipse.userstorage.util.FileStorageCache;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * @author Eike Stepper
  */
-public class Examples
+public class Example
 {
   public static void main(String[] args) throws IOException
   {
-    IStorageSpace storageSpace = IStorageSpace.Factory.create("cNhDr0INs8T109P8h6E1r_GvU3I", new FileStorageCache());
+    IStorage storage = StorageFactory.DEFAULT.create("cNhDr0INs8T109P8h6E1r_GvU3I", new FileStorageCache());
 
-    IBlob blob = storageSpace.getBlob("user_setup");
-    InputStream in = blob.getContents();
-    copy(in, new FileOutputStream("user.xml"));
-    IOUtil.close(in);
-
+    IBlob blob = storage.getBlob("user_setup");
     blob.setContentsUTF("A short UTF-8 string value");
 
-  }
-
-  private static void copy(InputStream in, OutputStream out)
-  {
+    InputStream in = blob.getContents();
+    IOUtil.copy(in, new FileOutputStream("user.txt"));
+    IOUtil.close(in);
   }
 }

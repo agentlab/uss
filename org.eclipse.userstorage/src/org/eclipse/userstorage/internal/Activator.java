@@ -10,7 +10,7 @@
  */
 package org.eclipse.userstorage.internal;
 
-import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 
@@ -154,12 +154,12 @@ public class Activator extends Plugin
       initCredentialsProvider();
     }
 
-    StorageRegistry.INSTANCE.start();
+    StorageServiceRegistry.INSTANCE.start();
   }
 
   public static void stop() throws Exception
   {
-    StorageRegistry.INSTANCE.stop();
+    StorageServiceRegistry.INSTANCE.stop();
     credentialsProvider = null;
   }
 
@@ -216,7 +216,7 @@ public class Activator extends Plugin
   private static final class NOOPCredentialsProvider implements ICredentialsProvider
   {
     @Override
-    public Credentials provideCredentials(IStorage storage)
+    public Credentials provideCredentials(IStorageService service)
     {
       return null;
     }

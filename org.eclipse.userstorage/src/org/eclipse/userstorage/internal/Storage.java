@@ -10,297 +10,224 @@
  */
 package org.eclipse.userstorage.internal;
 
+import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.internal.util.IOUtil.TeeInputStream;
 import org.eclipse.userstorage.internal.util.StringUtil;
-import org.eclipse.userstorage.spi.ICredentialsProvider;
+import org.eclipse.userstorage.spi.StorageCache;
+import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.ConflictException;
-
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * @author Eike Stepper
  */
-public class Storage implements IStorage
+public final class Storage implements IStorage
 {
-  private static final boolean TRANSIENT_CREDENTIALS = Boolean.getBoolean(Storage.class.getName() + ".transientCredentials");
+  private final String applicationToken;
 
-  private static final String USERNAME_KEY = "username";
+  private final InternalStorageFactory factory;
 
-  private static final String PASSWORD_KEY = "password";
+  private final InternalStorageCache cache;
 
-  private final String serviceLabel;
+  private final Map<String, Blob> blobs = new WeakHashMap<String, Blob>();
 
-  private final URI serviceURI;
+  private StorageService service;
 
-  private final URI createAccountURI;
-
-  private final URI editAccountURI;
-
-  private final URI recoverPasswordURI;
-
-  private ICredentialsProvider credentialsProvider;
-
-  private Session session;
-
-  public Storage(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
+  public Storage(InternalStorageFactory factory, String applicationToken, InternalStorageCache cache) throws BadApplicationTokenException
   {
-    if (StringUtil.isEmpty(serviceLabel))
+    this.applicationToken = BadApplicationTokenException.validate(applicationToken);
+    this.factory = factory;
+    this.cache = cache;
+  }
+
+  @Override
+  public String getApplicationToken()
+  {
+    return applicationToken;
+  }
+
+  @Override
+  public StorageCache getCache()
+  {
+    return (StorageCache)cache;
+  }
+
+  @Override
+  public StorageService getService()
+  {
+    return service;
+  }
+
+  @Override
+  public synchronized void setService(IStorageService service)
+  {
+    if (service != this.service)
     {
-      throw new IllegalArgumentException("Service label is null or empty");
-    }
+      disposeBlobs();
 
-    if (serviceURI == null)
-    {
-      throw new IllegalArgumentException("Service URI is null");
-    }
+      this.service = (StorageService)service;
+      factory.setPreferredServiceURI(applicationToken, service.getServiceURI().toString());
 
-    this.serviceLabel = serviceLabel;
-    this.serviceURI = serviceURI;
-    this.createAccountURI = createAccountURI;
-    this.editAccountURI = editAccountURI;
-    this.recoverPasswordURI = recoverPasswordURI;
-  }
-
-  @Override
-  public String getServiceLabel()
-  {
-    return serviceLabel;
-  }
-
-  @Override
-  public URI getServiceURI()
-  {
-    return serviceURI;
-  }
-
-  @Override
-  public URI getCreateAccountURI()
-  {
-    return createAccountURI;
-  }
-
-  @Override
-  public URI getEditAccountURI()
-  {
-    return editAccountURI;
-  }
-
-  @Override
-  public URI getRecoverPasswordURI()
-  {
-    return recoverPasswordURI;
-  }
-
-  public Credentials getCredentials()
-  {
-    try
-    {
-      ISecurePreferences securePreferences = getPreferences();
-      if (securePreferences != null)
+      if (cache != null)
       {
-        String username = securePreferences.get(USERNAME_KEY, null);
-        String password = securePreferences.get(PASSWORD_KEY, null);
-
-        if (username != null && password != null)
-        {
-          return new Credentials(username, password);
-        }
+        // TODO Should this happen later when the new storage is accessed the first time?
+        cache.setService(service);
       }
     }
-    catch (StorageException ex)
-    {
-      Activator.log(ex);
-    }
-
-    return null;
-  }
-
-  public void setCredentials(Credentials credentials)
-  {
-    try
-    {
-      ISecurePreferences securePreferences = getPreferences();
-      if (securePreferences != null)
-      {
-        if (credentials == null)
-        {
-          securePreferences.remove(USERNAME_KEY);
-          securePreferences.remove(PASSWORD_KEY);
-        }
-        else
-        {
-          securePreferences.put(USERNAME_KEY, credentials.getUsername(), true);
-          securePreferences.put(PASSWORD_KEY, credentials.getPassword(), true);
-        }
-
-        securePreferences.flush();
-      }
-    }
-    catch (Exception ex)
-    {
-      Activator.log(ex);
-    }
-  }
-
-  public synchronized InputStream retrieveBlob(String appToken, String key, Map<String, String> properties, boolean useETag) throws IOException
-  {
-    ICredentialsProvider credentialsProvider = getCredentialsProvider();
-
-    Session session = getSession();
-    return session.retrieveBlob(appToken, key, properties, useETag, credentialsProvider);
-  }
-
-  public synchronized boolean updateBlob(String appToken, String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException
-  {
-    ICredentialsProvider credentialsProvider = getCredentialsProvider();
-
-    Session session = getSession();
-    return session.updateBlob(appToken, key, properties, in, credentialsProvider);
   }
 
   @Override
-  public int hashCode()
+  public synchronized IBlob getBlob(String key)
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (serviceURI == null ? 0 : serviceURI.hashCode());
-    return result;
+    Blob blob = blobs.get(key);
+    if (blob == null)
+    {
+      Map<String, String> properties = new HashMap<String, String>();
+
+      if (cache != null)
+      {
+        try
+        {
+          cache.internalLoadProperties(applicationToken, key, properties);
+        }
+        catch (IOException ex)
+        {
+          properties.clear();
+          Activator.log(ex);
+        }
+      }
+
+      blob = new Blob(this, key, properties);
+      blobs.put(key, blob);
+    }
+
+    return blob;
   }
 
-  @Override
-  public boolean equals(Object obj)
+  public void setETag(String key, Map<String, String> properties, String eTag)
   {
-    if (this == obj)
+    if (StringUtil.isEmpty(eTag))
     {
-      return true;
+      properties.remove(Blob.ETAG);
+    }
+    else
+    {
+      properties.put(Blob.ETAG, eTag);
     }
 
-    if (obj == null)
+    if (cache != null)
     {
-      return false;
-    }
-
-    if (getClass() != obj.getClass())
-    {
-      return false;
-    }
-
-    Storage other = (Storage)obj;
-    if (serviceURI == null)
-    {
-      if (other.serviceURI != null)
+      try
       {
-        return false;
+        if (!StringUtil.isEmpty(eTag))
+        {
+          Map<String, String> cacheProperties = new HashMap<String, String>();
+          cache.loadProperties(applicationToken, key, cacheProperties);
+          String cacheETag = cacheProperties.get(Blob.ETAG);
+          if (eTag.equals(cacheETag))
+          {
+            // Don't delete blob from cache because it has the new ETag.
+            return;
+          }
+        }
+
+        cache.internalDelete(applicationToken, key);
+      }
+      catch (IOException ex)
+      {
+        Activator.log(ex);
       }
     }
-    else if (!serviceURI.equals(other.serviceURI))
+  }
+
+  public InputStream retrieveBlob(String key, Map<String, String> properties) throws IOException
+  {
+    InputStream contents = service.retrieveBlob(applicationToken, key, properties, cache != null);
+
+    if (cache != null)
     {
-      return false;
+      if (contents == Blob.NOT_MODIFIED)
+      {
+        return cache.internalGetInputStream(applicationToken, key);
+      }
+
+      if (contents == null)
+      {
+        cache.internalDelete(applicationToken, key);
+        return null;
+      }
+
+      OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
+      return new TeeInputStream(contents, output);
     }
 
-    return true;
+    return contents;
+  }
+
+  public boolean updateBlob(String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException
+  {
+    if (cache != null)
+    {
+      OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
+      in = new TeeInputStream(in, output);
+    }
+
+    boolean created = service.updateBlob(applicationToken, key, properties, in);
+
+    if (cache != null)
+    {
+      cache.internalSaveProperties(applicationToken, key, properties);
+    }
+
+    return created;
   }
 
   @Override
   public String toString()
   {
-    return serviceLabel;
+    return service + " (" + applicationToken + ")";
   }
 
-  private synchronized ICredentialsProvider getCredentialsProvider()
+  private void disposeBlobs()
   {
-    if (credentialsProvider == null)
+    for (Blob blob : blobs.values())
     {
-      String property = System.getProperty(StorageProperties.CREDENTIALS_PROVIDER, null);
-      if (property != null)
-      {
-        try
-        {
-          @SuppressWarnings("unchecked")
-          Class<ICredentialsProvider> c = (Class<ICredentialsProvider>)Class.forName(property);
+      blob.dispose();
+    }
 
-          credentialsProvider = c.newInstance();
-        }
-        catch (Throwable ex)
+    blobs.clear();
+
+    if (cache != null)
+    {
+      try
+      {
+        for (Iterator<String> it = cache.getKeys(applicationToken); it.hasNext();)
         {
-          Activator.log(ex);
+          String key = it.next();
+
+          try
+          {
+            cache.delete(applicationToken, key);
+          }
+          catch (Exception ex)
+          {
+            Activator.log(ex);
+          }
         }
       }
-
-      if (credentialsProvider == null)
+      catch (Exception ex)
       {
-        credentialsProvider = Activator.getCredentialsProvider();
+        Activator.log(ex);
       }
-    }
-
-    return credentialsProvider;
-  }
-
-  private Session getSession()
-  {
-    if (session == null)
-    {
-      session = openSession();
-    }
-
-    return session;
-  }
-
-  private Session openSession()
-  {
-    return new Session(this);
-  }
-
-  private ISecurePreferences getPreferences()
-  {
-    if (Activator.PLATFORM_RUNNING && !TRANSIENT_CREDENTIALS)
-    {
-      String serviceNode = getServiceNode();
-      return SecurePreferencesFactory.getDefault().node(Activator.PLUGIN_ID).node(serviceNode);
-    }
-
-    return null;
-  }
-
-  private String getServiceNode()
-  {
-    String result = getServiceURI().toString();
-
-    try
-    {
-      result = URLEncoder.encode(result, "UTF-8"); //$NON-NLS-1$
-    }
-    catch (UnsupportedEncodingException ex)
-    {
-      // UTF-8 should always be available.
-    }
-
-    return result;
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static final class DynamicStorage extends Storage implements IStorage.Dynamic
-  {
-    public DynamicStorage(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
-    {
-      super(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
-    }
-
-    @Override
-    public void remove()
-    {
-      StorageRegistry.INSTANCE.removeStorage(this);
     }
   }
 }
