@@ -37,6 +37,8 @@ public final class Settings
 {
   public static final ISettings DEFAULT = createDefaultSettings();
 
+  public static final ISettings NONE = new NoSettings();
+
   private Settings()
   {
   }
@@ -85,24 +87,18 @@ public final class Settings
   /**
    * @author Eike Stepper
    */
-  public static final class NoSettings implements ISettings
+  private static final class NoSettings implements ISettings
   {
     public NoSettings()
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getValue(String key) throws Exception
     {
       return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setValue(String key, String value) throws Exception
     {

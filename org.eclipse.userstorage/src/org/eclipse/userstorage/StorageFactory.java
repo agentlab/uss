@@ -34,7 +34,7 @@ public final class StorageFactory
 
   public StorageFactory(ISettings settings)
   {
-    this.settings = settings;
+    this.settings = settings != null ? settings : Settings.NONE;
   }
 
   /**
