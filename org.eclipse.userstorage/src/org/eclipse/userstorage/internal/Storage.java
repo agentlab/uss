@@ -58,6 +58,12 @@ public final class Storage implements IStorage
   }
 
   @Override
+  public StorageFactory getFactory()
+  {
+    return factory;
+  }
+
+  @Override
   public StorageCache getCache()
   {
     return (StorageCache)cache;

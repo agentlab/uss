@@ -48,7 +48,15 @@ public interface IStorage
   public String getApplicationToken();
 
   /**
-   * Returns the local storage cache of this storage.
+   * Returns the factory of this storage.
+   * <p>
+   *
+   * @return the factory of this storage, never <code>null</code>.<p>
+   */
+  public StorageFactory getFactory();
+
+  /**
+   * Returns the local cache of this storage.
    * <p>
    *
    * @return the local cache of this storage, or <code>null</code> if no cache was specified when this storage was created.<p>
