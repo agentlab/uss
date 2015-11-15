@@ -18,11 +18,13 @@ import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.Settings;
+import org.eclipse.userstorage.util.Settings.MemorySettings;
 
 import java.util.NoSuchElementException;
 
 /**
- * Creates {@link IStorage storages}.
+ * Creates {@link IStorage storages} and maintains their preferred {@link IStorage#getService() services}
+ * in the supplied {@link #getSettings() settings}.
  *
  * @author Eike Stepper
  */
@@ -32,13 +34,18 @@ public final class StorageFactory
 
   private final ISettings settings;
 
+  /**
+   * Constructs this storage factory with the given settings.
+   *
+   * @param settings the settings to use with this storage factory, or <code>null</code> for {@link Settings#NONE no settings}.
+   */
   public StorageFactory(ISettings settings)
   {
     this.settings = settings != null ? settings : Settings.NONE;
   }
 
   /**
-   * Constructs this storage factory.
+   * Constructs this storage factory with {@link MemorySettings in-memory settings}.
    */
   public StorageFactory()
   {

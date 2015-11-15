@@ -109,6 +109,58 @@ public final class Settings
   /**
    * @author Eike Stepper
    */
+  public static final class EclipseSettings implements ISettings
+  {
+    private final Preferences node;
+  
+    public EclipseSettings(String scope) throws Exception
+    {
+      IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
+      if (!rootNode.nodeExists(scope))
+      {
+        throw new BackingStoreException("Invalid scope: " + scope);
+      }
+  
+      String nodeName = getNodeName();
+      node = rootNode.node(scope).node(nodeName);
+    }
+  
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getValue(String key) throws Exception
+    {
+      return node.get(key, null);
+    }
+  
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setValue(String key, String value) throws Exception
+    {
+      if (value == null)
+      {
+        node.remove(key);
+      }
+      else
+      {
+        node.put(key, value);
+      }
+  
+      node.flush();
+    }
+  
+    protected String getNodeName()
+    {
+      return Activator.PLUGIN_ID;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
   public static final class MemorySettings implements ISettings
   {
     private final Map<String, String> map = new HashMap<String, String>();
@@ -140,58 +192,6 @@ public final class Settings
       {
         map.put(key, value);
       }
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static final class EclipseSettings implements ISettings
-  {
-    private final Preferences node;
-
-    public EclipseSettings(String scope) throws BackingStoreException
-    {
-      IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
-      if (!rootNode.nodeExists(scope))
-      {
-        throw new BackingStoreException("Invalid scope: " + scope);
-      }
-
-      String nodeName = getNodeName();
-      node = rootNode.node(scope).node(nodeName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getValue(String key) throws Exception
-    {
-      return node.get(key, null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(String key, String value) throws Exception
-    {
-      if (value == null)
-      {
-        node.remove(key);
-      }
-      else
-      {
-        node.put(key, value);
-      }
-
-      node.flush();
-    }
-
-    protected String getNodeName()
-    {
-      return Activator.PLUGIN_ID;
     }
   }
 
