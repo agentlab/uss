@@ -81,7 +81,7 @@ public final class Settings
       }
     }
 
-    return new MemorySettings();
+    return NONE;
   }
 
   /**
