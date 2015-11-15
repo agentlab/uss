@@ -8,13 +8,16 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.spi;
+package org.eclipse.userstorage;
 
-import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService.Registry;
-import org.eclipse.userstorage.internal.DefaultStorageFactory;
-import org.eclipse.userstorage.internal.InternalStorageFactory;
+import org.eclipse.userstorage.internal.Activator;
+import org.eclipse.userstorage.internal.Storage;
+import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.ISettings;
+import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
+import org.eclipse.userstorage.util.Settings;
 
 import java.util.NoSuchElementException;
 
@@ -23,15 +26,33 @@ import java.util.NoSuchElementException;
  *
  * @author Eike Stepper
  */
-public class StorageFactory extends InternalStorageFactory
+public final class StorageFactory
 {
-  public static final StorageFactory DEFAULT = new DefaultStorageFactory();
+  public static final StorageFactory DEFAULT = new StorageFactory(Settings.DEFAULT);
+
+  private final ISettings settings;
+
+  public StorageFactory(ISettings settings)
+  {
+    this.settings = settings;
+  }
 
   /**
    * Constructs this storage factory.
    */
   public StorageFactory()
   {
+    this(new Settings.MemorySettings());
+  }
+
+  /**
+   * Returns the settings of this factory.
+   *
+   * @return the settings of this factory, never <code>null</code>.
+   */
+  public ISettings getSettings()
+  {
+    return settings;
   }
 
   /**
@@ -48,9 +69,9 @@ public class StorageFactory extends InternalStorageFactory
    *
    * @see #create(String, StorageCache)
    */
-  public final IStorage create(String applicationToken) throws NoSuchElementException, BadApplicationTokenException
+  public IStorage create(String applicationToken) throws NoSuchElementException, BadApplicationTokenException
   {
-    return super.create(applicationToken, null);
+    return create(applicationToken, null);
   }
 
   /**
@@ -66,41 +87,75 @@ public class StorageFactory extends InternalStorageFactory
    * @see #create(String)
    * @see StorageCache
    */
-  @Override
-  public final IStorage create(String applicationToken, StorageCache cache) throws NoSuchElementException, BadApplicationTokenException
+  public IStorage create(String applicationToken, StorageCache cache) throws NoSuchElementException, BadApplicationTokenException
   {
-    return super.create(applicationToken, cache);
+    IStorageService service = getService(applicationToken);
+
+    Storage storage = new Storage(this, applicationToken, cache);
+    storage.setService(service);
+    return storage;
   }
 
-  /**
-   * Returns the URI of the preferred service for the given application.
-   * <p>
-   * Subclasses can override this method, for example,  to implement a per-application service memory.
-   * The default implementation returns <code>null</code>.
-   * <p>
-   *
-   * @param applicationToken the application token.<p>
-   * @return the URI of the preferred service for the given application.
-   */
-  @Override
-  protected String getPreferredServiceURI(String applicationToken)
+  private IStorageService getService(String applicationToken) throws NoSuchElementException
   {
+    if (!StringUtil.isEmpty(applicationToken))
+    {
+      IStorageService service = getPreferredService(applicationToken);
+      if (service != null)
+      {
+        return service;
+      }
+    }
+
+    IStorageService service = getPreferredService(null);
+    if (service != null)
+    {
+      return service;
+    }
+
+    IStorageService[] storages = IStorageService.Registry.INSTANCE.getServices();
+    if (storages.length != 0)
+    {
+      return storages[0];
+    }
+
+    throw new NoSuchElementException("No service registered");
+  }
+
+  private IStorageService getPreferredService(String applicationToken) throws NoSuchElementException
+  {
+    if (StringUtil.isEmpty(applicationToken))
+    {
+      applicationToken = "<default>";
+    }
+
+    try
+    {
+      String serviceURI = getPreferredServiceURI(applicationToken);
+      if (serviceURI != null)
+      {
+        return IStorageService.Registry.INSTANCE.getService(StringUtil.newURI(serviceURI));
+      }
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
     return null;
   }
 
-  /**
-   * Sets the URI of the preferred service for the given application.
-   * <p>
-   * Subclasses can override this method, for example,  to implement a per-application service memory.
-   * The default implementation does nothing.
-   * <p>
-   *
-   * @param applicationToken the application token.<p>
-   * @param serviceURI the URI of the preferred service for the given application.
-   */
-  @Override
-  protected void setPreferredServiceURI(String applicationToken, String serviceURI)
+  private String getPreferredServiceURI(String applicationToken)
   {
-    // Do nothing.
+    try
+    {
+      return settings.getValue(applicationToken);
+    }
+    catch (Exception ex)
+    {
+      Activator.log(ex);
+    }
+
+    return null;
   }
 }

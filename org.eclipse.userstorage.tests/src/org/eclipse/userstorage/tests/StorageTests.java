@@ -15,11 +15,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.Activator;
 import org.eclipse.userstorage.internal.Session;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
-import org.eclipse.userstorage.spi.StorageFactory;
+import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.tests.util.FixedCredentialsProvider;
 import org.eclipse.userstorage.tests.util.USSServer;
 import org.eclipse.userstorage.tests.util.USSServer.NOOPLogger;
@@ -96,14 +97,19 @@ public final class StorageTests extends AbstractTest
       final String serviceURI = "http://localhost:" + port;
       service = IStorageService.Registry.INSTANCE.addService("Test Service", StringUtil.newURI(serviceURI));
 
-      factory = new StorageFactory()
+      factory = new StorageFactory(new ISettings()
       {
         @Override
-        protected String getPreferredServiceURI(String applicationToken)
+        public String getValue(String key) throws Exception
         {
           return serviceURI;
         }
-      };
+
+        @Override
+        public void setValue(String key, String value) throws Exception
+        {
+        }
+      });
     }
 
     IOUtil.deleteFiles(CACHE);

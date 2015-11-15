@@ -11,7 +11,6 @@
 package org.eclipse.userstorage;
 
 import org.eclipse.userstorage.spi.StorageCache;
-import org.eclipse.userstorage.spi.StorageFactory;
 import org.eclipse.userstorage.util.BadKeyException;
 
 /**

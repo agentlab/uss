@@ -12,6 +12,7 @@ package org.eclipse.userstorage.spi;
 
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.StorageFactory;
 
 /**
  * A generic key/value map used by the {@link StorageFactory#DEFAULT default storage factory}

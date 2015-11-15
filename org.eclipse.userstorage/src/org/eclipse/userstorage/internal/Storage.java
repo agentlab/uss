@@ -13,8 +13,10 @@ package org.eclipse.userstorage.internal;
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.util.IOUtil.TeeInputStream;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.ConflictException;
@@ -34,7 +36,7 @@ public final class Storage implements IStorage
 {
   private final String applicationToken;
 
-  private final InternalStorageFactory factory;
+  private final StorageFactory factory;
 
   private final InternalStorageCache cache;
 
@@ -42,7 +44,7 @@ public final class Storage implements IStorage
 
   private StorageService service;
 
-  public Storage(InternalStorageFactory factory, String applicationToken, InternalStorageCache cache) throws BadApplicationTokenException
+  public Storage(StorageFactory factory, String applicationToken, InternalStorageCache cache) throws BadApplicationTokenException
   {
     this.applicationToken = BadApplicationTokenException.validate(applicationToken);
     this.factory = factory;
@@ -75,11 +77,10 @@ public final class Storage implements IStorage
       disposeBlobs();
 
       this.service = (StorageService)service;
-      factory.setPreferredServiceURI(applicationToken, service.getServiceURI().toString());
+      setPreferredServiceURI(service.getServiceURI().toString());
 
       if (cache != null)
       {
-        // TODO Should this happen later when the new storage is accessed the first time?
         cache.setService(service);
       }
     }
@@ -195,6 +196,19 @@ public final class Storage implements IStorage
   public String toString()
   {
     return service + " (" + applicationToken + ")";
+  }
+
+  private void setPreferredServiceURI(String serviceURI)
+  {
+    try
+    {
+      ISettings settings = factory.getSettings();
+      settings.setValue(applicationToken, serviceURI);
+    }
+    catch (Exception ex)
+    {
+      Activator.log(ex);
+    }
   }
 
   private void disposeBlobs()

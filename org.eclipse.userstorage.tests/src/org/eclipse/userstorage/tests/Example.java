@@ -12,8 +12,8 @@ package org.eclipse.userstorage.tests;
 
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.util.IOUtil;
-import org.eclipse.userstorage.spi.StorageFactory;
 import org.eclipse.userstorage.util.FileStorageCache;
 
 import java.io.FileOutputStream;
