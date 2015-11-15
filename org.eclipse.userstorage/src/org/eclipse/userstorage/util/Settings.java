@@ -112,19 +112,23 @@ public final class Settings
   public static final class EclipseSettings implements ISettings
   {
     private final Preferences node;
-  
-    public EclipseSettings(String scope) throws Exception
+
+    public EclipseSettings(String scope, String pluginID) throws Exception
     {
       IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
       if (!rootNode.nodeExists(scope))
       {
         throw new BackingStoreException("Invalid scope: " + scope);
       }
-  
-      String nodeName = getNodeName();
-      node = rootNode.node(scope).node(nodeName);
+
+      node = rootNode.node(scope).node(pluginID);
     }
-  
+
+    public EclipseSettings(String scope) throws Exception
+    {
+      this(scope, Activator.PLUGIN_ID);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -133,7 +137,7 @@ public final class Settings
     {
       return node.get(key, null);
     }
-  
+
     /**
      * {@inheritDoc}
      */
@@ -148,13 +152,8 @@ public final class Settings
       {
         node.put(key, value);
       }
-  
+
       node.flush();
-    }
-  
-    protected String getNodeName()
-    {
-      return Activator.PLUGIN_ID;
     }
   }
 
@@ -207,9 +206,14 @@ public final class Settings
       this.file = file;
     }
 
+    public FileSettings(String pluginID)
+    {
+      this(new File(System.getProperty("user.home"), ".eclipse/" + pluginID + "/.settings"));
+    }
+
     public FileSettings()
     {
-      this(new File(System.getProperty("user.home"), ".eclipse/" + Activator.PLUGIN_ID + "/.settings"));
+      this(Activator.PLUGIN_ID);
     }
 
     /**

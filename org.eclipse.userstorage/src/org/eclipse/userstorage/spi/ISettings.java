@@ -15,7 +15,7 @@ import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.StorageFactory;
 
 /**
- * A generic key/value map used by the {@link StorageFactory#DEFAULT default storage factory}
+ * A key/value map used by the {@link StorageFactory#DEFAULT default storage factory}
  * to remember the last {@link IStorageService service} of a {@link IStorage storage}.
  *
  * @author Eike Stepper
