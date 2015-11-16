@@ -16,6 +16,7 @@ import org.eclipse.userstorage.internal.StorageService;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -42,19 +43,21 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class ServicesPreferencePage extends org.eclipse.jface.preference.PreferencePage implements IWorkbenchPreferencePage
+public class ServicesPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
 {
+  public static final String ID = "org.eclipse.userstorage.ui.ServicesPreferencePage";
+
   private final Map<IStorageService, Credentials> credentialsMap = new HashMap<IStorageService, Credentials>();
 
   private TableViewer servicesViewer;
 
   private CredentialsComposite credentialsComposite;
 
-  private IStorageService currentService;
-
   private Button addButton;
 
   private Button removeButton;
+
+  private IStorageService selectedService;
 
   public ServicesPreferencePage()
   {
@@ -67,15 +70,14 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
     // Do nothing.
   }
 
-  private Composite createArea(Composite parent, int columns)
+  @Override
+  public void applyData(Object data)
   {
-    GridLayout layout = new GridLayout(columns, false);
-    layout.marginWidth = 0;
-    layout.marginHeight = 0;
-
-    final Composite main = new Composite(parent, SWT.NONE);
-    main.setLayout(layout);
-    return main;
+    if (data instanceof IStorageService)
+    {
+      IStorageService service = (IStorageService)data;
+      setSelectedService(service);
+    }
   }
 
   @Override
@@ -108,7 +110,7 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-        setCurrentService((IStorageService)selection.getFirstElement());
+        setSelectedService((IStorageService)selection.getFirstElement());
       }
     });
 
@@ -120,9 +122,9 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
       @Override
       protected void validate()
       {
-        if (currentService != null)
+        if (selectedService != null)
         {
-          credentialsMap.put(currentService, getCredentials());
+          credentialsMap.put(selectedService, getCredentials());
         }
       }
     };
@@ -164,9 +166,9 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        if (currentService instanceof IStorageService.Dynamic)
+        if (selectedService instanceof IStorageService.Dynamic)
         {
-          IStorageService.Dynamic dynamicService = (IStorageService.Dynamic)currentService;
+          IStorageService.Dynamic dynamicService = (IStorageService.Dynamic)selectedService;
           Object[] elements = contentProvider.getElements(null);
           final int currentIndex = getCurrentIndex(elements, dynamicService);
 
@@ -191,8 +193,7 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
                       newIndex = elements.length - 1;
                     }
 
-                    setCurrentService((IStorageService)elements[newIndex]);
-                    servicesViewer.setSelection(new StructuredSelection(currentService));
+                    setSelectedService((IStorageService)elements[newIndex]);
                   }
                 }
               }
@@ -231,8 +232,7 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
     Object[] elements = contentProvider.getElements(null);
     if (elements.length != 0)
     {
-      setCurrentService((IStorageService)elements[0]);
-      servicesViewer.setSelection(new StructuredSelection(currentService));
+      setSelectedService((IStorageService)elements[0]);
     }
 
     return mainArea;
@@ -243,9 +243,9 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
   {
     credentialsMap.clear();
 
-    IStorageService service = currentService;
-    currentService = null;
-    setCurrentService(service);
+    IStorageService service = selectedService;
+    selectedService = null;
+    setSelectedService(service);
 
     super.performDefaults();
   }
@@ -263,27 +263,40 @@ public class ServicesPreferencePage extends org.eclipse.jface.preference.Prefere
     return super.performOk();
   }
 
-  private void setCurrentService(IStorageService service)
+  private Composite createArea(Composite parent, int columns)
   {
-    if (service != currentService)
-    {
-      currentService = service;
+    GridLayout layout = new GridLayout(columns, false);
+    layout.marginWidth = 0;
+    layout.marginHeight = 0;
 
-      if (currentService != null)
+    final Composite main = new Composite(parent, SWT.NONE);
+    main.setLayout(layout);
+    return main;
+  }
+
+  private void setSelectedService(IStorageService service)
+  {
+    if (service != selectedService)
+    {
+      selectedService = service;
+
+      if (selectedService != null)
       {
-        Credentials credentials = credentialsMap.get(currentService);
+        Credentials credentials = credentialsMap.get(selectedService);
         if (credentials == null)
         {
-          credentials = ((StorageService)currentService).getCredentials();
+          credentials = ((StorageService)selectedService).getCredentials();
           if (credentials != null)
           {
-            credentialsMap.put(currentService, credentials);
+            credentialsMap.put(selectedService, credentials);
           }
         }
 
-        credentialsComposite.setService(currentService);
+        credentialsComposite.setService(selectedService);
         credentialsComposite.setCredentials(credentials);
-        removeButton.setEnabled(currentService instanceof IStorageService.Dynamic);
+        removeButton.setEnabled(selectedService instanceof IStorageService.Dynamic);
+
+        servicesViewer.setSelection(new StructuredSelection(selectedService));
       }
       else
       {

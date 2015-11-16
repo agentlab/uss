@@ -182,6 +182,8 @@ public class CredentialsComposite extends Composite
     passwordLabel.setEnabled(enabled);
     passwordText.setEnabled(enabled);
     createAccountLink.setEnabled(enabled);
+    editAccountLink.setEnabled(enabled);
+    recoverPasswordLink.setEnabled(enabled);
   }
 
   protected void createUI(Composite parent, int columns)
