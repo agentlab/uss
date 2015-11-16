@@ -16,14 +16,11 @@ import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.util.ConflictException;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -31,8 +28,6 @@ import java.util.Map;
  */
 public class StorageService implements IStorageService
 {
-  private static final boolean TRANSIENT_CREDENTIALS = Boolean.getBoolean(StorageService.class.getName() + ".transientCredentials");
-
   private static final String USERNAME_KEY = "username";
 
   private static final String PASSWORD_KEY = "password";
@@ -104,7 +99,7 @@ public class StorageService implements IStorageService
   {
     try
     {
-      ISecurePreferences securePreferences = getPreferences();
+      ISecurePreferences securePreferences = getSecurePreferences();
       if (securePreferences != null)
       {
         String username = securePreferences.get(USERNAME_KEY, null);
@@ -128,7 +123,7 @@ public class StorageService implements IStorageService
   {
     try
     {
-      ISecurePreferences securePreferences = getPreferences();
+      ISecurePreferences securePreferences = getSecurePreferences();
       if (securePreferences != null)
       {
         if (credentials == null)
@@ -211,9 +206,27 @@ public class StorageService implements IStorageService
   }
 
   @Override
+  public int compareTo(IStorageService o)
+  {
+    return serviceLabel.compareTo(o.getServiceLabel());
+  }
+
+  @Override
   public String toString()
   {
     return serviceLabel;
+  }
+
+  public ISecurePreferences getSecurePreferences()
+  {
+    ISecurePreferences securePreferences = Activator.getSecurePreferences();
+    if (securePreferences != null)
+    {
+      String serviceNode = StringUtil.encodeURI(serviceURI);
+      return securePreferences.node(serviceNode);
+    }
+
+    return null;
   }
 
   private synchronized ICredentialsProvider getCredentialsProvider()
@@ -260,39 +273,12 @@ public class StorageService implements IStorageService
     return new Session(this);
   }
 
-  private ISecurePreferences getPreferences()
-  {
-    if (Activator.PLATFORM_RUNNING && !TRANSIENT_CREDENTIALS)
-    {
-      String serviceNode = getServiceNode();
-      return SecurePreferencesFactory.getDefault().node(Activator.PLUGIN_ID).node(serviceNode);
-    }
-
-    return null;
-  }
-
-  private String getServiceNode()
-  {
-    String result = getServiceURI().toString();
-
-    try
-    {
-      result = URLEncoder.encode(result, "UTF-8"); //$NON-NLS-1$
-    }
-    catch (UnsupportedEncodingException ex)
-    {
-      // UTF-8 should always be available.
-    }
-
-    return result;
-  }
-
   /**
    * @author Eike Stepper
    */
-  public static final class DynamicStorage extends StorageService implements IStorageService.Dynamic
+  public static final class DynamicService extends StorageService implements IStorageService.Dynamic
   {
-    public DynamicStorage(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
+    public DynamicService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
     {
       super(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
     }
@@ -300,7 +286,22 @@ public class StorageService implements IStorageService
     @Override
     public void remove()
     {
-      StorageServiceRegistry.INSTANCE.removeStorage(this);
+      StorageServiceRegistry.INSTANCE.removeService(this);
+
+      ISecurePreferences securePreferences = getSecurePreferences();
+      if (securePreferences != null)
+      {
+        try
+        {
+          ISecurePreferences parent = securePreferences.parent();
+          securePreferences.removeNode();
+          parent.flush();
+        }
+        catch (Exception ex)
+        {
+          Activator.log(ex);
+        }
+      }
     }
   }
 }

@@ -49,7 +49,7 @@ public final class StorageFactory
    */
   public StorageFactory()
   {
-    this(new Settings.MemorySettings());
+    this(new MemorySettings());
   }
 
   /**

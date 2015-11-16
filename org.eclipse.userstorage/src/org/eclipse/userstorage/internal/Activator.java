@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 
 import org.osgi.framework.BundleContext;
 
@@ -140,6 +142,16 @@ public class Activator extends Plugin
     }
 
     return new Status(severity, PLUGIN_ID, msg, t);
+  }
+
+  public static ISecurePreferences getSecurePreferences()
+  {
+    if (PLATFORM_RUNNING)
+    {
+      return SecurePreferencesFactory.getDefault().node(PLUGIN_ID);
+    }
+
+    return null;
   }
 
   public static ICredentialsProvider getCredentialsProvider()

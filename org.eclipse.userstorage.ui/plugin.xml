@@ -16,8 +16,18 @@
    <extension
          point="org.eclipse.userstorage.credentialsProviders">
       <credentialsProvider
-            class="org.eclipse.userstorage.ui.internal.CredentialsPrompter">
+            class="org.eclipse.userstorage.ui.internal.DialogCredentialsProvider">
       </credentialsProvider>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.ui.preferencePages.Workbench"
+            class="org.eclipse.userstorage.ui.internal.ServicesPreferencePage"
+            id="org.eclipse.userstorage.ui.ServicesPreferencePage"
+            name="User Storage">
+      </page>
    </extension>
 
 </plugin>

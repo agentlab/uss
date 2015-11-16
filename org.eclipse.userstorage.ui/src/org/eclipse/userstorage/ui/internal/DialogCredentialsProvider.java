@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public final class CredentialsPrompter implements ICredentialsProvider
+public final class DialogCredentialsProvider implements ICredentialsProvider
 {
-  public static final CredentialsPrompter INSTANCE = new CredentialsPrompter();
+  public static final DialogCredentialsProvider INSTANCE = new DialogCredentialsProvider();
 
   @Override
   public Credentials provideCredentials(final IStorageService service)

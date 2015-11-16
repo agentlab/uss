@@ -26,7 +26,7 @@ import java.net.URI;
  * @noextend This interface is not intended to be extended by clients.
  * @noimplement This interface is not intended to be implemented by clients.
  */
-public interface IStorageService
+public interface IStorageService extends Comparable<IStorageService>
 {
   /**
    * Returns the label of the REST service behind this storage.
@@ -177,6 +177,13 @@ public interface IStorageService
      * @see #addService(String, URI, URI, URI, URI)
      */
     public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI) throws IllegalStateException;
+
+    /**
+     * Refreshes the dynamic services from the underlying secure storage and returns the newly added services.
+     *
+     * @return the newly added services.<p>
+     */
+    public IStorageService.Dynamic[] refresh();
 
     /**
      * @author Eike Stepper

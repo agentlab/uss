@@ -11,7 +11,7 @@
 package org.eclipse.userstorage.internal;
 
 import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.internal.StorageService.DynamicStorage;
+import org.eclipse.userstorage.internal.StorageService.DynamicService;
 import org.eclipse.userstorage.internal.util.StringUtil;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -20,10 +20,12 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.StorageException;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -37,11 +39,19 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   private static final ExtensionPointHandler HANDLER = new ExtensionPointHandler();
 
+  private static final String SERVICE_LABEL = "serviceLabel";
+
+  private static final String SERVICE_URI = "serviceURI";
+
+  private static final String CREATE_ACCOUNT_URI = "createAccountURI";
+
+  private static final String EDIT_ACCOUNT_URI = "editAccountURI";
+
+  private static final String RECOVER_PASSWORD_URI = "recoverPasswordURI";
+
   private final List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
-  private final Map<URI, IStorageService> storages = new LinkedHashMap<URI, IStorageService>();
-
-  private final LinkedList<IStorageService> defaultStorages = new LinkedList<IStorageService>();
+  private final Map<URI, IStorageService> services = new LinkedHashMap<URI, IStorageService>();
 
   private boolean running;
 
@@ -64,20 +74,20 @@ public final class StorageServiceRegistry implements IStorageService.Registry
   @Override
   public IStorageService[] getServices()
   {
-    synchronized (storages)
+    synchronized (services)
     {
       start();
-      return storages.values().toArray(new IStorageService[storages.size()]);
+      return services.values().toArray(new IStorageService[services.size()]);
     }
   }
 
   @Override
   public IStorageService getService(URI serviceURI)
   {
-    synchronized (storages)
+    synchronized (services)
     {
       start();
-      return storages.get(serviceURI);
+      return services.get(serviceURI);
     }
   }
 
@@ -85,9 +95,28 @@ public final class StorageServiceRegistry implements IStorageService.Registry
   public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
       throws IllegalStateException
   {
-    DynamicStorage storage = new DynamicStorage(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
-    addStorage(storage);
-    return storage;
+    DynamicService service = new DynamicService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+    addService(service);
+
+    ISecurePreferences securePreferences = service.getSecurePreferences();
+    if (securePreferences != null)
+    {
+      try
+      {
+        securePreferences.put(SERVICE_LABEL, serviceLabel, false);
+        securePreferences.put(SERVICE_URI, serviceURI.toString(), false);
+        setSecurePreference(securePreferences, CREATE_ACCOUNT_URI, createAccountURI);
+        setSecurePreference(securePreferences, EDIT_ACCOUNT_URI, editAccountURI);
+        setSecurePreference(securePreferences, RECOVER_PASSWORD_URI, recoverPasswordURI);
+        securePreferences.flush();
+      }
+      catch (Exception ex)
+      {
+        Activator.log(ex);
+      }
+    }
+
+    return service;
   }
 
   @Override
@@ -96,28 +125,72 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     return addService(serviceLabel, serviceURI, null, null, null);
   }
 
-  void addStorage(IStorageService storage) throws IllegalStateException
+  @Override
+  public IStorageService.Dynamic[] refresh()
   {
-    URI serviceURI = storage.getServiceURI();
+    List<IStorageService.Dynamic> result = new ArrayList<IStorageService.Dynamic>();
 
-    synchronized (storages)
+    ISecurePreferences securePreferences = Activator.getSecurePreferences();
+    if (securePreferences != null)
+    {
+      for (String name : securePreferences.childrenNames())
+      {
+        try
+        {
+          ISecurePreferences child = securePreferences.node(name);
+
+          String serviceLabel = child.get(SERVICE_LABEL, null);
+          if (StringUtil.isEmpty(serviceLabel))
+          {
+            continue;
+          }
+
+          URI serviceURI = StringUtil.newURI(child.get(SERVICE_URI, null));
+          if (serviceURI == null || !StringUtil.encodeURI(serviceURI).equals(name))
+          {
+            continue;
+          }
+
+          URI createAccountURI = StringUtil.newURI(child.get(CREATE_ACCOUNT_URI, null));
+          URI editAccountURI = StringUtil.newURI(child.get(EDIT_ACCOUNT_URI, null));
+          URI recoverPasswordURI = StringUtil.newURI(child.get(RECOVER_PASSWORD_URI, null));
+
+          IStorageService.Dynamic service = new DynamicService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+          addService(service);
+          result.add(service);
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+    }
+
+    return result.toArray(new IStorageService.Dynamic[result.size()]);
+  }
+
+  void addService(IStorageService service) throws IllegalStateException
+  {
+    URI serviceURI = service.getServiceURI();
+
+    synchronized (services)
     {
       start();
 
-      IStorageService registered = storages.get(serviceURI);
+      IStorageService registered = services.get(serviceURI);
       if (registered != null)
       {
-        throw new IllegalStateException("Storage already registered: " + registered);
+        throw new IllegalStateException("Service already registered: " + registered);
       }
 
-      storages.put(serviceURI, storage);
+      services.put(serviceURI, service);
     }
 
     for (Listener listener : listeners)
     {
       try
       {
-        listener.serviceAdded(storage);
+        listener.serviceAdded(service);
       }
       catch (Exception ex)
       {
@@ -126,14 +199,14 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     }
   }
 
-  void removeStorage(IStorageService storage)
+  void removeService(IStorageService storage)
   {
     URI serviceURI = storage.getServiceURI();
 
-    synchronized (storages)
+    synchronized (services)
     {
       start();
-      storages.remove(serviceURI);
+      services.remove(serviceURI);
     }
 
     for (Listener listener : listeners)
@@ -151,10 +224,12 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   void start()
   {
-    synchronized (storages)
+    synchronized (services)
     {
       if (!running)
       {
+        running = true;
+
         try
         {
           URI serviceURI = StringUtil.newURI("https://api-staging.eclipse.org/");
@@ -163,20 +238,18 @@ public final class StorageServiceRegistry implements IStorageService.Registry
           URI recoverPasswordURI = StringUtil.newURI("https://dev.eclipse.org/site_login/password_recovery.php");
 
           StorageService eclipseStorage = new StorageService("Eclipse.org", serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
-          storages.put(serviceURI, eclipseStorage);
+          services.put(eclipseStorage.getServiceURI(), eclipseStorage);
 
           if (Activator.PLATFORM_RUNNING)
           {
             HANDLER.start();
           }
+
+          refresh();
         }
         catch (Exception ex)
         {
           Activator.log(ex);
-        }
-        finally
-        {
-          running = true;
         }
       }
     }
@@ -184,10 +257,12 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   void stop() throws Exception
   {
-    synchronized (storages)
+    synchronized (services)
     {
       if (running)
       {
+        running = false;
+
         try
         {
           if (Activator.PLATFORM_RUNNING)
@@ -195,18 +270,25 @@ public final class StorageServiceRegistry implements IStorageService.Registry
             HANDLER.stop();
           }
 
-          storages.clear();
-          defaultStorages.clear();
+          services.clear();
         }
         catch (Exception ex)
         {
           Activator.log(ex);
         }
-        finally
-        {
-          running = false;
-        }
       }
+    }
+  }
+
+  private static void setSecurePreference(ISecurePreferences securePreferences, String key, URI uri) throws StorageException
+  {
+    if (uri != null)
+    {
+      securePreferences.put(key, uri.toString(), false);
+    }
+    else
+    {
+      securePreferences.remove(key);
     }
   }
 
@@ -278,7 +360,7 @@ public final class StorageServiceRegistry implements IStorageService.Registry
       try
       {
         StorageService storage = createStorage(configurationElement);
-        INSTANCE.addStorage(storage);
+        INSTANCE.addService(storage);
       }
       catch (Exception ex)
       {
@@ -291,7 +373,7 @@ public final class StorageServiceRegistry implements IStorageService.Registry
       try
       {
         StorageService storage = createStorage(configurationElement);
-        INSTANCE.removeStorage(storage);
+        INSTANCE.removeService(storage);
       }
       catch (Exception ex)
       {
@@ -301,11 +383,11 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
     private StorageService createStorage(IConfigurationElement configurationElement)
     {
-      String serviceLabel = configurationElement.getAttribute("serviceLabel");
-      URI serviceURI = StringUtil.newURI(configurationElement.getAttribute("serviceURI"));
-      URI createAccountURI = StringUtil.newURI(configurationElement.getAttribute("createAccountURI"));
-      URI editAccountURI = StringUtil.newURI(configurationElement.getAttribute("editAccountURI"));
-      URI recoverPasswordURI = StringUtil.newURI(configurationElement.getAttribute("recoverPasswordURI"));
+      String serviceLabel = configurationElement.getAttribute(SERVICE_LABEL);
+      URI serviceURI = StringUtil.newURI(configurationElement.getAttribute(SERVICE_URI));
+      URI createAccountURI = StringUtil.newURI(configurationElement.getAttribute(CREATE_ACCOUNT_URI));
+      URI editAccountURI = StringUtil.newURI(configurationElement.getAttribute(EDIT_ACCOUNT_URI));
+      URI recoverPasswordURI = StringUtil.newURI(configurationElement.getAttribute(RECOVER_PASSWORD_URI));
 
       return new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
     }

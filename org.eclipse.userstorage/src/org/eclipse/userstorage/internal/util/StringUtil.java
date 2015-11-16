@@ -13,6 +13,7 @@ package org.eclipse.userstorage.internal.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 /**
@@ -144,5 +145,24 @@ public final class StringUtil
     }
 
     return newURI(result);
+  }
+
+  public static String encodeURI(URI uri)
+  {
+    return encodeURI(uri.toString());
+  }
+
+  public static String encodeURI(String uri)
+  {
+    try
+    {
+      uri = URLEncoder.encode(uri, "UTF-8"); //$NON-NLS-1$
+    }
+    catch (UnsupportedEncodingException ex)
+    {
+      // UTF-8 should always be available.
+    }
+
+    return uri;
   }
 }
