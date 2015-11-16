@@ -13,6 +13,7 @@ package org.eclipse.userstorage.ui.internal;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.StorageService;
+import org.eclipse.userstorage.internal.util.StringUtil;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -47,7 +48,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 {
   public static final String ID = "org.eclipse.userstorage.ui.ServicesPreferencePage";
 
-  private final Map<IStorageService, Credentials> credentialsMap = new HashMap<IStorageService, Credentials>();
+  private Map<IStorageService, Credentials> credentialsMap = new HashMap<IStorageService, Credentials>();
 
   private TableViewer servicesViewer;
 
@@ -78,6 +79,13 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       IStorageService service = (IStorageService)data;
       setSelectedService(service);
     }
+  }
+
+  @Override
+  public void createControl(Composite parent)
+  {
+    super.createControl(parent);
+    updateEnablement();
   }
 
   @Override
@@ -124,7 +132,9 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       {
         if (selectedService != null)
         {
-          credentialsMap.put(selectedService, getCredentials());
+          Credentials credentials = getCredentials();
+          credentialsMap.put(selectedService, credentials);
+          updateEnablement();
         }
       }
     };
@@ -247,7 +257,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
     selectedService = null;
     setSelectedService(service);
 
-    super.performDefaults();
+    updateEnablement();
   }
 
   @Override
@@ -260,7 +270,8 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       ((StorageService)service).setCredentials(credentials);
     }
 
-    return super.performOk();
+    updateEnablement();
+    return true;
   }
 
   private Composite createArea(Composite parent, int columns)
@@ -304,6 +315,53 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
         credentialsComposite.setCredentials(null);
         removeButton.setEnabled(false);
       }
+    }
+  }
+
+  private void updateEnablement()
+  {
+    boolean dirty = false;
+    for (IStorageService service : IStorageService.Registry.INSTANCE.getServices())
+    {
+      Credentials localCredentials = credentialsMap.get(service);
+      String localUsername = "";
+      String localPassword = "";
+      if (localCredentials != null)
+      {
+        localUsername = StringUtil.safe(localCredentials.getUsername());
+        localPassword = StringUtil.safe(localCredentials.getPassword());
+      }
+      else
+      {
+        continue;
+      }
+
+      Credentials credentials = ((StorageService)service).getCredentials();
+      String username = "";
+      String password = "";
+      if (credentials != null)
+      {
+        username = StringUtil.safe(credentials.getUsername());
+        password = StringUtil.safe(credentials.getPassword());
+      }
+
+      if (!localUsername.equals(username) || !localPassword.equals(password))
+      {
+        dirty = true;
+        break;
+      }
+    }
+
+    Button defaultsButton = getDefaultsButton();
+    if (defaultsButton != null)
+    {
+      defaultsButton.setEnabled(dirty);
+    }
+
+    Button applyButton = getApplyButton();
+    if (applyButton != null)
+    {
+      applyButton.setEnabled(dirty);
     }
   }
 }
