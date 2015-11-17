@@ -12,6 +12,7 @@ package org.eclipse.userstorage;
 
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.ConflictException;
+import org.eclipse.userstorage.util.NoServiceException;
 import org.eclipse.userstorage.util.ProtocolException;
 
 import java.io.DataInput;
@@ -149,12 +150,13 @@ public interface IBlob
    *
    * @return an {@link InputStream} that represents the current contents of this blob, or <code>null</code> if this blob does not exist on the server.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #setContents(InputStream)
    * @see #getETag()
    */
-  public InputStream getContents() throws IOException, IllegalStateException;
+  public InputStream getContents() throws IOException, NoServiceException, IllegalStateException;
 
   /**
    * Sets an {@link InputStream} that represents the new contents of this blob.
@@ -175,12 +177,13 @@ public interface IBlob
    * @return <code>true</code> if a new blob was created, <code>false</code> if an existing blob was updated.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws ConflictException if the server detected a conflict and did not update the blob.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #getContents()
    * @see #setETag(String)
    */
-  public boolean setContents(InputStream in) throws IOException, ConflictException, IllegalStateException;
+  public boolean setContents(InputStream in) throws IOException, ConflictException, NoServiceException, IllegalStateException;
 
   /**
    * Returns a {@link String} that represents the current contents of this blob.
@@ -193,11 +196,12 @@ public interface IBlob
    *
    * @return a {@link String} that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #getContents()
    */
-  public String getContentsUTF() throws IOException, IllegalStateException;
+  public String getContentsUTF() throws IOException, NoServiceException, IllegalStateException;
 
   /**
    * Sets a {@link String} that represents the new contents of this blob.
@@ -210,11 +214,12 @@ public interface IBlob
    * @return <code>true</code> if a new blob was created, <code>false</code> if an existing blob was updated.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws ConflictException if the server detected a conflict and did not update the blob.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #setContents(InputStream)
    */
-  public boolean setContentsUTF(String value) throws IOException, ConflictException, IllegalStateException;
+  public boolean setContentsUTF(String value) throws IOException, ConflictException, NoServiceException, IllegalStateException;
 
   /**
    * Returns a primitive int value that represents the current contents of this blob.
@@ -227,11 +232,12 @@ public interface IBlob
    *
    * @return a primitive int value that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #getContents()
    */
-  public int getContentsInt() throws IOException, NumberFormatException, IllegalStateException;
+  public int getContentsInt() throws IOException, NumberFormatException, NoServiceException, IllegalStateException;
 
   /**
    * Sets a a primitive int value that represents the new contents of this blob.
@@ -244,11 +250,12 @@ public interface IBlob
    * @return <code>true</code> if a new blob was created, <code>false</code> if an existing blob was updated.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws ConflictException if the server detected a conflict and did not update the blob.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #setContents(InputStream)
    */
-  public boolean setContentsInt(int value) throws IOException, ConflictException, IllegalStateException;
+  public boolean setContentsInt(int value) throws IOException, ConflictException, NoServiceException, IllegalStateException;
 
   /**
    * Returns a primitive boolean value that represents the current contents of this blob.
@@ -261,11 +268,12 @@ public interface IBlob
    *
    * @return a primitive boolean value that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #getContents()
    */
-  public boolean getContentsBoolean() throws IOException, IllegalStateException;
+  public boolean getContentsBoolean() throws IOException, NoServiceException, IllegalStateException;
 
   /**
    * Sets a a primitive boolean value that represents the new contents of this blob.
@@ -278,11 +286,12 @@ public interface IBlob
    * @return <code>true</code> if a new blob was created, <code>false</code> if an existing blob was updated.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws ConflictException if the server detected a conflict and did not update the blob.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
    *
    * @see #setContents(InputStream)
    */
-  public boolean setContentsBoolean(boolean value) throws IOException, ConflictException, IllegalStateException;
+  public boolean setContentsBoolean(boolean value) throws IOException, ConflictException, NoServiceException, IllegalStateException;
 
   /**
    * Returns <code>true</code> if this blob is disposed, <code>false</code> otherwise.

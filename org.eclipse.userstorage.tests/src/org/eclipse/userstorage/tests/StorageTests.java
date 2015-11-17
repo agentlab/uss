@@ -58,7 +58,7 @@ public final class StorageTests extends AbstractTest
 
   private static final File CACHE = new File(System.getProperty("java.io.tmpdir"), "uss-tests/cache");
 
-  private static final String APPLICATION_TOKEN = "cNhDr0INs8T109P8h6E1r_GvU3I";
+  private static final String APPLICATION_TOKEN = "pDKTqBfDuNxlAKydhEwxBZPxa4q";
 
   private static final String KEY = "test_blob";
 

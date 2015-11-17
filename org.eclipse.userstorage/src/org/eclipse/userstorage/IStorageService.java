@@ -17,7 +17,7 @@ import java.net.URI;
 /**
  * Represents a remote <i>user storage service</i> (USS).
  * <p>
- * The {@link Registry storage registry} makes known storages available and supports the
+ * The {@link Registry storage service registry} makes known storages available and supports the
  * {@link Registry#addService(String, URI, URI, URI, URI) addition} of {@link Dynamic dynamic}
  * storages.
  * <p>
@@ -71,7 +71,7 @@ public interface IStorageService extends Comparable<IStorageService>
    * statically contributed via the <code>org.eclipse.userstorage.storages</code> extension point).
    * <p>
    * Dynamic storages can be created and registered via the {@link Registry#addService(String, URI, URI, URI, URI) addStorage()} method
-   * and only dynamic storages can be {@link #remove() removed} from the {@link Registry storage registry}.
+   * and only dynamic storages can be {@link #remove() removed} from the {@link Registry storage service registry}.
    * <p>
    *
    * @author Eike Stepper
@@ -81,7 +81,7 @@ public interface IStorageService extends Comparable<IStorageService>
   public interface Dynamic extends IStorageService
   {
     /**
-     * Removes this storage from the {@link Registry storage registry}.
+     * Removes this storage from the {@link Registry storage service registry}.
      */
     public void remove();
   }

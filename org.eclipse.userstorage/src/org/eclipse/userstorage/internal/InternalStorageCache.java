@@ -40,7 +40,10 @@ public abstract class InternalStorageCache
     IStorageService oldService = this.service;
     this.service = service;
 
-    storageChanged(oldService, service);
+    if (service != oldService)
+    {
+      storageChanged(oldService, service);
+    }
   }
 
   protected abstract void storageChanged(IStorageService oldService, IStorageService newService);

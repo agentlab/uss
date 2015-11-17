@@ -16,6 +16,7 @@ import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
+import org.eclipse.userstorage.util.NoServiceException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -91,21 +92,21 @@ public class Blob implements IBlob
   }
 
   @Override
-  public InputStream getContents() throws IOException, IllegalStateException
+  public InputStream getContents() throws IOException, NoServiceException, IllegalStateException
   {
     checkNotDisposed();
     return storage.retrieveBlob(key, properties);
   }
 
   @Override
-  public boolean setContents(InputStream in) throws IOException, ConflictException, IllegalStateException
+  public boolean setContents(InputStream in) throws IOException, ConflictException, NoServiceException, IllegalStateException
   {
     checkNotDisposed();
     return storage.updateBlob(key, properties, in);
   }
 
   @Override
-  public String getContentsUTF() throws IOException, IllegalStateException
+  public String getContentsUTF() throws IOException, NoServiceException, IllegalStateException
   {
     InputStream contents = getContents();
 
@@ -122,31 +123,31 @@ public class Blob implements IBlob
   }
 
   @Override
-  public boolean setContentsUTF(String value) throws IOException, ConflictException, IllegalStateException
+  public boolean setContentsUTF(String value) throws IOException, ConflictException, NoServiceException, IllegalStateException
   {
     return setContents(new ByteArrayInputStream(StringUtil.toUTF(value)));
   }
 
   @Override
-  public int getContentsInt() throws IOException, NumberFormatException, IllegalStateException
+  public int getContentsInt() throws IOException, NumberFormatException, NoServiceException, IllegalStateException
   {
     return Integer.parseInt(getContentsUTF());
   }
 
   @Override
-  public boolean setContentsInt(int value) throws IOException, ConflictException, IllegalStateException
+  public boolean setContentsInt(int value) throws IOException, ConflictException, NoServiceException, IllegalStateException
   {
     return setContentsUTF(Integer.toString(value));
   }
 
   @Override
-  public boolean getContentsBoolean() throws IOException, IllegalStateException
+  public boolean getContentsBoolean() throws IOException, NoServiceException, IllegalStateException
   {
     return Boolean.parseBoolean(getContentsUTF());
   }
 
   @Override
-  public boolean setContentsBoolean(boolean value) throws IOException, ConflictException, IllegalStateException
+  public boolean setContentsBoolean(boolean value) throws IOException, ConflictException, NoServiceException, IllegalStateException
   {
     return setContentsUTF(Boolean.toString(value));
   }

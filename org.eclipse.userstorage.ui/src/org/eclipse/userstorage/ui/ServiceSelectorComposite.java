@@ -49,7 +49,7 @@ public class ServiceSelectorComposite extends Composite
     gridLayout.marginHeight = 0;
     setLayout(gridLayout);
 
-    comboViewer = new ComboViewer(this, SWT.NONE);
+    comboViewer = new ComboViewer(this, SWT.READ_ONLY);
     comboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     comboViewer.setContentProvider(new ServicesContentProvider());
     comboViewer.setInput(IStorageService.Registry.INSTANCE);

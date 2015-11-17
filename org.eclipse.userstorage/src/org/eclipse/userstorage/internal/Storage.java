@@ -20,10 +20,12 @@ import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.ConflictException;
+import org.eclipse.userstorage.util.NoServiceException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +36,8 @@ import java.util.WeakHashMap;
  */
 public final class Storage implements IStorage
 {
+  private static final String DEFAULT_APPLICATION_TOKEN = "<default>";
+
   private final String applicationToken;
 
   private final StorageFactory factory;
@@ -70,8 +74,23 @@ public final class Storage implements IStorage
   }
 
   @Override
-  public StorageService getService()
+  public synchronized StorageService getService()
   {
+    if (service != null)
+    {
+      URI serviceURI = service.getServiceURI();
+      service = (StorageService)IStorageService.Registry.INSTANCE.getService(serviceURI);
+    }
+
+    if (service == null)
+    {
+      service = lookupService();
+      if (cache != null)
+      {
+        cache.setService(service);
+      }
+    }
+
     return service;
   }
 
@@ -83,7 +102,9 @@ public final class Storage implements IStorage
       disposeBlobs();
 
       this.service = (StorageService)service;
-      setPreferredServiceURI(service.getServiceURI().toString());
+
+      String serviceURI = service == null ? null : service.getServiceURI().toString();
+      setServiceURI(serviceURI);
 
       if (cache != null)
       {
@@ -156,8 +177,9 @@ public final class Storage implements IStorage
     }
   }
 
-  public InputStream retrieveBlob(String key, Map<String, String> properties) throws IOException
+  public InputStream retrieveBlob(String key, Map<String, String> properties) throws IOException, NoServiceException
   {
+    StorageService service = getServiceSafe();
     InputStream contents = service.retrieveBlob(applicationToken, key, properties, cache != null);
 
     if (cache != null)
@@ -180,8 +202,10 @@ public final class Storage implements IStorage
     return contents;
   }
 
-  public boolean updateBlob(String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException
+  public boolean updateBlob(String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException, NoServiceException
   {
+    StorageService service = getServiceSafe();
+
     if (cache != null)
     {
       OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
@@ -204,17 +228,96 @@ public final class Storage implements IStorage
     return service + " (" + applicationToken + ")";
   }
 
-  private void setPreferredServiceURI(String serviceURI)
+  private StorageService getServiceSafe()
+  {
+    StorageService service = getService();
+    if (service != null)
+    {
+      return service;
+    }
+
+    throw new NoServiceException();
+  }
+
+  private StorageService lookupService()
+  {
+    if (!StringUtil.isEmpty(applicationToken))
+    {
+      StorageService service = lookupService(applicationToken);
+      if (service != null)
+      {
+        return service;
+      }
+    }
+
+    StorageService service = lookupService(DEFAULT_APPLICATION_TOKEN);
+    if (service != null)
+    {
+      return service;
+    }
+
+    IStorageService[] storages = IStorageService.Registry.INSTANCE.getServices();
+    if (storages.length != 0)
+    {
+      return (StorageService)storages[0];
+    }
+
+    return null;
+  }
+
+  private StorageService lookupService(String applicationToken)
   {
     try
     {
+      String serviceURI = getServiceURI(applicationToken);
+      if (serviceURI != null)
+      {
+        return (StorageService)IStorageService.Registry.INSTANCE.getService(StringUtil.newURI(serviceURI));
+      }
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
+  }
+
+  private String getServiceURI(String applicationToken)
+  {
+    try
+    {
+      String serviceKey = getServiceKey(applicationToken);
+
       ISettings settings = factory.getSettings();
-      settings.setValue(applicationToken, serviceURI);
+      return settings.getValue(serviceKey);
     }
     catch (Exception ex)
     {
       Activator.log(ex);
     }
+
+    return null;
+  }
+
+  private void setServiceURI(String serviceURI)
+  {
+    try
+    {
+      String serviceKey = getServiceKey(applicationToken);
+
+      ISettings settings = factory.getSettings();
+      settings.setValue(serviceKey, serviceURI);
+    }
+    catch (Exception ex)
+    {
+      Activator.log(ex);
+    }
+  }
+
+  private String getServiceKey(String applicationToken)
+  {
+    return applicationToken + ".service";
   }
 
   private void disposeBlobs()

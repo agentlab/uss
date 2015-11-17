@@ -27,7 +27,7 @@ public class Example
 {
   public static void main(String[] args) throws IOException
   {
-    IStorage storage = StorageFactory.DEFAULT.create("cNhDr0INs8T109P8h6E1r_GvU3I", new FileStorageCache());
+    IStorage storage = StorageFactory.DEFAULT.create("pDKTqBfDuNxlAKydhEwxBZPxa4q", new FileStorageCache());
 
     IBlob blob = storage.getBlob("user_setup");
     blob.setContentsUTF("A short UTF-8 string value");

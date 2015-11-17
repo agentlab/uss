@@ -11,16 +11,12 @@
 package org.eclipse.userstorage;
 
 import org.eclipse.userstorage.IStorageService.Registry;
-import org.eclipse.userstorage.internal.Activator;
 import org.eclipse.userstorage.internal.Storage;
-import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.Settings;
 import org.eclipse.userstorage.util.Settings.MemorySettings;
-
-import java.util.NoSuchElementException;
 
 /**
  * Creates {@link IStorage storages} and maintains their preferred {@link IStorage#getService() services}
@@ -65,18 +61,26 @@ public final class StorageFactory
   /**
    * Creates a storage for the application identified by the given application token.
    * <p>
+   * This factory searches for a {@link IStorage#getService() storage service} in the following order:
+   * <p>
+   * <ol>
+   * <li> Look-up a mapping for the <code>applicationToken</code> in the {@link #getSettings() settings} of this factory.
+   * <li> Look-up a mapping for <code>"&lt;default>"</code> in the {@link #getSettings() settings} of this factory.
+   * <li> Look-up the first service in the {@link IStorageService.Registry storage service registry}.
+   * <li> No service is assigned if the {@link Registry storage service registry} is empty.
+   * </ol>
+   * <p>
    * Calling this method is identical to calling <code>create(applicationToken, null)</code>.
    * <p>
    *
    * @param applicationToken the application token that identifies the application of the storage to be created.
    *        Minimal {@link BadApplicationTokenException#validate(String) lexical validation} is performed on the passed application token.<p>
    * @return the newly created storage, never <code>null</code>.<p>
-   * @throws NoSuchElementException if the {@link Registry storage registry} is empty and, hence, there is no default storage available.<p>
    * @throws BadApplicationTokenException if {@link BadApplicationTokenException#validate(String) lexical validation} of the passed application token fails.<p>
    *
    * @see #create(String, StorageCache)
    */
-  public IStorage create(String applicationToken) throws NoSuchElementException, BadApplicationTokenException
+  public IStorage create(String applicationToken) throws BadApplicationTokenException
   {
     return create(applicationToken, null);
   }
@@ -84,85 +88,27 @@ public final class StorageFactory
   /**
    * Creates a storage for the application identified by the given application token and associates it with a given {@link StorageCache storage cache}.
    * <p>
+   * This factory searches for a {@link IStorage#getService() storage service} in the following order:
+   * <p>
+   * <ol>
+   * <li> Look-up a mapping for the <code>applicationToken</code> in the {@link #getSettings() settings} of this factory.
+   * <li> Look-up a mapping for <code>"&lt;default>"</code> in the {@link #getSettings() settings} of this factory.
+   * <li> Look-up the first service in the {@link IStorageService.Registry storage service registry}.
+   * <li> No service is assigned if the {@link Registry storage service registry} is empty.
+   * </ol>
+   * <p>
+   *
    * @param applicationToken the application token that identifies the application of the storage to be created.
    *        Minimal {@link BadApplicationTokenException#validate(String) lexical validation} is performed on the passed application token.<p>
    * @param cache a local storage cache to be used as a locally persistent optimization, or <code>null</code> if local caching is not wanted.<p>
    * @return the newly created storage, never <code>null</code>.<p>
-   * @throws NoSuchElementException if the {@link Registry storage registry} is empty and, hence, there is no default storage available.<p>
    * @throws BadApplicationTokenException if {@link BadApplicationTokenException#validate(String) lexical validation} of the passed application token fails.<p>
    *
    * @see #create(String)
    * @see StorageCache
    */
-  public IStorage create(String applicationToken, StorageCache cache) throws NoSuchElementException, BadApplicationTokenException
+  public IStorage create(String applicationToken, StorageCache cache) throws BadApplicationTokenException
   {
-    IStorageService service = getService(applicationToken);
-
-    Storage storage = new Storage(this, applicationToken, cache);
-    storage.setService(service);
-    return storage;
-  }
-
-  private IStorageService getService(String applicationToken) throws NoSuchElementException
-  {
-    if (!StringUtil.isEmpty(applicationToken))
-    {
-      IStorageService service = getPreferredService(applicationToken);
-      if (service != null)
-      {
-        return service;
-      }
-    }
-
-    IStorageService service = getPreferredService(null);
-    if (service != null)
-    {
-      return service;
-    }
-
-    IStorageService[] storages = IStorageService.Registry.INSTANCE.getServices();
-    if (storages.length != 0)
-    {
-      return storages[0];
-    }
-
-    throw new NoSuchElementException("No service registered");
-  }
-
-  private IStorageService getPreferredService(String applicationToken) throws NoSuchElementException
-  {
-    if (StringUtil.isEmpty(applicationToken))
-    {
-      applicationToken = "<default>";
-    }
-
-    try
-    {
-      String serviceURI = getPreferredServiceURI(applicationToken);
-      if (serviceURI != null)
-      {
-        return IStorageService.Registry.INSTANCE.getService(StringUtil.newURI(serviceURI));
-      }
-    }
-    catch (Exception ex)
-    {
-      //$FALL-THROUGH$
-    }
-
-    return null;
-  }
-
-  private String getPreferredServiceURI(String applicationToken)
-  {
-    try
-    {
-      return settings.getValue(applicationToken);
-    }
-    catch (Exception ex)
-    {
-      Activator.log(ex);
-    }
-
-    return null;
+    return new Storage(this, applicationToken, cache);
   }
 }
