@@ -114,10 +114,6 @@ public interface IStorageService extends Comparable<IStorageService>
      */
     public static final Registry INSTANCE = StorageServiceRegistry.INSTANCE;
 
-    public void addListener(Listener listener);
-
-    public void removeListener(Listener listener);
-
     /**
      * Returns an array of all currently registered storages.
      *
@@ -186,12 +182,38 @@ public interface IStorageService extends Comparable<IStorageService>
     public IStorageService.Dynamic[] refresh();
 
     /**
+     * Adds the given listener to the list of listeners that are notified about changes in this registry.
+     *
+     * @param listener the listener to add to the list of listeners that are notified about changes in this registry.
+     */
+    public void addListener(Listener listener);
+
+    /**
+     * Removes the given listener from the list of listeners that are notified about changes in this registry.
+     *
+     * @param listener the listener to remove from the list of listeners that are notified about changes in this registry.
+     */
+    public void removeListener(Listener listener);
+
+    /**
+     * Listens to changes in the {@link Registry#INSTANCE storage service registry}.
+     *
      * @author Eike Stepper
      */
     public interface Listener
     {
+      /**
+       * Called when a service has been added to the {@link Registry#INSTANCE storage service registry}.
+       *
+       * @param service the service that has been added to the registry, never <code>null</code>.
+       */
       public void serviceAdded(IStorageService service);
 
+      /**
+       * Called when a service has been removed from the {@link Registry#INSTANCE storage service registry}.
+       *
+       * @param service the service that has been removed from the registry, never <code>null</code>.
+       */
       public void serviceRemoved(IStorageService service);
     }
   }

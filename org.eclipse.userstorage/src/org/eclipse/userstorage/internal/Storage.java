@@ -28,8 +28,10 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Eike Stepper
@@ -37,6 +39,8 @@ import java.util.WeakHashMap;
 public final class Storage implements IStorage
 {
   private static final String DEFAULT_APPLICATION_TOKEN = "<default>";
+
+  private final List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
   private final String applicationToken;
 
@@ -74,71 +78,105 @@ public final class Storage implements IStorage
   }
 
   @Override
-  public synchronized StorageService getService()
+  public StorageService getService()
   {
-    if (service != null)
-    {
-      URI serviceURI = service.getServiceURI();
-      service = (StorageService)IStorageService.Registry.INSTANCE.getService(serviceURI);
-    }
+    StorageService oldService;
+    StorageService newService;
 
-    if (service == null)
+    synchronized (this)
     {
-      service = lookupService();
-      if (cache != null)
+      oldService = service;
+      newService = oldService;
+
+      if (newService != null)
       {
-        cache.setService(service);
+        URI serviceURI = newService.getServiceURI();
+        newService = (StorageService)IStorageService.Registry.INSTANCE.getService(serviceURI);
+      }
+
+      if (newService == null)
+      {
+        newService = lookupService();
+        if (cache != null)
+        {
+          cache.setService(newService);
+        }
       }
     }
 
-    return service;
+    notifyListeners(oldService, newService);
+    return newService;
   }
 
   @Override
-  public synchronized void setService(IStorageService service)
+  public void setService(IStorageService service)
   {
-    if (service != this.service)
+    StorageService oldService;
+
+    synchronized (this)
     {
-      disposeBlobs();
+      oldService = this.service;
 
-      this.service = (StorageService)service;
-
-      String serviceURI = service == null ? null : service.getServiceURI().toString();
-      setServiceURI(serviceURI);
-
-      if (cache != null)
+      if (service != oldService)
       {
-        cache.setService(service);
+        disposeBlobs();
+
+        this.service = (StorageService)service;
+
+        String serviceURI = service == null ? null : service.getServiceURI().toString();
+        setServiceURI(serviceURI);
+
+        if (cache != null)
+        {
+          cache.setService(service);
+        }
       }
+    }
+
+    notifyListeners(oldService, service);
+  }
+
+  @Override
+  public IBlob getBlob(String key)
+  {
+    synchronized (this)
+    {
+      Blob blob = blobs.get(key);
+      if (blob == null)
+      {
+        Map<String, String> properties = new HashMap<String, String>();
+
+        if (cache != null)
+        {
+          try
+          {
+            cache.internalLoadProperties(applicationToken, key, properties);
+          }
+          catch (IOException ex)
+          {
+            properties.clear();
+            Activator.log(ex);
+          }
+        }
+
+        blob = new Blob(this, key, properties);
+        blobs.put(key, blob);
+      }
+
+      return blob;
     }
   }
 
   @Override
-  public synchronized IBlob getBlob(String key)
+  public void addListener(Listener listener)
   {
-    Blob blob = blobs.get(key);
-    if (blob == null)
-    {
-      Map<String, String> properties = new HashMap<String, String>();
+    listeners.add(listener);
+  }
 
-      if (cache != null)
-      {
-        try
-        {
-          cache.internalLoadProperties(applicationToken, key, properties);
-        }
-        catch (IOException ex)
-        {
-          properties.clear();
-          Activator.log(ex);
-        }
-      }
-
-      blob = new Blob(this, key, properties);
-      blobs.put(key, blob);
-    }
-
-    return blob;
+  @Override
+  public void removeListener(Listener listener)
+  {
+    listeners.remove(listener);
   }
 
   public void setETag(String key, Map<String, String> properties, String eTag)
@@ -287,10 +325,8 @@ public final class Storage implements IStorage
   {
     try
     {
-      String serviceKey = getServiceKey(applicationToken);
-
       ISettings settings = factory.getSettings();
-      return settings.getValue(serviceKey);
+      return settings.getValue(applicationToken);
     }
     catch (Exception ex)
     {
@@ -304,10 +340,8 @@ public final class Storage implements IStorage
   {
     try
     {
-      String serviceKey = getServiceKey(applicationToken);
-
       ISettings settings = factory.getSettings();
-      settings.setValue(serviceKey, serviceURI);
+      settings.setValue(applicationToken, serviceURI);
     }
     catch (Exception ex)
     {
@@ -315,9 +349,22 @@ public final class Storage implements IStorage
     }
   }
 
-  private String getServiceKey(String applicationToken)
+  private void notifyListeners(IStorageService oldService, IStorageService newService)
   {
-    return applicationToken + ".service";
+    if (oldService != newService)
+    {
+      for (Listener listener : listeners)
+      {
+        try
+        {
+          listener.serviceChanged(this, oldService, newService);
+        }
+        catch (Exception ex)
+        {
+          Activator.log(ex);
+        }
+      }
+    }
   }
 
   private void disposeBlobs()

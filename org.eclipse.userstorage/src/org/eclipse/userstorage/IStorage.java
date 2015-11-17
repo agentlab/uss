@@ -105,4 +105,35 @@ public interface IStorage
    *          maintains for the logged-in user under the given <code>key</code>, never <code>null</code>.<p>
    */
   public IBlob getBlob(String key) throws BadKeyException;
+
+  /**
+   * Adds the given listener to the list of listeners that are notified about {@link IStorageService service} changes.
+   *
+   * @param listener the listener to add to the list of listeners that are notified about service changes.
+   */
+  public void addListener(Listener listener);
+
+  /**
+   * Removes the given listener from the list of listeners that are notified about {@link IStorageService service} changes.
+   *
+   * @param listener the listener to remove from the list of listeners that are notified about service changes.
+   */
+  public void removeListener(Listener listener);
+
+  /**
+   * Listens to {@link IStorageService service} changes of a {@link IStorage storage}.
+   *
+   * @author Eike Stepper
+   */
+  public interface Listener
+  {
+    /**
+     * Called when the {@link IStorageService service} of a {@link IStorage storage} has changed.
+     *
+     * @param storage the storage, never <code>null</code>.
+     * @param oldService the old service of the storage, possibly <code>null</code>.
+     * @param newService the new service of the storage, possibly <code>null</code>.
+     */
+    public void serviceChanged(IStorage storage, IStorageService oldService, IStorageService newService);
+  }
 }
