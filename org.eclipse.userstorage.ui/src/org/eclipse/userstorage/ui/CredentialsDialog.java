@@ -8,16 +8,16 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.ui.internal;
+package org.eclipse.userstorage.ui;
 
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
+import org.eclipse.userstorage.ui.internal.AbstractDialog;
+import org.eclipse.userstorage.ui.internal.CredentialsComposite;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -27,9 +27,9 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public class CredentialsDialog extends AbstractDialog implements ModifyListener
+public class CredentialsDialog extends AbstractDialog
 {
-  private IStorageService storage;
+  private final IStorageService service;
 
   private Credentials credentials;
 
@@ -37,18 +37,18 @@ public class CredentialsDialog extends AbstractDialog implements ModifyListener
 
   private Button okButton;
 
-  public CredentialsDialog(Shell parentShell, IStorageService storage)
+  public CredentialsDialog(Shell parentShell, IStorageService service)
   {
     super(parentShell);
-    this.storage = storage;
+    this.service = service;
   }
 
-  public IStorageService getStorage()
+  public final IStorageService getService()
   {
-    return storage;
+    return service;
   }
 
-  public Credentials getCredentials()
+  public final Credentials getCredentials()
   {
     return credentials;
   }
@@ -57,7 +57,7 @@ public class CredentialsDialog extends AbstractDialog implements ModifyListener
   protected Control createDialogArea(Composite parent)
   {
     setTitle("Login");
-    setMessage("Enter the credentials for your Eclipse.org account.");
+    setMessage("Enter the credentials for your '" + service.getServiceLabel() + "' account.");
     initializeDialogUnits(parent);
 
     Composite area = (Composite)super.createDialogArea(parent);
@@ -72,7 +72,7 @@ public class CredentialsDialog extends AbstractDialog implements ModifyListener
     };
 
     credentialsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    credentialsComposite.setService(storage);
+    credentialsComposite.setService(service);
     Dialog.applyDialogFont(credentialsComposite);
 
     return area;
@@ -83,12 +83,6 @@ public class CredentialsDialog extends AbstractDialog implements ModifyListener
   {
     super.createButtonsForButtonBar(parent);
     okButton = getButton(IDialogConstants.OK_ID);
-    validatePage();
-  }
-
-  @Override
-  public void modifyText(ModifyEvent e)
-  {
     validatePage();
   }
 

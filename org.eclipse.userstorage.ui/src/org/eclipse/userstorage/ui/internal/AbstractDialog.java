@@ -56,7 +56,6 @@ public class AbstractDialog extends TitleAreaDialog
     });
 
     setTitleImage(titleImage);
-
     return super.createDialogArea(parent);
   }
 }
