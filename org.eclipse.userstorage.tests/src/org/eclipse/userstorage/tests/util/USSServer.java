@@ -76,6 +76,11 @@ public final class USSServer
     return port;
   }
 
+  public File getFolder()
+  {
+    return folder;
+  }
+
   public Set<String> getApplicationTokens()
   {
     return applicationTokens;
@@ -652,8 +657,9 @@ public final class USSServer
     Log.setLog(new NOOPLogger());
 
     USSServer server = new USSServer(8080, new File(System.getProperty("java.io.tmpdir"), "uss-server"));
-    server.addUser("titusexperior@gmail.com", "abc92669183478");
+    server.addUser("eclipse_test_123456789", "plaintext123456789");
 
+    System.out.println(server.getFolder());
     System.out.println("Listening on port " + server.start());
     server.join();
   }

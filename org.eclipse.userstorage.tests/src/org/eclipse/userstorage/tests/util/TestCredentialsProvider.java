@@ -122,7 +122,7 @@ public class TestCredentialsProvider implements ICredentialsProvider
       contentPane.add(okButton);
       contentPane.add(cancelButton);
 
-      userField.setText("titusexperior@gmail.com");
+      userField.setText("eclipse_test_123456789");
       passwordField.requestFocus();
 
       pack();
