@@ -284,7 +284,6 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
         try
         {
-          // URI serviceURI = StringUtil.newURI("https://api-staging.eclipse.org/");
           URI serviceURI = StringUtil.newURI("https://api.eclipse.org/");
           URI createAccountURI = StringUtil.newURI("https://dev.eclipse.org/site_login/");
           URI editAccountURI = StringUtil.newURI("https://dev.eclipse.org/site_login/myaccount.php");
