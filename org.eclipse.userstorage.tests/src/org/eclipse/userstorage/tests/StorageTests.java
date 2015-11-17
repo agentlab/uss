@@ -30,7 +30,6 @@ import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.FileStorageCache;
 import org.eclipse.userstorage.util.ProtocolException;
-import org.eclipse.userstorage.util.Settings;
 import org.eclipse.userstorage.util.Settings.MemorySettings;
 
 import org.eclipse.jetty.util.log.Log;
@@ -84,11 +83,9 @@ public final class StorageTests extends AbstractTest
     super.setUp();
     Activator.start();
 
-    ISettings settings;
-
     if (REMOTE)
     {
-      settings = Settings.NONE;
+      service = IStorageService.Registry.INSTANCE.addService("Eclipse.org (Staging)", StringUtil.newURI("https://api-staging.eclipse.org/"));
     }
     else
     {
@@ -99,12 +96,10 @@ public final class StorageTests extends AbstractTest
       server.getApplicationTokens().add(APPLICATION_TOKEN);
       int port = server.start();
 
-      final String serviceURI = "http://localhost:" + port;
-      service = IStorageService.Registry.INSTANCE.addService("Test Service", StringUtil.newURI(serviceURI));
-
-      settings = new MemorySettings(Collections.singletonMap(APPLICATION_TOKEN, serviceURI));
+      service = IStorageService.Registry.INSTANCE.addService("Local", StringUtil.newURI("http://localhost:" + port));
     }
 
+    ISettings settings = new MemorySettings(Collections.singletonMap(APPLICATION_TOKEN, service.getServiceURI().toString()));
     factory = new StorageFactory(settings);
 
     IOUtil.deleteFiles(CACHE);
@@ -117,17 +112,19 @@ public final class StorageTests extends AbstractTest
     factory = null;
     cache = null;
 
-    if (hasLocalServer())
+    if (service != null)
     {
       service.remove();
       service = null;
-
-      server.stop();
-      server = null;
-
-      user = null;
     }
 
+    if (server != null)
+    {
+      server.stop();
+      server = null;
+    }
+
+    user = null;
     Activator.stop();
     super.tearDown();
   }
