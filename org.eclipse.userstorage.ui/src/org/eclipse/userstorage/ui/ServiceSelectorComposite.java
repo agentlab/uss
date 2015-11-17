@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,7 +35,7 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
  */
 public class ServiceSelectorComposite extends Composite
 {
-  private final ComboViewer comboViewer;
+  private final StructuredViewer viewer;
 
   private final Link link;
 
@@ -66,17 +67,16 @@ public class ServiceSelectorComposite extends Composite
       }
     };
 
-    comboViewer = new ComboViewer(this, SWT.READ_ONLY);
-    comboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    comboViewer.setContentProvider(contentProvider);
-    comboViewer.setInput(IStorageService.Registry.INSTANCE);
-    comboViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    viewer = createViewer(this);
+    viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    viewer.setContentProvider(contentProvider);
+    viewer.setInput(IStorageService.Registry.INSTANCE);
+    viewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
       @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
-        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-        selectedService = (IStorageService)selection.getFirstElement();
+        selectedService = getViewerSelection();
       }
     });
 
@@ -87,8 +87,7 @@ public class ServiceSelectorComposite extends Composite
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        IStructuredSelection selection = (IStructuredSelection)comboViewer.getSelection();
-        IStorageService service = (IStorageService)selection.getFirstElement();
+        IStorageService service = getViewerSelection();
 
         PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(getShell(), ServicesPreferencePage.ID, null, service);
         dialog.open();
@@ -106,21 +105,21 @@ public class ServiceSelectorComposite extends Composite
     if (service != selectedService)
     {
       selectedService = service;
-      comboViewer.setSelection(new StructuredSelection(service));
+      viewer.setSelection(new StructuredSelection(service));
     }
   }
 
   @Override
   public boolean setFocus()
   {
-    return comboViewer.getControl().setFocus();
+    return viewer.getControl().setFocus();
   }
 
   @Override
   public void setEnabled(boolean enabled)
   {
     super.setEnabled(enabled);
-    comboViewer.getControl().setEnabled(enabled);
+    viewer.getControl().setEnabled(enabled);
     link.setEnabled(enabled);
   }
 
@@ -132,5 +131,16 @@ public class ServiceSelectorComposite extends Composite
   protected void serviceRemoved(IStorageService service)
   {
     // Do nothing.
+  }
+
+  protected StructuredViewer createViewer(Composite parent)
+  {
+    return new ComboViewer(parent, SWT.READ_ONLY);
+  }
+
+  private IStorageService getViewerSelection()
+  {
+    IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
+    return (IStorageService)selection.getFirstElement();
   }
 }
