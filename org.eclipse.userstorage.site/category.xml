@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (c) 2015 Eike Stepper (Berlin, Germany) and others.
-  All rights reserved. This program and the accompanying materials
-  are made available under the terms of the Eclipse Public License v1.0
-  which accompanies this distribution, and is available at
-  http://www.eclipse.org/legal/epl-v10.html
-
-  Contributors:
-    Eike Stepper - initial API and implementation
--->
 <site>
-
-   <!-- All -->
-   <category-def name="org.eclipse.userstorage.category" label="User Storage"/>
    <feature id="org.eclipse.userstorage" version="0.0.0">
       <category name="org.eclipse.userstorage.category"/>
    </feature>
    <feature id="org.eclipse.userstorage.sdk" version="0.0.0">
       <category name="org.eclipse.userstorage.category"/>
    </feature>
-
+   <bundle id="org.eclipse.userstorage.tests" version="1.0.0.qualifier">
+      <category name="org.eclipse.userstorage.category"/>
+   </bundle>
+   <category-def name="org.eclipse.userstorage.category" label="User Storage"/>
 </site>
