@@ -12,6 +12,7 @@ package org.eclipse.userstorage.ui;
 
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.internal.StorageServiceRegistry;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -65,5 +66,16 @@ public class StorageConfigurationComposite extends ServiceSelectorComposite
     }
 
     return false;
+  }
+
+  @Override
+  protected void serviceRemoved(IStorageService service)
+  {
+    IStorageService selectedService = getSelectedService();
+    if (service == selectedService)
+    {
+      service = StorageServiceRegistry.INSTANCE.getFirstService();
+      setSelectedService(service);
+    }
   }
 }

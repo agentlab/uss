@@ -23,11 +23,15 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -51,24 +55,14 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   private final List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
+  private final Set<WeakReference<Storage>> storages = new HashSet<WeakReference<Storage>>();
+
   private final Map<URI, IStorageService> services = new LinkedHashMap<URI, IStorageService>();
 
   private boolean running;
 
   private StorageServiceRegistry()
   {
-  }
-
-  @Override
-  public void addListener(Listener listener)
-  {
-    listeners.add(listener);
-  }
-
-  @Override
-  public void removeListener(Listener listener)
-  {
-    listeners.remove(listener);
   }
 
   @Override
@@ -82,12 +76,27 @@ public final class StorageServiceRegistry implements IStorageService.Registry
   }
 
   @Override
-  public IStorageService getService(URI serviceURI)
+  public StorageService getService(URI serviceURI)
   {
     synchronized (services)
     {
       start();
-      return services.get(serviceURI);
+      return (StorageService)services.get(serviceURI);
+    }
+  }
+
+  public StorageService getFirstService()
+  {
+    synchronized (services)
+    {
+      start();
+
+      if (services.isEmpty())
+      {
+        return null;
+      }
+
+      return (StorageService)services.values().iterator().next();
     }
   }
 
@@ -169,6 +178,26 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     return result.toArray(new IStorageService.Dynamic[result.size()]);
   }
 
+  @Override
+  public void addListener(Listener listener)
+  {
+    listeners.add(listener);
+  }
+
+  @Override
+  public void removeListener(Listener listener)
+  {
+    listeners.remove(listener);
+  }
+
+  void addStorage(Storage storage)
+  {
+    synchronized (storages)
+    {
+      storages.add(new WeakReference<Storage>(storage));
+    }
+  }
+
   void addService(IStorageService service) throws IllegalStateException
   {
     URI serviceURI = service.getServiceURI();
@@ -199,9 +228,9 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     }
   }
 
-  void removeService(IStorageService storage)
+  void removeService(IStorageService service)
   {
-    URI serviceURI = storage.getServiceURI();
+    URI serviceURI = service.getServiceURI();
 
     synchronized (services)
     {
@@ -213,12 +242,35 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     {
       try
       {
-        listener.serviceRemoved(storage);
+        listener.serviceRemoved(service);
       }
       catch (Exception ex)
       {
         Activator.log(ex);
       }
+    }
+
+    List<Storage> storagesToNotify = new ArrayList<Storage>();
+    synchronized (storages)
+    {
+      for (Iterator<WeakReference<Storage>> it = storages.iterator(); it.hasNext();)
+      {
+        WeakReference<Storage> ref = it.next();
+        Storage storage = ref.get();
+        if (storage != null)
+        {
+          storagesToNotify.add(storage);
+        }
+        else
+        {
+          it.remove();
+        }
+      }
+    }
+
+    for (Storage storage : storagesToNotify)
+    {
+      storage.serviceRemoved(service);
     }
   }
 

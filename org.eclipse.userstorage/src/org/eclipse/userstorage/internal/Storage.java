@@ -57,6 +57,8 @@ public final class Storage implements IStorage
     this.applicationToken = BadApplicationTokenException.validate(applicationToken);
     this.factory = factory;
     this.cache = cache;
+
+    StorageServiceRegistry.INSTANCE.addStorage(this);
   }
 
   @Override
@@ -91,12 +93,12 @@ public final class Storage implements IStorage
       if (newService != null)
       {
         URI serviceURI = newService.getServiceURI();
-        newService = (StorageService)IStorageService.Registry.INSTANCE.getService(serviceURI);
+        service = newService = StorageServiceRegistry.INSTANCE.getService(serviceURI);
       }
 
       if (newService == null)
       {
-        newService = lookupService();
+        service = newService = lookupService();
         if (cache != null)
         {
           cache.setService(newService);
@@ -266,6 +268,14 @@ public final class Storage implements IStorage
     return service + " (" + applicationToken + ")";
   }
 
+  void serviceRemoved(IStorageService service)
+  {
+    if (this.service == service)
+    {
+      setService(null);
+    }
+  }
+
   private StorageService getServiceSafe()
   {
     StorageService service = getService();
@@ -294,13 +304,7 @@ public final class Storage implements IStorage
       return service;
     }
 
-    IStorageService[] storages = IStorageService.Registry.INSTANCE.getServices();
-    if (storages.length != 0)
-    {
-      return (StorageService)storages[0];
-    }
-
-    return null;
+    return StorageServiceRegistry.INSTANCE.getFirstService();
   }
 
   private StorageService lookupService(String applicationToken)
@@ -310,7 +314,7 @@ public final class Storage implements IStorage
       String serviceURI = getServiceURI(applicationToken);
       if (serviceURI != null)
       {
-        return (StorageService)IStorageService.Registry.INSTANCE.getService(StringUtil.newURI(serviceURI));
+        return StorageServiceRegistry.INSTANCE.getService(StringUtil.newURI(serviceURI));
       }
     }
     catch (Exception ex)

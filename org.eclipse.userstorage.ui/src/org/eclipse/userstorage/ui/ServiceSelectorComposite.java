@@ -49,9 +49,26 @@ public class ServiceSelectorComposite extends Composite
     gridLayout.marginHeight = 0;
     setLayout(gridLayout);
 
+    ServicesContentProvider contentProvider = new ServicesContentProvider()
+    {
+      @Override
+      public void serviceAdded(IStorageService service)
+      {
+        super.serviceAdded(service);
+        ServiceSelectorComposite.this.serviceAdded(service);
+      }
+
+      @Override
+      public void serviceRemoved(IStorageService service)
+      {
+        super.serviceRemoved(service);
+        ServiceSelectorComposite.this.serviceRemoved(service);
+      }
+    };
+
     comboViewer = new ComboViewer(this, SWT.READ_ONLY);
     comboViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    comboViewer.setContentProvider(new ServicesContentProvider());
+    comboViewer.setContentProvider(contentProvider);
     comboViewer.setInput(IStorageService.Registry.INSTANCE);
     comboViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
@@ -86,8 +103,11 @@ public class ServiceSelectorComposite extends Composite
 
   public final void setSelectedService(IStorageService service)
   {
-    selectedService = service;
-    comboViewer.setSelection(new StructuredSelection(service));
+    if (service != selectedService)
+    {
+      selectedService = service;
+      comboViewer.setSelection(new StructuredSelection(service));
+    }
   }
 
   @Override
@@ -102,5 +122,15 @@ public class ServiceSelectorComposite extends Composite
     super.setEnabled(enabled);
     comboViewer.getControl().setEnabled(enabled);
     link.setEnabled(enabled);
+  }
+
+  protected void serviceAdded(IStorageService service)
+  {
+    // Do nothing.
+  }
+
+  protected void serviceRemoved(IStorageService service)
+  {
+    // Do nothing.
   }
 }
