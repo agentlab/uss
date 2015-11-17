@@ -8,12 +8,10 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.ui;
+package org.eclipse.userstorage.ui.internal;
 
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
-import org.eclipse.userstorage.ui.internal.AbstractDialog;
-import org.eclipse.userstorage.ui.internal.CredentialsComposite;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
