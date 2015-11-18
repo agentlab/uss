@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -87,19 +88,19 @@ public class FileStorageCache extends StorageCache
   {
     Set<String> keys = new HashSet<String>();
 
-    File applicationFolder = new File(folder, applicationToken);
+    File applicationFolder = getApplicationFolder(applicationToken);
     File[] files = applicationFolder.listFiles();
     if (files != null)
     {
       for (File file : files)
       {
         String name = file.getName();
-        if (name.endsWith(PROPERTIES))
-        {
-          name = name.substring(0, name.length() - PROPERTIES.length());
-        }
 
-        keys.add(name);
+        String key = getKeyFromFileName(name);
+        if (key != null)
+        {
+          keys.add(name);
+        }
       }
     }
 
@@ -215,7 +216,29 @@ public class FileStorageCache extends StorageCache
    */
   protected File getFile(String applicationToken, String key, String extension)
   {
-    return new File(new File(folder, applicationToken), key + StringUtil.safe(extension));
+    File applicationFolder = getApplicationFolder(applicationToken);
+    String keyFileName = getFileNameFromKey(key, extension);
+    return new File(applicationFolder, keyFileName);
+  }
+
+  protected File getApplicationFolder(String applicationFolderName)
+  {
+    return new File(folder, applicationFolderName);
+  }
+
+  protected String getFileNameFromKey(String key, String extension)
+  {
+    return key + StringUtil.safe(extension);
+  }
+
+  protected String getKeyFromFileName(String name)
+  {
+    if (name.endsWith(PROPERTIES))
+    {
+      return name.substring(0, name.length() - PROPERTIES.length());
+    }
+
+    return null;
   }
 
   private static File createTempFolder()
@@ -240,5 +263,217 @@ public class FileStorageCache extends StorageCache
     }
 
     throw new RuntimeException("Temporary folder could not be created");
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class SingleApplication extends FileStorageCache
+  {
+    private final String applicationToken;
+
+    public SingleApplication(String applicationToken)
+    {
+      this.applicationToken = applicationToken;
+    }
+
+    public SingleApplication(File folder, String applicationToken)
+    {
+      super(folder);
+      this.applicationToken = applicationToken;
+    }
+
+    public final String getApplicationToken()
+    {
+      return applicationToken;
+    }
+
+    @Override
+    public Iterator<String> getKeys(String applicationToken) throws IOException
+    {
+      checkApplication(applicationToken);
+      return super.getKeys(applicationToken);
+    }
+
+    @Override
+    protected void loadProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
+    {
+      checkApplication(applicationToken);
+      super.loadProperties(applicationToken, key, properties);
+    }
+
+    @Override
+    protected void saveProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
+    {
+      checkApplication(applicationToken);
+      super.saveProperties(applicationToken, key, properties);
+    }
+
+    @Override
+    protected InputStream getInputStream(String applicationToken, String key) throws IOException
+    {
+      checkApplication(applicationToken);
+      return super.getInputStream(applicationToken, key);
+    }
+
+    @Override
+    protected OutputStream getOutputStream(String applicationToken, String key) throws IOException
+    {
+      checkApplication(applicationToken);
+      return super.getOutputStream(applicationToken, key);
+    }
+
+    @Override
+    protected void delete(String applicationToken, String key) throws IOException
+    {
+      checkApplication(applicationToken);
+      super.delete(applicationToken, key);
+    }
+
+    @Override
+    protected File getFile(String applicationToken, String key, String extension)
+    {
+      checkApplication(applicationToken);
+      return super.getFile(applicationToken, key, extension);
+    }
+
+    @Override
+    protected File getApplicationFolder(String applicationFolderName)
+    {
+      checkApplication(applicationToken);
+      return getFolder();
+    }
+
+    protected final void checkApplication(String applicationToken) throws IllegalArgumentException
+    {
+      if (!this.applicationToken.equals(applicationToken))
+      {
+        throw new IllegalArgumentException("Invalid application token: " + applicationToken);
+      }
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    public static class SingleKey extends FileStorageCache
+    {
+      private static final Set<String> NO_KEYS = Collections.emptySet();
+
+      private final String key;
+
+      private String fileNamePrefix;
+
+      public SingleKey(String key)
+      {
+        this.key = key;
+        fileNamePrefix = key;
+      }
+
+      public SingleKey(File folder, String key)
+      {
+        super(folder);
+        this.key = key;
+        fileNamePrefix = key;
+      }
+
+      public final String getKey()
+      {
+        return key;
+      }
+
+      public String getFileNamePrefix()
+      {
+        return fileNamePrefix;
+      }
+
+      public void setFileNamePrefix(String fileNamePrefix)
+      {
+        this.fileNamePrefix = fileNamePrefix;
+      }
+
+      @Override
+      public Iterator<String> getKeys(String applicationToken) throws IOException
+      {
+        for (Iterator<String> it = super.getKeys(applicationToken); it.hasNext();)
+        {
+          String key = it.next();
+          if (this.key.equals(key))
+          {
+            return Collections.singleton(key).iterator();
+          }
+        }
+
+        return NO_KEYS.iterator();
+      }
+
+      @Override
+      protected void loadProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
+      {
+        checkKey(key);
+        super.loadProperties(applicationToken, key, properties);
+      }
+
+      @Override
+      protected void saveProperties(String applicationToken, String key, Map<String, String> properties) throws IOException
+      {
+        checkKey(key);
+        super.saveProperties(applicationToken, key, properties);
+      }
+
+      @Override
+      protected InputStream getInputStream(String applicationToken, String key) throws IOException
+      {
+        checkKey(key);
+        return super.getInputStream(applicationToken, key);
+      }
+
+      @Override
+      protected OutputStream getOutputStream(String applicationToken, String key) throws IOException
+      {
+        checkKey(key);
+        return super.getOutputStream(applicationToken, key);
+      }
+
+      @Override
+      protected void delete(String applicationToken, String key) throws IOException
+      {
+        checkKey(key);
+        super.delete(applicationToken, key);
+      }
+
+      @Override
+      protected File getFile(String applicationToken, String key, String extension)
+      {
+        checkKey(key);
+        return super.getFile(applicationToken, key, extension);
+      }
+
+      @Override
+      protected String getFileNameFromKey(String key, String extension)
+      {
+        checkKey(key);
+        return super.getFileNameFromKey(fileNamePrefix, extension);
+      }
+
+      @Override
+      protected String getKeyFromFileName(String name)
+      {
+        String fileNamePrefix = super.getKeyFromFileName(name);
+        if (this.fileNamePrefix.equals(fileNamePrefix))
+        {
+          return key;
+        }
+
+        return null;
+      }
+
+      protected final void checkKey(String key) throws IllegalArgumentException
+      {
+        if (!this.key.equals(key))
+        {
+          throw new IllegalArgumentException("Invalid key: " + key);
+        }
+      }
+    }
   }
 }
