@@ -16,9 +16,11 @@ import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.Session;
-import org.eclipse.userstorage.tests.util.USSFixture;
-import org.eclipse.userstorage.tests.util.USSFixture.BlobInfo;
-import org.eclipse.userstorage.tests.util.USSFixture.TestCache;
+import org.eclipse.userstorage.tests.util.ClientFixture;
+import org.eclipse.userstorage.tests.util.ClientFixture.TestCache;
+import org.eclipse.userstorage.tests.util.ServerFixture;
+import org.eclipse.userstorage.tests.util.ServerFixture.BlobInfo;
+import org.eclipse.userstorage.tests.util.USSServer;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
@@ -29,6 +31,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.io.FileNotFoundException;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -37,24 +40,14 @@ import java.util.UUID;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class StorageTests extends AbstractTest
 {
-  // private static final boolean REMOTE = Boolean.getBoolean(StorageTests.class.getName() + ".remote");
-  //
-  // private static final File SERVER = new File(System.getProperty("java.io.tmpdir"), "uss-tests/server");
-  //
-  // private static final File CACHE = new File(System.getProperty("java.io.tmpdir"), "uss-tests/cache");
-
   private static final String APPLICATION_TOKEN = "pDKTqBfDuNxlAKydhEwxBZPxa4q";
 
   private static final String KEY = "test_blob";
 
-  private USSFixture fixture;
+  private ServerFixture serverFixture;
 
-  // private USSServer server;
-  //
-  // private User user;
-  //
-  // private IStorageService.Dynamic service;
-  //
+  private ClientFixture clientFixture;
+
   private StorageFactory factory;
 
   private TestCache cache;
@@ -63,39 +56,17 @@ public final class StorageTests extends AbstractTest
   public void setUp() throws Exception
   {
     super.setUp();
-    fixture = new USSFixture(APPLICATION_TOKEN);
-    factory = fixture.getFactory();
-    cache = fixture.getCache();
-
-    // Activator.start();
-    //
-    // if (REMOTE)
-    // {
-    // service = IStorageService.Registry.INSTANCE.addService("Eclipse.org (Staging)", StringUtil.newURI("https://api-staging.eclipse.org/"));
-    // }
-    // else
-    // {
-    // IOUtil.deleteFiles(SERVER);
-    //
-    // server = new USSServer(8080, SERVER);
-    // user = server.addUser(FixedCredentialsProvider.DEFAULT_CREDENTIALS);
-    // server.getApplicationTokens().add(APPLICATION_TOKEN);
-    // int port = server.start();
-    //
-    // service = IStorageService.Registry.INSTANCE.addService("Local", StringUtil.newURI("http://localhost:" + port));
-    // }
-    //
-    // ISettings settings = new MemorySettings(Collections.singletonMap(APPLICATION_TOKEN, service.getServiceURI().toString()));
-    // factory = new StorageFactory(settings);
-    //
-    // IOUtil.deleteFiles(CACHE);
-    // cache = new TestCache(CACHE);
+    serverFixture = new ServerFixture(APPLICATION_TOKEN);
+    clientFixture = new ClientFixture(serverFixture);
+    factory = clientFixture.getFactory();
+    cache = clientFixture.getCache();
   }
 
   @Override
   public void tearDown() throws Exception
   {
-    fixture.dispose();
+    clientFixture.dispose();
+    serverFixture.dispose();
     super.tearDown();
   }
 
@@ -226,7 +197,7 @@ public final class StorageTests extends AbstractTest
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
 
-    BlobInfo blobInfo = fixture.readServer(blob);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value));
     assertThat(blobInfo.eTag, is(blob.getETag()));
   }
@@ -239,8 +210,8 @@ public final class StorageTests extends AbstractTest
 
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
-    assertThat(fixture.readCache(blob.getKey(), null), is(value));
-    assertThat(fixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
+    assertThat(clientFixture.readCache(blob.getKey(), null), is(value));
+    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
   }
 
   @Test
@@ -273,7 +244,7 @@ public final class StorageTests extends AbstractTest
 
     assertThat(blob.getContentsUTF(), is(value));
 
-    BlobInfo blobInfo = fixture.readServer(blob);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value));
     assertThat(blobInfo.eTag, is(blob.getETag()));
   }
@@ -288,8 +259,8 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value);
 
     assertThat(blob.getContentsUTF(), is(value));
-    assertThat(fixture.readCache(blob.getKey(), null), is(value));
-    assertThat(fixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
+    assertThat(clientFixture.readCache(blob.getKey(), null), is(value));
+    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
   }
 
   @Test
@@ -318,7 +289,7 @@ public final class StorageTests extends AbstractTest
 
     // Prepare the conflict.
     String value2 = "Different content";
-    String eTag2 = fixture.writeServer(blob, value2);
+    String eTag2 = serverFixture.writeServer(blob, value2);
 
     String value3 = "And now a conflicting string";
 
@@ -335,7 +306,7 @@ public final class StorageTests extends AbstractTest
 
     assertThat(blob.getETag(), is(eTag1));
 
-    BlobInfo blobInfo = fixture.readServer(blob);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value2));
     assertThat(blobInfo.eTag, is(eTag2));
   }
@@ -351,7 +322,7 @@ public final class StorageTests extends AbstractTest
     String eTag1 = blob.getETag();
 
     // Prepare the conflict.
-    fixture.writeServer(blob, "Different content");
+    serverFixture.writeServer(blob, "Different content");
 
     String value3 = "And now a conflicting string";
 
@@ -367,10 +338,10 @@ public final class StorageTests extends AbstractTest
     }
 
     // It's okay for the cache to have the new value. The old ETag (see below) will cause cache refresh...
-    assertThat(fixture.readCache(blob.getKey(), null), is(value3));
+    assertThat(clientFixture.readCache(blob.getKey(), null), is(value3));
 
     // Cache and blob ETags must still be in old state.
-    assertThat(fixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + eTag1));
+    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + eTag1));
     assertThat(blob.getETag(), is(eTag1));
   }
 
@@ -385,7 +356,7 @@ public final class StorageTests extends AbstractTest
 
     // Prepare the conflict.
     String value2 = "Different content";
-    String eTag2 = fixture.writeServer(blob, value2);
+    String eTag2 = serverFixture.writeServer(blob, value2);
 
     assertThat(blob.getContentsUTF(), is(value2));
     assertThat(blob.getETag(), is(eTag2));
@@ -393,7 +364,7 @@ public final class StorageTests extends AbstractTest
     String value3 = "And now a non-conflicting string";
     blob.setContentsUTF(value3);
 
-    BlobInfo blobInfo = fixture.readServer(blob);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value3));
     assertThat(blobInfo.eTag, is(blob.getETag()));
   }
@@ -409,15 +380,15 @@ public final class StorageTests extends AbstractTest
 
     // Prepare the conflict.
     String value2 = "Different content";
-    String eTag2 = fixture.writeServer(blob, value2);
+    String eTag2 = serverFixture.writeServer(blob, value2);
 
     assertThat(blob.getContentsUTF(), is(value2));
     assertThat(blob.getETag(), is(eTag2));
 
     String value3 = "And now a non-conflicting string";
     blob.setContentsUTF(value3);
-    assertThat(fixture.readCache(blob.getKey(), null), is(value3));
-    assertThat(fixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
+    assertThat(clientFixture.readCache(blob.getKey(), null), is(value3));
+    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
   }
 
   @Test
@@ -431,7 +402,7 @@ public final class StorageTests extends AbstractTest
 
     // Prepare the conflict.
     String value2 = "Different content";
-    String eTag2 = fixture.writeServer(blob, value2);
+    String eTag2 = serverFixture.writeServer(blob, value2);
 
     String value3 = "And now a conflicting string";
 
@@ -447,7 +418,7 @@ public final class StorageTests extends AbstractTest
 
     blob.setContentsUTF(value3);
 
-    BlobInfo blobInfo = fixture.readServer(blob);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value3));
     assertThat(blobInfo.eTag, is(blob.getETag()));
   }
@@ -463,7 +434,7 @@ public final class StorageTests extends AbstractTest
 
     // Prepare the conflict.
     String value2 = "Different content";
-    String eTag2 = fixture.writeServer(blob, value2);
+    String eTag2 = serverFixture.writeServer(blob, value2);
 
     String value3 = "And now a conflicting string";
 
@@ -478,7 +449,7 @@ public final class StorageTests extends AbstractTest
 
       try
       {
-        fixture.readCache(blob.getKey(), null);
+        clientFixture.readCache(blob.getKey(), null);
         fail("FileNotFoundException expected");
       }
       catch (FileNotFoundException expected2)
@@ -488,7 +459,7 @@ public final class StorageTests extends AbstractTest
 
       try
       {
-        fixture.readCache(blob.getKey(), ".properties");
+        clientFixture.readCache(blob.getKey(), ".properties");
         fail("FileNotFoundException expected");
       }
       catch (FileNotFoundException expected2)
@@ -498,8 +469,8 @@ public final class StorageTests extends AbstractTest
     }
 
     blob.setContentsUTF(value3);
-    assertThat(fixture.readCache(blob.getKey(), null), is(value3));
-    assertThat(fixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
+    assertThat(clientFixture.readCache(blob.getKey(), null), is(value3));
+    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
   }
 
   @Test
@@ -511,27 +482,29 @@ public final class StorageTests extends AbstractTest
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
 
-    if (fixture.hasLocalServer())
+    if (serverFixture.hasLocalServer())
     {
-      assertThat(fixture.getServer().getSessions().size(), is(1));
-      fixture.getServer().getSessions().clear();
+      Map<String, USSServer.Session> sessions = serverFixture.getServer().getSessions();
+      assertThat(sessions.size(), is(1));
+      sessions.clear();
     }
 
     assertThat(blob.getContentsUTF(), is(value));
 
-    BlobInfo blobInfo = fixture.readServer(blob);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value));
     assertThat(blobInfo.eTag, is(blob.getETag()));
 
-    if (fixture.hasLocalServer())
+    if (serverFixture.hasLocalServer())
     {
-      assertThat(fixture.getServer().getSessions().size(), is(1));
+      Map<String, USSServer.Session> sessions = serverFixture.getServer().getSessions();
+      assertThat(sessions.size(), is(1));
     }
   }
 
   private String makeKey()
   {
-    if (fixture.hasLocalServer())
+    if (serverFixture.hasLocalServer())
     {
       return KEY;
     }

@@ -20,7 +20,6 @@ import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.tests.util.USSServer.NOOPLogger;
 import org.eclipse.userstorage.tests.util.USSServer.User;
-import org.eclipse.userstorage.util.FileStorageCache;
 import org.eclipse.userstorage.util.Settings.MemorySettings;
 
 import org.eclipse.jetty.util.log.Log;
@@ -33,15 +32,9 @@ import java.util.UUID;
 /**
  * @author Eike Stepper
  */
-public class USSFixture
+public class ServerFixture extends Fixture
 {
-  private static final boolean REMOTE = Boolean.getBoolean("org.eclipse.userstorage.tests.remote");
-
-  private static final File TEST_FOLDER = new File(System.getProperty("java.io.tmpdir"), "uss-tests");
-
-  private static final File SERVER_FOLDER = new File(TEST_FOLDER, "server");
-
-  private static final File CACHE = new File(TEST_FOLDER, "cache");
+  public static final File SERVER_FOLDER = new File(TEST_FOLDER, "server");
 
   private final String applicationToken;
 
@@ -51,11 +44,7 @@ public class USSFixture
 
   private IStorageService.Dynamic service;
 
-  private StorageFactory factory;
-
-  private TestCache cache;
-
-  public USSFixture(String applicationToken) throws Exception
+  public ServerFixture(String applicationToken) throws Exception
   {
     this.applicationToken = applicationToken;
 
@@ -80,12 +69,6 @@ public class USSFixture
 
       service = IStorageService.Registry.INSTANCE.addService("Local", StringUtil.newURI("http://localhost:" + port));
     }
-
-    ISettings settings = new MemorySettings(Collections.singletonMap(applicationToken, service.getServiceURI().toString()));
-    factory = new StorageFactory(settings);
-
-    IOUtil.deleteFiles(CACHE);
-    cache = new TestCache(CACHE);
   }
 
   public final String getApplicationToken()
@@ -113,32 +96,10 @@ public class USSFixture
     return service;
   }
 
-  public final StorageFactory getFactory()
+  public final StorageFactory createFactory(String applicationToken)
   {
-    return factory;
-  }
-
-  public final TestCache getCache()
-  {
-    return cache;
-  }
-
-  public final String readCache(String key, String extension) throws IOException
-  {
-    try
-    {
-      return IOUtil.readUTF(cache.getFile(applicationToken, key, extension));
-    }
-    catch (RuntimeException ex)
-    {
-      Throwable cause = ex.getCause();
-      if (cause instanceof IOException)
-      {
-        throw (IOException)cause;
-      }
-
-      throw ex;
-    }
+    ISettings settings = new MemorySettings(Collections.singletonMap(applicationToken, service.getServiceURI().toString()));
+    return new StorageFactory(settings);
   }
 
   public final BlobInfo readServer(IBlob blob) throws IOException
@@ -175,6 +136,7 @@ public class USSFixture
     }
     else
     {
+      StorageFactory factory = createFactory(applicationToken);
       IStorage tmpStorage = factory.create(applicationToken);
       IBlob tmpBlob = tmpStorage.getBlob(key);
 
@@ -203,6 +165,7 @@ public class USSFixture
       return eTag;
     }
 
+    StorageFactory factory = createFactory(applicationToken);
     IStorage tmpStorage = factory.create(applicationToken);
     IBlob tmpBlob = tmpStorage.getBlob(key);
     tmpBlob.setETag(blob.getETag());
@@ -210,10 +173,9 @@ public class USSFixture
     return tmpBlob.getETag();
   }
 
+  @Override
   public void dispose() throws Exception
   {
-    factory = null;
-    cache = null;
     user = null;
 
     if (service != null)
@@ -232,6 +194,8 @@ public class USSFixture
     {
       Activator.stop();
     }
+
+    super.dispose();
   }
 
   protected void configureServerLogging()
@@ -252,22 +216,5 @@ public class USSFixture
     public String eTag;
 
     public String contents;
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static final class TestCache extends FileStorageCache
-  {
-    public TestCache(File folder)
-    {
-      super(folder);
-    }
-
-    @Override
-    public File getFile(String applicationToken, String key, String extension)
-    {
-      return super.getFile(applicationToken, key, extension);
-    }
   }
 }
