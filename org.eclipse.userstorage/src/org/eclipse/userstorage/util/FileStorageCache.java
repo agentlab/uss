@@ -355,7 +355,7 @@ public class FileStorageCache extends StorageCache
     /**
      * @author Eike Stepper
      */
-    public static class SingleKey extends FileStorageCache
+    public static class SingleKey extends FileStorageCache.SingleApplication
     {
       private static final Set<String> NO_KEYS = Collections.emptySet();
 
@@ -363,15 +363,16 @@ public class FileStorageCache extends StorageCache
 
       private String fileNamePrefix;
 
-      public SingleKey(String key)
+      public SingleKey(String applicationToken, String key)
       {
+        super(applicationToken);
         this.key = key;
         fileNamePrefix = key;
       }
 
-      public SingleKey(File folder, String key)
+      public SingleKey(File folder, String applicationToken, String key)
       {
-        super(folder);
+        super(folder, applicationToken);
         this.key = key;
         fileNamePrefix = key;
       }
@@ -381,12 +382,12 @@ public class FileStorageCache extends StorageCache
         return key;
       }
 
-      public String getFileNamePrefix()
+      public final String getFileNamePrefix()
       {
         return fileNamePrefix;
       }
 
-      public void setFileNamePrefix(String fileNamePrefix)
+      public final void setFileNamePrefix(String fileNamePrefix)
       {
         this.fileNamePrefix = fileNamePrefix;
       }
