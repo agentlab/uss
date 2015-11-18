@@ -52,7 +52,7 @@ public class Session implements Headers, Codes
 
   private static final int AUTHORIZATION_ATTEMPTS = 3;
 
-  private static final boolean DEBUG = Boolean.getBoolean(Session.class.getName() + ".debug");
+  private static final boolean DEBUG = Boolean.getBoolean("org.eclipse.userstorage.session.debug");
 
   /**
    * It's important that the cookie store is <b>not</b> declared as a static field!

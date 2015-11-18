@@ -16,5 +16,5 @@
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.userstorage.tests.StorageTests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.userstorage.tests"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DXXXorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.TestCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.internal.Session.debug=true&#13;&#10;-Dorg.eclipse.userstorage.tests.StorageTests.remote=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DXXXorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.TestCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.session.debug=true&#13;&#10;-Dorg.eclipse.userstorage.tests.remote=true"/>
 </launchConfiguration>

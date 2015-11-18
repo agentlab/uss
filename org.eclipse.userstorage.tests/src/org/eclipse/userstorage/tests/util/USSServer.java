@@ -47,7 +47,7 @@ import java.util.UUID;
  */
 public final class USSServer
 {
-  private static final boolean DEBUG = Boolean.getBoolean(USSServer.class.getName() + ".debug");
+  private static final boolean DEBUG = Boolean.getBoolean("org.eclipse.userstorage.tests.server.debug");
 
   private final USSHandler handler = new USSHandler();
 
