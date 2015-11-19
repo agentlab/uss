@@ -423,12 +423,12 @@ public final class USSServer
   {
     private final String username;
 
-    private final String password;
+    private final byte[] password;
 
     public User(String username, String password)
     {
       this.username = username;
-      this.password = password;
+      this.password = StringUtil.encrypt(password);
     }
 
     public String getUsername()
@@ -438,7 +438,7 @@ public final class USSServer
 
     public String getPassword()
     {
-      return password;
+      return StringUtil.decrypt(password);
     }
 
     @Override
@@ -657,7 +657,7 @@ public final class USSServer
     Log.setLog(new NOOPLogger());
 
     USSServer server = new USSServer(8080, new File(System.getProperty("java.io.tmpdir"), "uss-server"));
-    server.addUser("eclipse_test_123456789", "plaintext123456789");
+    server.addUser(FixedCredentialsProvider.DEFAULT_CREDENTIALS);
 
     System.out.println(server.getFolder());
     System.out.println("Listening on port " + server.start());

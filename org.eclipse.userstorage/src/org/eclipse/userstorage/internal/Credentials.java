@@ -10,7 +10,10 @@
  */
 package org.eclipse.userstorage.internal;
 
+import org.eclipse.userstorage.internal.util.StringUtil;
+
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author Eike Stepper
@@ -21,7 +24,7 @@ public final class Credentials implements Serializable
 
   private String username;
 
-  private String password;
+  private byte[] password;
 
   public Credentials()
   {
@@ -30,7 +33,7 @@ public final class Credentials implements Serializable
   public Credentials(String username, String password)
   {
     this.username = username;
-    this.password = password;
+    this.password = StringUtil.encrypt(password);
   }
 
   public String getUsername()
@@ -40,7 +43,7 @@ public final class Credentials implements Serializable
 
   public String getPassword()
   {
-    return password;
+    return StringUtil.decrypt(password);
   }
 
   @Override
@@ -48,7 +51,7 @@ public final class Credentials implements Serializable
   {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (password == null ? 0 : password.hashCode());
+    result = prime * result + Arrays.hashCode(password);
     result = prime * result + (username == null ? 0 : username.hashCode());
     return result;
   }
@@ -72,14 +75,7 @@ public final class Credentials implements Serializable
     }
 
     Credentials other = (Credentials)obj;
-    if (password == null)
-    {
-      if (other.password != null)
-      {
-        return false;
-      }
-    }
-    else if (!password.equals(other.password))
+    if (!Arrays.equals(password, other.password))
     {
       return false;
     }

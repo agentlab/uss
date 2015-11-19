@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * @author Eike Stepper
@@ -26,6 +27,10 @@ public final class StringUtil
   public static final String UTF8 = "UTF-8"; //$NON-NLS-1$
 
   private static final byte[] NO_BYTES = {};
+
+  private static final byte[] KEY = new byte[256];
+
+  private static Random random;
 
   private StringUtil()
   {
@@ -164,5 +169,61 @@ public final class StringUtil
     }
 
     return uri;
+  }
+
+  public static byte[] encrypt(String str) throws RuntimeException
+  {
+    if (str == null)
+    {
+      return null;
+    }
+
+    if (str.length() == 0)
+    {
+      return NO_BYTES;
+    }
+
+    byte[] bytes = toUTF(str);
+    byte[] result = new byte[bytes.length + 1];
+
+    synchronized (KEY)
+    {
+      if (random == null)
+      {
+        random = new Random(System.currentTimeMillis());
+        random.nextBytes(KEY);
+      }
+    }
+
+    int j = random.nextInt(KEY.length);
+    result[bytes.length] = (byte)(j - Byte.MAX_VALUE);
+    crypt(bytes, result, bytes.length, j);
+    return result;
+  }
+
+  public static String decrypt(byte[] bytes) throws RuntimeException
+  {
+    if (bytes == null)
+    {
+      return null;
+    }
+
+    if (bytes.length == 0)
+    {
+      return EMPTY;
+    }
+
+    byte[] result = new byte[bytes.length - 1];
+    int j = bytes[result.length] + Byte.MAX_VALUE;
+    crypt(bytes, result, result.length, j);
+    return fromUTF(result);
+  }
+
+  private static void crypt(byte[] bytes, byte[] result, int length, int j)
+  {
+    for (int i = 0; i < length; i++)
+    {
+      result[i] = (byte)(bytes[i] ^ KEY[j++ % KEY.length]);
+    }
   }
 }
