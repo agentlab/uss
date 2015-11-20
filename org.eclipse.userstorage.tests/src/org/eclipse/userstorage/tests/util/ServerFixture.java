@@ -113,8 +113,8 @@ public class ServerFixture extends Fixture
     {
       try
       {
-        File blobFile = server.getUserFile(user, applicationToken, key, null);
-        File etagFile = server.getUserFile(user, applicationToken, key, ".etag");
+        File blobFile = server.getUserFile(user, applicationToken, key, USSServer.BLOB_EXTENSION);
+        File etagFile = server.getUserFile(user, applicationToken, key, USSServer.ETAG_EXTENSION);
         if (!blobFile.isFile() || !etagFile.isFile())
         {
           return null;
@@ -160,8 +160,8 @@ public class ServerFixture extends Fixture
     if (hasLocalServer())
     {
       String eTag = UUID.randomUUID().toString();
-      IOUtil.writeUTF(server.getUserFile(user, applicationToken, key, ".etag"), eTag);
-      IOUtil.writeUTF(server.getUserFile(user, applicationToken, key, null), value);
+      IOUtil.writeUTF(server.getUserFile(user, applicationToken, key, USSServer.ETAG_EXTENSION), eTag);
+      IOUtil.writeUTF(server.getUserFile(user, applicationToken, key, USSServer.BLOB_EXTENSION), value);
       return eTag;
     }
 

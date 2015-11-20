@@ -47,6 +47,10 @@ import java.util.UUID;
  */
 public final class USSServer
 {
+  public static final String BLOB_EXTENSION = ".blob";
+
+  public static final String ETAG_EXTENSION = ".etag";
+
   private static final boolean DEBUG = Boolean.getBoolean("org.eclipse.userstorage.tests.server.debug");
 
   private final USSHandler handler = new USSHandler();
@@ -381,8 +385,8 @@ public final class USSServer
               return;
             }
 
-            File blobFile = getUserFile(user, applicationToken, key, null);
-            File etagFile = getUserFile(user, applicationToken, key, ".etag");
+            File blobFile = getUserFile(user, applicationToken, key, BLOB_EXTENSION);
+            File etagFile = getUserFile(user, applicationToken, key, ETAG_EXTENSION);
             boolean exists = etagFile.exists();
 
             if (HttpMethod.GET.is(method))
