@@ -35,7 +35,7 @@ public class AbstractDialog extends TitleAreaDialog
   protected void configureShell(Shell newShell)
   {
     super.configureShell(newShell);
-    newShell.setText("User Storage");
+    newShell.setText("User Storage Service");
   }
 
   @Override
