@@ -248,12 +248,12 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
           REGISTRY.refresh();
         }
       });
+    }
 
-      Object[] elements = contentProvider.getElements(null);
-      if (elements.length != 0)
-      {
-        setSelectedService((IStorageService)elements[0]);
-      }
+    Object[] elements = contentProvider == null ? REGISTRY.getServices() : contentProvider.getElements(null);
+    if (elements.length != 0)
+    {
+      setSelectedService((IStorageService)elements[0]);
     }
 
     return mainArea;
@@ -316,15 +316,26 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
         credentialsComposite.setService(selectedService);
         credentialsComposite.setCredentials(credentials);
-        removeButton.setEnabled(selectedService instanceof IStorageService.Dynamic);
 
-        servicesViewer.setSelection(new StructuredSelection(selectedService));
+        if (removeButton != null)
+        {
+          removeButton.setEnabled(selectedService instanceof IStorageService.Dynamic);
+        }
+
+        if (servicesViewer != null)
+        {
+          servicesViewer.setSelection(new StructuredSelection(selectedService));
+        }
       }
       else
       {
         credentialsComposite.setService(null);
         credentialsComposite.setCredentials(null);
-        removeButton.setEnabled(false);
+
+        if (removeButton != null)
+        {
+          removeButton.setEnabled(false);
+        }
       }
     }
   }
