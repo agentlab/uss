@@ -146,17 +146,25 @@ public class StorageService implements IStorageService
     }
   }
 
-  public synchronized InputStream retrieveBlob(String appToken, String key, Map<String, String> properties, boolean useETag) throws IOException
+  public synchronized InputStream retrieveBlob(ICredentialsProvider credentialsProvider, String appToken, String key, Map<String, String> properties,
+      boolean useETag) throws IOException
   {
-    ICredentialsProvider credentialsProvider = getCredentialsProvider();
+    if (credentialsProvider == null)
+    {
+      credentialsProvider = getCredentialsProvider();
+    }
 
     Session session = getSession();
     return session.retrieveBlob(appToken, key, properties, useETag, credentialsProvider);
   }
 
-  public synchronized boolean updateBlob(String appToken, String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException
+  public synchronized boolean updateBlob(ICredentialsProvider credentialsProvider, String appToken, String key, Map<String, String> properties, InputStream in)
+      throws IOException, ConflictException
   {
-    ICredentialsProvider credentialsProvider = getCredentialsProvider();
+    if (credentialsProvider == null)
+    {
+      credentialsProvider = getCredentialsProvider();
+    }
 
     Session session = getSession();
     return session.updateBlob(appToken, key, properties, in, credentialsProvider);

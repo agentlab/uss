@@ -16,6 +16,7 @@ import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.util.IOUtil.TeeInputStream;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
@@ -51,6 +52,8 @@ public final class Storage implements IStorage
   private final Map<String, Blob> blobs = new WeakHashMap<String, Blob>();
 
   private StorageService service;
+
+  private ICredentialsProvider credentialsProvider;
 
   public Storage(StorageFactory factory, String applicationToken, InternalStorageCache cache) throws BadApplicationTokenException
   {
@@ -139,6 +142,18 @@ public final class Storage implements IStorage
   }
 
   @Override
+  public ICredentialsProvider getCredentialsProvider()
+  {
+    return credentialsProvider;
+  }
+
+  @Override
+  public void setCredentialsProvider(ICredentialsProvider credentialsProvider)
+  {
+    this.credentialsProvider = credentialsProvider;
+  }
+
+  @Override
   public IBlob getBlob(String key)
   {
     synchronized (this)
@@ -220,7 +235,7 @@ public final class Storage implements IStorage
   public InputStream retrieveBlob(String key, Map<String, String> properties) throws IOException, NoServiceException
   {
     StorageService service = getServiceSafe();
-    InputStream contents = service.retrieveBlob(applicationToken, key, properties, cache != null);
+    InputStream contents = service.retrieveBlob(credentialsProvider, applicationToken, key, properties, cache != null);
 
     if (cache != null)
     {
@@ -252,7 +267,7 @@ public final class Storage implements IStorage
       in = new TeeInputStream(in, output);
     }
 
-    boolean created = service.updateBlob(applicationToken, key, properties, in);
+    boolean created = service.updateBlob(credentialsProvider, applicationToken, key, properties, in);
 
     if (cache != null)
     {

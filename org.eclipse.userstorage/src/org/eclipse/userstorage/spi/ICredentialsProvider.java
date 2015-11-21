@@ -11,6 +11,7 @@
 package org.eclipse.userstorage.spi;
 
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.internal.Activator;
 import org.eclipse.userstorage.internal.Credentials;
 
 /**
@@ -20,6 +21,11 @@ import org.eclipse.userstorage.internal.Credentials;
  */
 public interface ICredentialsProvider
 {
+  /**
+   * A credentials provider that returns no credentials and, hence, simulates authentication cancelation.
+   */
+  public static final ICredentialsProvider CANCEL = Activator.CANCEL_CREDENTIALS_PROVIDER;
+
   /**
    * Provides the user's credentials for the given {@link IStorageService storage service}.
    * <p>

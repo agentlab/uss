@@ -10,6 +10,7 @@
  */
 package org.eclipse.userstorage;
 
+import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadKeyException;
 
@@ -86,6 +87,28 @@ public interface IStorage
    * @see #getService()
    */
   public void setService(IStorageService service);
+
+  /**
+   * Returns the optional credentials provider of this storage that, if available, overrides the default credentials provider.
+   * <p>
+   * @return the override credentials provider of this storage, or <code>null</code> if unavailable.<p>
+   *
+   * @see #setCredentialsProvider(ICredentialsProvider)
+   */
+  public ICredentialsProvider getCredentialsProvider();
+
+  /**
+   * Sets the optional credentials provider of this storage that, if available, overrides the default credentials provider.
+   * <p>
+   * Overriding the default credentials provider can make sense in scenarios where one wouldn't want a credentials dialog to pop up.
+   * {@link ICredentialsProvider#CANCEL} can be used temporarily in these cases.
+   * <p>
+   *
+   * @param credentialsProvider the override credentials provider of this storage, or <code>null</code> for no overriding.<p>
+   *
+   * @see #getCredentialsProvider()
+   */
+  public void setCredentialsProvider(ICredentialsProvider credentialsProvider);
 
   /**
    * Provides access to a specific piece of data that this storage maintains for the logged-in user under the given <code>key</code>.

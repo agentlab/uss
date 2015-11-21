@@ -35,6 +35,8 @@ public class Activator extends Plugin
 
   public static final boolean PLATFORM_RUNNING;
 
+  public static final CancelCredentialsProvider CANCEL_CREDENTIALS_PROVIDER = new CancelCredentialsProvider();
+
   static
   {
     boolean result = false;
@@ -53,7 +55,7 @@ public class Activator extends Plugin
 
   private static Activator plugin;
 
-  private static ICredentialsProvider credentialsProvider = new NOOPCredentialsProvider();
+  private static ICredentialsProvider credentialsProvider = CANCEL_CREDENTIALS_PROVIDER;
 
   @Override
   public void start(BundleContext bundleContext) throws Exception
@@ -225,7 +227,7 @@ public class Activator extends Plugin
   /**
    * @author Eike Stepper
    */
-  private static final class NOOPCredentialsProvider implements ICredentialsProvider
+  private static final class CancelCredentialsProvider implements ICredentialsProvider
   {
     @Override
     public Credentials provideCredentials(IStorageService service)
