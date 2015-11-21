@@ -218,7 +218,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          authenticate(credentialsProvider);
+          authenticate(credentialsProvider, authorizationAttempts == AUTHORIZATION_ATTEMPTS);
 
           Request request = prepareRequest();
           HttpResponse response = sendRequest(request, uri);
@@ -255,7 +255,7 @@ public class Session implements Headers, Codes
       }
     }
 
-    protected final void authenticate(ICredentialsProvider credentialsProvider) throws IOException
+    protected final void authenticate(ICredentialsProvider credentialsProvider, boolean firstAttempt) throws IOException
     {
       if (sessionID == null)
       {
@@ -268,7 +268,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          Credentials credentials = getCredentials(credentialsProvider);
+          Credentials credentials = getCredentials(credentialsProvider, firstAttempt);
 
           Map<String, String> arguments = new LinkedHashMap<String, String>();
           arguments.put("username", credentials.getUsername());
@@ -493,9 +493,9 @@ public class Session implements Headers, Codes
       return "HTTP";
     }
 
-    protected final Credentials getCredentials(ICredentialsProvider credentialsProvider) throws OperationCanceledException
+    protected final Credentials getCredentials(ICredentialsProvider credentialsProvider, boolean firstAttempt) throws OperationCanceledException
     {
-      Credentials credentials = service.getCredentials();
+      Credentials credentials = firstAttempt ? service.getCredentials() : null;
       if (credentials == null)
       {
         if (credentialsProvider != null)

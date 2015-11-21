@@ -12,6 +12,7 @@ package org.eclipse.userstorage.ui.internal;
 
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Credentials;
+import org.eclipse.userstorage.internal.util.StringUtil;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -96,7 +97,7 @@ public class CredentialsDialog extends AbstractDialog
     if (okButton != null)
     {
       Credentials credentials = credentialsComposite.getCredentials();
-      okButton.setEnabled(credentials != null);
+      okButton.setEnabled(credentials != null && !StringUtil.isEmpty(credentials.getUsername()) && !StringUtil.isEmpty(credentials.getPassword()));
     }
   }
 }

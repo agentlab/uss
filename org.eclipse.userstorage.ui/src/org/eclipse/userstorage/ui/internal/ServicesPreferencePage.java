@@ -10,13 +10,17 @@
  */
 package org.eclipse.userstorage.ui.internal;
 
+import org.eclipse.userstorage.IBlob;
+import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.IStorageService.Registry;
+import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.StorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.ui.ServiceSelectorComposite;
 
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.preference.PreferencePage;
@@ -61,6 +65,8 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
   private Button addButton;
 
   private Button removeButton;
+
+  private Button testButton;
 
   private IStorageService selectedService;
 
@@ -256,6 +262,32 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       setSelectedService((IStorageService)elements[0]);
     }
 
+    if (Boolean.getBoolean("org.eclipse.userstorage.ui.showTestButton"))
+    {
+      testButton = new Button(leftArea, SWT.PUSH);
+      testButton.setText("Test");
+      testButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          try
+          {
+            IStorage storage = StorageFactory.DEFAULT.create("pDKTqBfDuNxlAKydhEwxBZPxa4q");
+            IBlob blob = storage.getBlob("ui_test");
+            blob.setContentsUTF("Test 123");
+            performDefaults();
+            MessageDialog.openInformation(getShell(), "Test", "Test succeeded.");
+          }
+          catch (Exception ex)
+          {
+            performDefaults();
+            ErrorDialog.openError(getShell(), "Test", "Test failed.", Activator.getStatus(ex));
+          }
+        }
+      });
+    }
+
     return mainArea;
   }
 
@@ -372,6 +404,11 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
         dirty = true;
         break;
       }
+    }
+
+    if (testButton != null)
+    {
+      testButton.setEnabled(!dirty);
     }
 
     Button defaultsButton = getDefaultsButton();
