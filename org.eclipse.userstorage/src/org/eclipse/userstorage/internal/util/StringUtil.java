@@ -196,7 +196,7 @@ public final class StringUtil
     }
 
     int j = random.nextInt(KEY.length);
-    result[bytes.length] = (byte)(j - Byte.MAX_VALUE);
+    result[bytes.length] = (byte)(j + Byte.MIN_VALUE);
     crypt(bytes, result, bytes.length, j);
     return result;
   }
@@ -214,7 +214,7 @@ public final class StringUtil
     }
 
     byte[] result = new byte[bytes.length - 1];
-    int j = bytes[result.length] + Byte.MAX_VALUE;
+    int j = bytes[result.length] - Byte.MIN_VALUE;
     crypt(bytes, result, result.length, j);
     return fromUTF(result);
   }
