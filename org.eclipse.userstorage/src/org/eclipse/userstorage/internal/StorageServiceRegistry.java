@@ -43,6 +43,8 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   private static final ExtensionPointHandler HANDLER = new ExtensionPointHandler();
 
+  private static final String PREFIX = "org.eclipse.userstorage.";
+
   private static final String SERVICE_LABEL = "serviceLabel";
 
   private static final String SERVICE_URI = "serviceURI";
@@ -52,6 +54,10 @@ public final class StorageServiceRegistry implements IStorageService.Registry
   private static final String EDIT_ACCOUNT_URI = "editAccountURI";
 
   private static final String RECOVER_PASSWORD_URI = "recoverPasswordURI";
+
+  private static final String DEFAULT_SERVICE_LABEL = "Eclipse.org";
+
+  private static final String DEFAULT_SERVICE_URI = "https://api.eclipse.org/";
 
   private final List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
@@ -284,13 +290,17 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
         try
         {
-          URI serviceURI = StringUtil.newURI("https://api.eclipse.org/");
-          URI createAccountURI = StringUtil.newURI("https://dev.eclipse.org/site_login/");
-          URI editAccountURI = StringUtil.newURI("https://dev.eclipse.org/site_login/myaccount.php");
-          URI recoverPasswordURI = StringUtil.newURI("https://dev.eclipse.org/site_login/password_recovery.php");
+          URI serviceURI = StringUtil.newURI(System.getProperty(PREFIX + SERVICE_URI, DEFAULT_SERVICE_URI));
+          if (serviceURI != null)
+          {
+            String serviceLabel = System.getProperty(PREFIX + SERVICE_LABEL, DEFAULT_SERVICE_LABEL);
+            URI createAccountURI = getURI(serviceURI, CREATE_ACCOUNT_URI, "https://dev.eclipse.org/site_login/");
+            URI editAccountURI = getURI(serviceURI, EDIT_ACCOUNT_URI, "https://dev.eclipse.org/site_login/myaccount.php");
+            URI recoverPasswordURI = getURI(serviceURI, RECOVER_PASSWORD_URI, "https://dev.eclipse.org/site_login/password_recovery.php");
 
-          StorageService eclipseStorage = new StorageService("Eclipse.org", serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
-          services.put(eclipseStorage.getServiceURI(), eclipseStorage);
+            StorageService eclipseStorage = new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+            services.put(eclipseStorage.getServiceURI(), eclipseStorage);
+          }
 
           if (Activator.PLATFORM_RUNNING)
           {
@@ -330,6 +340,21 @@ public final class StorageServiceRegistry implements IStorageService.Registry
         }
       }
     }
+  }
+
+  private static URI getURI(URI serviceURI, String property, String defaultURI)
+  {
+    String uri = System.getProperty(PREFIX + property);
+    if (StringUtil.isEmpty(uri))
+    {
+      String authority = serviceURI.getAuthority();
+      if (authority != null && authority.endsWith(".eclipse.org"))
+      {
+        uri = defaultURI;
+      }
+    }
+
+    return StringUtil.newURI(uri);
   }
 
   private static void setSecurePreference(ISecurePreferences securePreferences, String key, URI uri) throws StorageException

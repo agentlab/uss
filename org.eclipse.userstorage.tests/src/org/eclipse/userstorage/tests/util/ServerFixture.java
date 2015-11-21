@@ -26,7 +26,6 @@ import org.eclipse.jetty.util.log.Log;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -96,13 +95,15 @@ public class ServerFixture extends Fixture
     return service;
   }
 
-  public final StorageFactory createFactory(String applicationToken)
+  public final StorageFactory createFactory(String applicationToken) throws Exception
   {
-    ISettings settings = new MemorySettings(Collections.singletonMap(applicationToken, service.getServiceURI().toString()));
+    ISettings settings = new MemorySettings();
+    settings.setValue(applicationToken, service.getServiceURI().toString());
+
     return new StorageFactory(settings);
   }
 
-  public final BlobInfo readServer(IBlob blob) throws IOException
+  public final BlobInfo readServer(IBlob blob) throws Exception
   {
     BlobInfo result = new BlobInfo();
 
@@ -152,7 +153,7 @@ public class ServerFixture extends Fixture
     return result;
   }
 
-  public final String writeServer(IBlob blob, String value) throws IOException
+  public final String writeServer(IBlob blob, String value) throws Exception
   {
     String applicationToken = blob.getStorage().getApplicationToken();
     String key = blob.getKey();
