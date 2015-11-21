@@ -11,9 +11,11 @@
 package org.eclipse.userstorage.ui.internal;
 
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.IStorageService.Registry;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.StorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.ui.ServiceSelectorComposite;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -48,6 +50,8 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 {
   public static final String ID = "org.eclipse.userstorage.ui.ServicesPreferencePage";
 
+  private static final Registry REGISTRY = IStorageService.Registry.INSTANCE;
+
   private Map<IStorageService, Credentials> credentialsMap = new HashMap<IStorageService, Credentials>();
 
   private TableViewer servicesViewer;
@@ -62,7 +66,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
   public ServicesPreferencePage()
   {
-    super("User Storage");
+    super("User Storage Service");
   }
 
   @Override
@@ -91,39 +95,42 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
   @Override
   protected Control createContents(final Composite parent)
   {
+    final ServicesContentProvider contentProvider = ServiceSelectorComposite.isShowServices() ? new ServicesContentProvider() : null;
+
     final Composite mainArea = createArea(parent, 2);
     mainArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
     Composite leftArea = createArea(mainArea, 1);
     leftArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-    Label servicesLabel = new Label(leftArea, SWT.NONE);
-    servicesLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    servicesLabel.setText("Services:");
-
-    final ServicesContentProvider contentProvider = new ServicesContentProvider();
-
-    TableColumnLayout tableLayout = new TableColumnLayout();
-    Composite tableComposite = new Composite(leftArea, SWT.NONE);
-    tableComposite.setLayout(tableLayout);
-    tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-    servicesViewer = new TableViewer(tableComposite, SWT.BORDER);
-    servicesViewer.setContentProvider(contentProvider);
-    servicesViewer.setLabelProvider(new ServicesLabelProvider());
-    servicesViewer.setInput(IStorageService.Registry.INSTANCE);
-    servicesViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    if (contentProvider != null)
     {
-      @Override
-      public void selectionChanged(SelectionChangedEvent event)
-      {
-        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-        setSelectedService((IStorageService)selection.getFirstElement());
-      }
-    });
+      Label servicesLabel = new Label(leftArea, SWT.NONE);
+      servicesLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      servicesLabel.setText("Services:");
 
-    TableColumn tableColumn = new TableColumn(servicesViewer.getTable(), SWT.LEFT);
-    tableLayout.setColumnData(tableColumn, new ColumnWeightData(100));
+      TableColumnLayout tableLayout = new TableColumnLayout();
+      Composite tableComposite = new Composite(leftArea, SWT.NONE);
+      tableComposite.setLayout(tableLayout);
+      tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+      servicesViewer = new TableViewer(tableComposite, SWT.BORDER);
+      servicesViewer.setContentProvider(contentProvider);
+      servicesViewer.setLabelProvider(new ServicesLabelProvider());
+      servicesViewer.setInput(REGISTRY);
+      servicesViewer.addSelectionChangedListener(new ISelectionChangedListener()
+      {
+        @Override
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+          IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+          setSelectedService((IStorageService)selection.getFirstElement());
+        }
+      });
+
+      TableColumn tableColumn = new TableColumn(servicesViewer.getTable(), SWT.LEFT);
+      tableLayout.setColumnData(tableColumn, new ColumnWeightData(100));
+    }
 
     credentialsComposite = new CredentialsComposite(leftArea, SWT.NONE, 0, 0, false)
     {
@@ -141,108 +148,112 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
     credentialsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-    Composite rightArea = createArea(mainArea, 1);
-    rightArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-
-    new Label(rightArea, SWT.NONE);
-
-    addButton = new Button(rightArea, SWT.NONE);
-    addButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-    addButton.setText("Add...");
-    addButton.addSelectionListener(new SelectionAdapter()
+    if (contentProvider != null)
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      Composite rightArea = createArea(mainArea, 1);
+      rightArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+
+      new Label(rightArea, SWT.NONE);
+
+      addButton = new Button(rightArea, SWT.NONE);
+      addButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      addButton.setText("Add...");
+      addButton.addSelectionListener(new SelectionAdapter()
       {
-        AddServiceDialog dialog = new AddServiceDialog(getShell());
-        if (dialog.open() == AddServiceDialog.OK)
+        @Override
+        public void widgetSelected(SelectionEvent e)
         {
-          String serviceLabel = dialog.getServiceLabel();
-          URI serviceURI = dialog.getServiceURI();
-          URI createAccountURI = dialog.getCreateAccountURI();
-          URI editAccountURI = dialog.getEditAccountURI();
-          URI recoverPasswordURI = dialog.getRecoverPasswordURI();
-
-          IStorageService.Registry.INSTANCE.addService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
-        }
-      }
-    });
-
-    removeButton = new Button(rightArea, SWT.NONE);
-    removeButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-    removeButton.setText("Remove");
-    removeButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        if (selectedService instanceof IStorageService.Dynamic)
-        {
-          IStorageService.Dynamic dynamicService = (IStorageService.Dynamic)selectedService;
-          Object[] elements = contentProvider.getElements(null);
-          final int currentIndex = getCurrentIndex(elements, dynamicService);
-
-          if (MessageDialog.openQuestion(getShell(), "Remove Service", "Do you really want to remove the '" + dynamicService.getServiceLabel() + "' service?"))
+          AddServiceDialog dialog = new AddServiceDialog(getShell());
+          if (dialog.open() == AddServiceDialog.OK)
           {
-            dynamicService.remove();
+            String serviceLabel = dialog.getServiceLabel();
+            URI serviceURI = dialog.getServiceURI();
+            URI createAccountURI = dialog.getCreateAccountURI();
+            URI editAccountURI = dialog.getEditAccountURI();
+            URI recoverPasswordURI = dialog.getRecoverPasswordURI();
 
-            final Control control = servicesViewer.getControl();
-            control.getDisplay().asyncExec(new Runnable()
+            REGISTRY.addService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+          }
+        }
+      });
+
+      removeButton = new Button(rightArea, SWT.NONE);
+      removeButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      removeButton.setText("Remove");
+      removeButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          if (selectedService instanceof IStorageService.Dynamic)
+          {
+            IStorageService.Dynamic dynamicService = (IStorageService.Dynamic)selectedService;
+            Object[] elements = contentProvider.getElements(null);
+            final int currentIndex = getCurrentIndex(elements, dynamicService);
+
+            if (MessageDialog.openQuestion(getShell(), "Remove Service",
+                "Do you really want to remove the '" + dynamicService.getServiceLabel() + "' service?"))
             {
-              @Override
-              public void run()
-              {
-                if (!control.isDisposed())
-                {
-                  Object[] elements = contentProvider.getElements(null);
-                  if (elements.length != 0)
-                  {
-                    int newIndex = currentIndex;
-                    if (newIndex >= elements.length)
-                    {
-                      newIndex = elements.length - 1;
-                    }
+              dynamicService.remove();
 
-                    setSelectedService((IStorageService)elements[newIndex]);
+              final Control control = servicesViewer.getControl();
+              control.getDisplay().asyncExec(new Runnable()
+              {
+                @Override
+                public void run()
+                {
+                  if (!control.isDisposed())
+                  {
+                    Object[] elements = contentProvider.getElements(null);
+                    if (elements.length != 0)
+                    {
+                      int newIndex = currentIndex;
+                      if (newIndex >= elements.length)
+                      {
+                        newIndex = elements.length - 1;
+                      }
+
+                      setSelectedService((IStorageService)elements[newIndex]);
+                    }
                   }
                 }
-              }
-            });
+              });
+            }
           }
         }
-      }
 
-      private int getCurrentIndex(Object[] elements, IStorageService service)
-      {
-        for (int i = 0; i < elements.length; i++)
+        private int getCurrentIndex(Object[] elements, IStorageService service)
         {
-          Object element = elements[i];
-          if (element == service)
+          for (int i = 0; i < elements.length; i++)
           {
-            return i;
+            Object element = elements[i];
+            if (element == service)
+            {
+              return i;
+            }
           }
+
+          return 0;
         }
+      });
 
-        return 0;
-      }
-    });
-
-    Button refreshButton = new Button(rightArea, SWT.NONE);
-    refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-    refreshButton.setText("Refresh");
-    refreshButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      Button refreshButton = new Button(rightArea, SWT.NONE);
+      refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      refreshButton.setText("Refresh");
+      refreshButton.addSelectionListener(new SelectionAdapter()
       {
-        IStorageService.Registry.INSTANCE.refresh();
-      }
-    });
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          REGISTRY.refresh();
+        }
+      });
 
-    Object[] elements = contentProvider.getElements(null);
-    if (elements.length != 0)
-    {
-      setSelectedService((IStorageService)elements[0]);
+      Object[] elements = contentProvider.getElements(null);
+      if (elements.length != 0)
+      {
+        setSelectedService((IStorageService)elements[0]);
+      }
     }
 
     return mainArea;
@@ -321,7 +332,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
   private void updateEnablement()
   {
     boolean dirty = false;
-    for (IStorageService service : IStorageService.Registry.INSTANCE.getServices())
+    for (IStorageService service : REGISTRY.getServices())
     {
       Credentials localCredentials = credentialsMap.get(service);
       String localUsername = "";

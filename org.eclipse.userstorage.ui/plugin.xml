@@ -21,7 +21,7 @@
       <page category="org.eclipse.ui.preferencePages.Workbench"
             class="org.eclipse.userstorage.ui.internal.ServicesPreferencePage"
             id="org.eclipse.userstorage.ui.ServicesPreferencePage"
-            name="User Storage"/>
+            name="User Storage Service"/>
    </extension>
 
 </plugin>

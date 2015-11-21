@@ -143,4 +143,15 @@ public class ServiceSelectorComposite extends Composite
     IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
     return (IStorageService)selection.getFirstElement();
   }
+
+  public static boolean isShowServices()
+  {
+    String property = System.getProperty("org.eclipse.userstorage.ui.showServices", "auto");
+    if ("auto".equalsIgnoreCase(property))
+    {
+      return IStorageService.Registry.INSTANCE.getServices().length > 1;
+    }
+  
+    return Boolean.parseBoolean(property);
+  }
 }
