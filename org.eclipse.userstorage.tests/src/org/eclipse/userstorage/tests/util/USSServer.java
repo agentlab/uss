@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -348,63 +349,63 @@ public final class USSServer
           return;
         }
 
-        String path = request.getPathInfo();
         String method = request.getMethod();
+        String path = request.getPathInfo();
 
         if (DEBUG)
         {
-          System.out.println(method + " " + path);
+          StringBuilder builder = new StringBuilder();
+          builder.append(method);
+          builder.append(" ");
+          builder.append(path);
+          builder.append('\n');
+
+          Enumeration<String> headerNames = request.getHeaderNames();
+          while (headerNames.hasMoreElements())
+          {
+            String headerName = headerNames.nextElement();
+            Enumeration<String> headers = request.getHeaders(headerName);
+            while (headers.hasMoreElements())
+            {
+              String header = headers.nextElement();
+              builder.append("   ");
+              builder.append(headerName);
+              builder.append(": ");
+              builder.append(header);
+              builder.append('\n');
+            }
+          }
+
+          System.out.print(builder);
+          System.out.flush();
         }
 
         if (path != null && method != null)
         {
-          if (path.equals("/api/user/login") && HttpMethod.POST.is(method))
+          handle(method, path, request, response);
+
+          if (DEBUG)
           {
-            login(request, response);
-            return;
-          }
+            StringBuilder builder = new StringBuilder();
+            builder.append(request.getProtocol());
+            builder.append(" ");
+            builder.append(response.getStatus());
+            builder.append('\n');
 
-          Session session = getSession(request);
-          if (session == null)
-          {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-          }
-
-          if (path.startsWith("/api/blob"))
-          {
-            User user = session.getUser();
-
-            Path segments = new Path(path);
-            String applicationToken = segments.segment(2);
-            String key = segments.segment(3);
-
-            if (!applicationTokens.contains(applicationToken))
+            for (String headerName : response.getHeaderNames())
             {
-              response.sendError(HttpServletResponse.SC_NOT_FOUND);
-              return;
+              for (String header : response.getHeaders(headerName))
+              {
+                builder.append("   ");
+                builder.append(headerName);
+                builder.append(": ");
+                builder.append(header);
+                builder.append('\n');
+              }
             }
 
-            File blobFile = getUserFile(user, applicationToken, key, BLOB_EXTENSION);
-            File etagFile = getUserFile(user, applicationToken, key, ETAG_EXTENSION);
-            boolean exists = etagFile.exists();
-
-            if (HttpMethod.GET.is(method))
-            {
-              retrieveBlob(request, response, blobFile, etagFile, exists);
-              return;
-            }
-
-            if (HttpMethod.PUT.is(method))
-            {
-              updateBlob(request, response, blobFile, etagFile, exists);
-              return;
-            }
-
-            return;
+            System.out.println(builder);
           }
-
-          response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
       }
       catch (IOException ex)
@@ -417,6 +418,57 @@ public final class USSServer
         ex.printStackTrace();
         throw ex;
       }
+    }
+
+    private void handle(String method, String path, HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+      if (path.equals("/api/user/login") && HttpMethod.POST.is(method))
+      {
+        login(request, response);
+        return;
+      }
+
+      Session session = getSession(request);
+      if (session == null)
+      {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        return;
+      }
+
+      if (path.startsWith("/api/blob"))
+      {
+        User user = session.getUser();
+
+        Path segments = new Path(path);
+        String applicationToken = segments.segment(2);
+        String key = segments.segment(3);
+
+        if (!applicationTokens.contains(applicationToken))
+        {
+          response.sendError(HttpServletResponse.SC_NOT_FOUND);
+          return;
+        }
+
+        File blobFile = getUserFile(user, applicationToken, key, BLOB_EXTENSION);
+        File etagFile = getUserFile(user, applicationToken, key, ETAG_EXTENSION);
+        boolean exists = etagFile.exists();
+
+        if (HttpMethod.GET.is(method))
+        {
+          retrieveBlob(request, response, blobFile, etagFile, exists);
+          return;
+        }
+
+        if (HttpMethod.PUT.is(method))
+        {
+          updateBlob(request, response, blobFile, etagFile, exists);
+          return;
+        }
+
+        return;
+      }
+
+      response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
   }
 

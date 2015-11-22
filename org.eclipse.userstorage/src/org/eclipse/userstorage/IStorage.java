@@ -89,7 +89,7 @@ public interface IStorage
   public void setService(IStorageService service);
 
   /**
-   * Returns the optional credentials provider of this storage that, if available, overrides the default credentials provider.
+   * Returns the optional credentials provider of this storage that, if available, overrides the {@link #getService() service}'s default credentials provider.
    * <p>
    * @return the override credentials provider of this storage, or <code>null</code> if unavailable.<p>
    *
@@ -98,7 +98,7 @@ public interface IStorage
   public ICredentialsProvider getCredentialsProvider();
 
   /**
-   * Sets the optional credentials provider of this storage that, if available, overrides the default credentials provider.
+   * Sets the optional credentials provider of this storage that, if available, overrides the {@link #getService() service}'s default credentials provider.
    * <p>
    * Overriding the default credentials provider can make sense in scenarios where one wouldn't want a credentials dialog to pop up.
    * {@link ICredentialsProvider#CANCEL} can be used temporarily in these cases.

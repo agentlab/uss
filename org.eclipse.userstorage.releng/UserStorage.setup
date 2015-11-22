@@ -152,6 +152,10 @@
       <requirement
           name="org.eclipse.sdk.feature.group"/>
       <requirement
+          name="org.apache.httpcomponents.httpclient.source"/>
+      <requirement
+          name="org.apache.httpcomponents.httpcore.source"/>
+      <requirement
           name="*"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}">
@@ -163,9 +167,15 @@
         </predicate>
       </sourceLocator>
       <repositoryList
-          name="Neon"/>
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+      </repositoryList>
       <repositoryList
-          name="Mars"/>
+          name="Mars">
+        <repository
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+      </repositoryList>
     </targlet>
   </setupTask>
   <setupTask
