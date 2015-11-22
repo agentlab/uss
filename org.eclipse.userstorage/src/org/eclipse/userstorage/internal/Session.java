@@ -80,6 +80,16 @@ public class Session implements Headers, Codes
     return service;
   }
 
+  public void reset()
+  {
+    sessionID = null;
+    csrfToken = null;
+
+    // Make sure no old session session cookies are sent.
+    // Otherwise the server would reply with "401: CSRF Validation Failed".
+    cookieStore.clear();
+  }
+
   public InputStream retrieveBlob(String appToken, String key, final Map<String, String> properties, final boolean useETag,
       ICredentialsProvider credentialsProvider) throws IOException
   {
@@ -259,9 +269,7 @@ public class Session implements Headers, Codes
     {
       if (sessionID == null)
       {
-        // Make sure no old session session cookies are sent.
-        // Otherwise the server would reply with "401: CSRF Validation Failed".
-        cookieStore.clear();
+        reset();
 
         InputStream body = null;
         HttpEntity responseEntity = null;

@@ -95,7 +95,7 @@ public class StorageService implements IStorageService
     return recoverPasswordURI;
   }
 
-  public Credentials getCredentials()
+  public synchronized Credentials getCredentials()
   {
     try
     {
@@ -119,7 +119,7 @@ public class StorageService implements IStorageService
     return null;
   }
 
-  public void setCredentials(Credentials credentials)
+  public synchronized void setCredentials(Credentials credentials)
   {
     try
     {
@@ -143,6 +143,13 @@ public class StorageService implements IStorageService
     catch (Exception ex)
     {
       Activator.log(ex);
+    }
+    finally
+    {
+      if (session != null)
+      {
+        session.reset();
+      }
     }
   }
 
@@ -237,7 +244,7 @@ public class StorageService implements IStorageService
     return null;
   }
 
-  private synchronized ICredentialsProvider getCredentialsProvider()
+  private ICredentialsProvider getCredentialsProvider()
   {
     if (credentialsProvider == null)
     {
@@ -248,7 +255,6 @@ public class StorageService implements IStorageService
         {
           @SuppressWarnings("unchecked")
           Class<ICredentialsProvider> c = (Class<ICredentialsProvider>)Class.forName(property);
-
           credentialsProvider = c.newInstance();
         }
         catch (Throwable ex)

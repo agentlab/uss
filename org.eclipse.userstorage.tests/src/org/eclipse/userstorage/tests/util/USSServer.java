@@ -179,7 +179,7 @@ public final class USSServer
     String password = properties.get("password");
 
     User user = users.get(username);
-    if (password == null || !password.equals(user.getPassword()))
+    if (user == null || password == null || !password.equals(user.getPassword()))
     {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
       return;
