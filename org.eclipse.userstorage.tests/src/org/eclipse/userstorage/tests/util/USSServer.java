@@ -330,6 +330,19 @@ public final class USSServer
     return eTag;
   }
 
+  @SuppressWarnings("restriction")
+  private static String getReasonPhrase(int status)
+  {
+    try
+    {
+      return org.apache.http.impl.EnglishReasonPhraseCatalog.INSTANCE.getReason(status, null);
+    }
+    catch (Throwable ex)
+    {
+      return "";
+    }
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -386,10 +399,19 @@ public final class USSServer
 
           if (DEBUG)
           {
+            int status = response.getStatus();
+            String reasonPhrase = getReasonPhrase(status);
+
             StringBuilder builder = new StringBuilder();
             builder.append(request.getProtocol());
             builder.append(" ");
-            builder.append(response.getStatus());
+            builder.append(status);
+            if (!StringUtil.isEmpty(reasonPhrase))
+            {
+              builder.append(" ");
+              builder.append(reasonPhrase);
+            }
+
             builder.append('\n');
 
             for (String headerName : response.getHeaderNames())
