@@ -95,7 +95,7 @@ public class StorageService implements IStorageService
     return recoverPasswordURI;
   }
 
-  public synchronized Credentials getCredentials()
+  public Credentials getCredentials()
   {
     try
     {
@@ -119,7 +119,7 @@ public class StorageService implements IStorageService
     return null;
   }
 
-  public synchronized void setCredentials(Credentials credentials)
+  public void setCredentials(Credentials credentials)
   {
     try
     {
