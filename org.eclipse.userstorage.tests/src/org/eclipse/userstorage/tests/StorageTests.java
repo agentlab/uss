@@ -15,9 +15,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.StorageFactory;
+import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.Session;
+import org.eclipse.userstorage.internal.StorageService;
+import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.tests.util.ClientFixture;
 import org.eclipse.userstorage.tests.util.ClientFixture.TestCache;
+import org.eclipse.userstorage.tests.util.FixedCredentialsProvider;
 import org.eclipse.userstorage.tests.util.ServerFixture;
 import org.eclipse.userstorage.tests.util.ServerFixture.BlobInfo;
 import org.eclipse.userstorage.tests.util.USSServer;
@@ -30,6 +34,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.UUID;
@@ -223,6 +229,55 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF("Text 1");
     blob.setContentsUTF("Text 2");
     blob.setContentsUTF("Text 3");
+  }
+
+  @Test
+  public void testUpdateFailEarly() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+  
+    String value1 = "A short UTF-8 string value";
+    assertThat(blob.setContentsUTF(value1), is(true));
+  
+    File tempFile = File.createTempFile("test-", ".txt");
+    IOUtil.writeUTF(tempFile, "Another string value");
+  
+    FileInputStream in = null;
+  
+    try
+    {
+      Credentials credentials = new Credentials("abc", "wrong");
+      Credentials oldCredentials = FixedCredentialsProvider.setCredentials(credentials);
+  
+      try
+      {
+        ((StorageService)storage.getService()).setCredentials(credentials);
+  
+        in = new FileInputStream(tempFile);
+        blob.setContents(in);
+        fail("ProtocolException: HTTP/1.1 401 Unauthorized expected");
+      }
+      catch (ProtocolException expected)
+      {
+        assertThat(expected.getStatusCode(), is(401));
+      }
+      finally
+      {
+        FixedCredentialsProvider.setCredentials(oldCredentials);
+      }
+  
+      assertThat(tempFile.delete(), is(true));
+    }
+    finally
+    {
+      IOUtil.closeSilent(in);
+  
+      if (!tempFile.delete())
+      {
+        tempFile.deleteOnExit();
+      }
+    }
   }
 
   @Test

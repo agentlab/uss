@@ -101,8 +101,16 @@ public class Blob implements IBlob
   @Override
   public boolean setContents(InputStream in) throws IOException, ConflictException, NoServiceException, IllegalStateException
   {
-    checkNotDisposed();
-    return storage.updateBlob(key, properties, in);
+    try
+    {
+      checkNotDisposed();
+      return storage.updateBlob(key, properties, in);
+    }
+    finally
+    {
+      // Just a safety guard to ensure the stream is closed even if something goes wrong before it's even attempted to be read.
+      IOUtil.closeSilent(in);
+    }
   }
 
   @Override

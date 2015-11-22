@@ -33,8 +33,10 @@ public class FixedCredentialsProvider implements ICredentialsProvider
     return credentials;
   }
 
-  public static void setCredentials(Credentials credentials)
+  public static Credentials setCredentials(Credentials credentials)
   {
+    Credentials oldCredentials = FixedCredentialsProvider.credentials;
     FixedCredentialsProvider.credentials = credentials;
+    return oldCredentials;
   }
 }
