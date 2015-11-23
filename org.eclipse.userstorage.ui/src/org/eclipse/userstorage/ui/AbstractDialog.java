@@ -8,7 +8,9 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.ui.internal;
+package org.eclipse.userstorage.ui;
+
+import org.eclipse.userstorage.ui.internal.Activator;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -23,7 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-public class AbstractDialog extends TitleAreaDialog
+public abstract class AbstractDialog extends TitleAreaDialog
 {
   public AbstractDialog(Shell parentShell)
   {

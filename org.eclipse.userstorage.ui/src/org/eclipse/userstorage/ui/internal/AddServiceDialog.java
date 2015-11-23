@@ -12,6 +12,7 @@ package org.eclipse.userstorage.ui.internal;
 
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.ui.AbstractDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;

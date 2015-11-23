@@ -46,7 +46,10 @@ import java.util.UUID;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class StorageTests extends AbstractTest
 {
-  private static final String APPLICATION_TOKEN = "pDKTqBfDuNxlAKydhEwxBZPxa4q";
+  /**
+   * The test application's token.
+   */
+  public static final String APPLICATION_TOKEN = "pDKTqBfDuNxlAKydhEwxBZPxa4q";
 
   private static final String KEY = "test_blob";
 
@@ -236,24 +239,24 @@ public final class StorageTests extends AbstractTest
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob(makeKey());
-  
+
     String value1 = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value1), is(true));
-  
+
     File tempFile = File.createTempFile("test-", ".txt");
     IOUtil.writeUTF(tempFile, "Another string value");
-  
+
     FileInputStream in = null;
-  
+
     try
     {
       Credentials credentials = new Credentials("abc", "wrong");
       Credentials oldCredentials = FixedCredentialsProvider.setCredentials(credentials);
-  
+
       try
       {
         ((StorageService)storage.getService()).setCredentials(credentials);
-  
+
         in = new FileInputStream(tempFile);
         blob.setContents(in);
         fail("ProtocolException: HTTP/1.1 401 Unauthorized expected");
@@ -266,13 +269,13 @@ public final class StorageTests extends AbstractTest
       {
         FixedCredentialsProvider.setCredentials(oldCredentials);
       }
-  
+
       assertThat(tempFile.delete(), is(true));
     }
     finally
     {
       IOUtil.closeSilent(in);
-  
+
       if (!tempFile.delete())
       {
         tempFile.deleteOnExit();

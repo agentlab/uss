@@ -15,6 +15,7 @@ import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.tests.StorageTests;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jetty.http.HttpMethod;
@@ -736,6 +737,10 @@ public final class USSServer
 
     USSServer server = new USSServer(8080, new File(System.getProperty("java.io.tmpdir"), "uss-server"));
     server.addUser(FixedCredentialsProvider.DEFAULT_CREDENTIALS);
+
+    Set<String> applicationTokens = server.getApplicationTokens();
+    applicationTokens.add(StorageTests.APPLICATION_TOKEN);
+    applicationTokens.add("cNhDr0INs8T109P8h6E1r_GvU3I"); // Oomph
 
     System.out.println(server.getFolder());
     System.out.println("Listening on port " + server.start());
