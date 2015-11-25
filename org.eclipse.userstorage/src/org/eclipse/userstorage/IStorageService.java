@@ -11,8 +11,10 @@
 package org.eclipse.userstorage;
 
 import org.eclipse.userstorage.internal.StorageServiceRegistry;
+import org.eclipse.userstorage.spi.ICredentialsProvider;
 
 import java.net.URI;
+import java.util.concurrent.Semaphore;
 
 /**
  * Represents a remote <i>user storage service</i> (USS).
@@ -67,11 +69,13 @@ public interface IStorageService extends Comparable<IStorageService>
   public URI getRecoverPasswordURI();
 
   /**
-   * Returns whether the user is currently being asked for the credentials of this service or not.
+   * Returns a one-permit semaphore that this service acquires while control is passed to a {@link ICredentialsProvider credentials provider},
+   * such a a login dialog.
    *
-   * @return <code>true</code> if the user is currently being asked for credentials of this service, <code>false</code> otherwise.<p>
+   * @return a one-permit semaphore that this service acquires while control is passed to a {@link ICredentialsProvider credentials provider},
+   * such a a login dialog.<p>
    */
-  public boolean isAuthenticating();
+  public Semaphore getAuthenticationSemaphore();
 
   /**
    * A {@link IStorageService storage service} that is dynamically created as opposed to being

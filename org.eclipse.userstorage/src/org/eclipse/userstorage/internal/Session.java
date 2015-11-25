@@ -38,6 +38,7 @@ import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 /**
  * @author Eike Stepper
@@ -70,8 +71,6 @@ public class Session implements Headers, Codes
 
   private String csrfToken;
 
-  private volatile boolean authenticating;
-
   public Session(StorageService service)
   {
     this.service = service;
@@ -80,11 +79,6 @@ public class Session implements Headers, Codes
   public IStorageService getService()
   {
     return service;
-  }
-
-  public boolean isAuthenticating()
-  {
-    return authenticating;
   }
 
   public void reset()
@@ -515,14 +509,21 @@ public class Session implements Headers, Codes
       {
         if (credentialsProvider != null)
         {
+          Semaphore semaphore = service.getAuthenticationSemaphore();
+
           try
           {
-            authenticating = true;
+            semaphore.acquire();
+
             credentials = credentialsProvider.provideCredentials(service);
+          }
+          catch (InterruptedException ex)
+          {
+            //$FALL-THROUGH$
           }
           finally
           {
-            authenticating = false;
+            semaphore.release();
           }
 
           if (credentials != null)

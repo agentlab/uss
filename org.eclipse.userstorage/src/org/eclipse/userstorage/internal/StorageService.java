@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 /**
  * @author Eike Stepper
@@ -31,6 +32,8 @@ public class StorageService implements IStorageService
   private static final String USERNAME_KEY = "username";
 
   private static final String PASSWORD_KEY = "password";
+
+  private final Semaphore authenticationSemaphore = new Semaphore(1);
 
   private final String serviceLabel;
 
@@ -96,9 +99,9 @@ public class StorageService implements IStorageService
   }
 
   @Override
-  public boolean isAuthenticating()
+  public Semaphore getAuthenticationSemaphore()
   {
-    return session != null && session.isAuthenticating();
+    return authenticationSemaphore;
   }
 
   public Credentials getCredentials()
