@@ -95,6 +95,12 @@ public class StorageService implements IStorageService
     return recoverPasswordURI;
   }
 
+  @Override
+  public boolean isAuthenticating()
+  {
+    return session != null && session.isAuthenticating();
+  }
+
   public Credentials getCredentials()
   {
     try

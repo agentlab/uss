@@ -67,6 +67,13 @@ public interface IStorageService extends Comparable<IStorageService>
   public URI getRecoverPasswordURI();
 
   /**
+   * Returns whether the user is currently being asked for the credentials of this service or not.
+   *
+   * @return <code>true</code> if the user is currently being asked for credentials of this service, <code>false</code> otherwise.<p>
+   */
+  public boolean isAuthenticating();
+
+  /**
    * A {@link IStorageService storage service} that is dynamically created as opposed to being
    * statically contributed via the <code>org.eclipse.userstorage.storages</code> extension point).
    * <p>

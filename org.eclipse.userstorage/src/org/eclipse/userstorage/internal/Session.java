@@ -70,6 +70,8 @@ public class Session implements Headers, Codes
 
   private String csrfToken;
 
+  private volatile boolean authenticating;
+
   public Session(StorageService service)
   {
     this.service = service;
@@ -78,6 +80,11 @@ public class Session implements Headers, Codes
   public IStorageService getService()
   {
     return service;
+  }
+
+  public boolean isAuthenticating()
+  {
+    return authenticating;
   }
 
   public void reset()
@@ -508,7 +515,16 @@ public class Session implements Headers, Codes
       {
         if (credentialsProvider != null)
         {
-          credentials = credentialsProvider.provideCredentials(service);
+          try
+          {
+            authenticating = true;
+            credentials = credentialsProvider.provideCredentials(service);
+          }
+          finally
+          {
+            authenticating = false;
+          }
+
           if (credentials != null)
           {
             service.setCredentials(credentials);
