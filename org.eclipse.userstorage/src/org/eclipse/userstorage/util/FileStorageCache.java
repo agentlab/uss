@@ -173,7 +173,12 @@ public class FileStorageCache extends StorageCache
   protected InputStream getInputStream(String applicationToken, String key) throws IOException
   {
     File file = getFile(applicationToken, key, null);
-    return new FileInputStream(file);
+    if (file.isFile())
+    {
+      return new FileInputStream(file);
+    }
+
+    return null;
   }
 
   /**

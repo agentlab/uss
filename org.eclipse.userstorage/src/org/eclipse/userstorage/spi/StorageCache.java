@@ -122,8 +122,8 @@ public abstract class StorageCache extends InternalStorageCache
    *        must not be <code>null</code>.<p>
    * @param key the {@link IBlob#getKey() key} for which to return the contents stream,
    *        must not be <code>null</code>.<p>
-   * @return an {@link InputStream} that represents the cached contents of this blob, never <code>null</code>.<p>
-   * @throws IOException if local I/O was unsuccessful, including the case that the contents disappeared from this cache.<p>
+   * @return an {@link InputStream} that represents the cached contents of the blob, or <code>null</code> if the blob does not exist in this cache.<p>
+   * @throws IOException if local I/O was unsuccessful.<p>
    */
   @Override
   protected abstract InputStream getInputStream(String applicationToken, String key) throws IOException;

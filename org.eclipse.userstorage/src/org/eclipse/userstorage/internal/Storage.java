@@ -14,6 +14,7 @@ import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.StorageFactory;
+import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.IOUtil.TeeInputStream;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
@@ -234,27 +235,49 @@ public final class Storage implements IStorage
 
   public InputStream retrieveBlob(String key, Map<String, String> properties) throws IOException, NoServiceException
   {
-    StorageService service = getServiceSafe();
-    InputStream contents = service.retrieveBlob(credentialsProvider, applicationToken, key, properties, cache != null);
-
+    InputStream cacheStream = null;
     if (cache != null)
     {
-      if (contents == Blob.NOT_MODIFIED)
+      try
       {
-        return cache.internalGetInputStream(applicationToken, key);
+        cacheStream = cache.internalGetInputStream(applicationToken, key);
       }
-
-      if (contents == null)
+      catch (IOException ex)
       {
-        cache.internalDelete(applicationToken, key);
-        return null;
+        Activator.log(ex);
       }
-
-      OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
-      return new TeeInputStream(contents, output);
     }
 
-    return contents;
+    try
+    {
+      StorageService service = getServiceSafe();
+      InputStream contents = service.retrieveBlob(credentialsProvider, applicationToken, key, properties, cacheStream != null);
+
+      if (cacheStream != null)
+      {
+        if (contents == Blob.NOT_MODIFIED)
+        {
+          InputStream cacheStreamResult = cacheStream;
+          cacheStream = null; // Avoid closing the result stream in the finally block
+          return cacheStreamResult;
+        }
+
+        if (contents == null)
+        {
+          cache.internalDelete(applicationToken, key);
+          return null;
+        }
+
+        OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
+        return new TeeInputStream(contents, output);
+      }
+
+      return contents;
+    }
+    finally
+    {
+      IOUtil.closeSilent(cacheStream);
+    }
   }
 
   public boolean updateBlob(String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException, NoServiceException
