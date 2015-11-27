@@ -72,7 +72,7 @@ public class CredentialsDialog extends AbstractDialog
   @Override
   protected Control createDialogArea(Composite parent)
   {
-    setTitle("Log-in");
+    setTitle("Log-In");
     setMessage("Enter the log-in information for your '" + service.getServiceLabel() + "' account.");
     initializeDialogUnits(parent);
 
