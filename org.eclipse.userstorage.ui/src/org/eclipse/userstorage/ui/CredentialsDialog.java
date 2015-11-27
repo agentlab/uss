@@ -54,10 +54,26 @@ public class CredentialsDialog extends AbstractDialog
   }
 
   @Override
+  protected void configureShell(Shell newShell)
+  {
+    super.configureShell(newShell);
+
+    String shellText = "User Storage Service";
+
+    String authority = service.getServiceURI().getAuthority();
+    if (authority != null && authority.endsWith(".eclipse.org"))
+    {
+      shellText = "Eclipse " + shellText;
+    }
+
+    newShell.setText(shellText);
+  }
+
+  @Override
   protected Control createDialogArea(Composite parent)
   {
-    setTitle("Login");
-    setMessage("Enter the credentials for your '" + service.getServiceLabel() + "' account.");
+    setTitle("Log-in");
+    setMessage("Enter the log-in information for your '" + service.getServiceLabel() + "' account.");
     initializeDialogUnits(parent);
 
     Composite area = (Composite)super.createDialogArea(parent);

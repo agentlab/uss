@@ -89,6 +89,13 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
   }
 
   @Override
+  protected void configureShell(Shell newShell)
+  {
+    super.configureShell(newShell);
+    newShell.setText("User Storage Service");
+  }
+
+  @Override
   protected Control createDialogArea(Composite parent)
   {
     setTitle("Add Service");

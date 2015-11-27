@@ -34,13 +34,6 @@ public abstract class AbstractDialog extends TitleAreaDialog
   }
 
   @Override
-  protected void configureShell(Shell newShell)
-  {
-    super.configureShell(newShell);
-    newShell.setText("User Storage Service");
-  }
-
-  @Override
   protected Control createDialogArea(Composite parent)
   {
     Shell shell = getShell();
