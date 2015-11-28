@@ -58,14 +58,7 @@ public class CredentialsDialog extends AbstractDialog
   {
     super.configureShell(newShell);
 
-    String shellText = "User Storage Service";
-
-    String authority = service.getServiceURI().getAuthority();
-    if (authority != null && authority.endsWith(".eclipse.org"))
-    {
-      shellText = "Eclipse " + shellText;
-    }
-
+    String shellText = AbstractDialog.createShellText(service);
     newShell.setText(shellText);
   }
 

@@ -10,6 +10,7 @@
  */
 package org.eclipse.userstorage.ui;
 
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.ui.internal.Activator;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -52,5 +53,18 @@ public abstract class AbstractDialog extends TitleAreaDialog
 
     setTitleImage(titleImage);
     return super.createDialogArea(parent);
+  }
+
+  public static String createShellText(IStorageService service)
+  {
+    String shellText = "User Storage Service";
+
+    String authority = service.getServiceURI().getAuthority();
+    if (authority != null && authority.endsWith(".eclipse.org"))
+    {
+      shellText = "Eclipse " + shellText;
+    }
+
+    return shellText;
   }
 }
