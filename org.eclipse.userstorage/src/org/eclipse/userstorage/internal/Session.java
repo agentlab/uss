@@ -220,7 +220,8 @@ public class Session implements Headers, Codes
 
     public final synchronized T send(ICredentialsProvider credentialsProvider) throws IOException
     {
-      int authorizationAttempts = AUTHORIZATION_ATTEMPTS;
+      Credentials credentials = service.getCredentials();
+      int authorizationAttempts = (credentials == null ? 0 : 1) + AUTHORIZATION_ATTEMPTS;
 
       for (;;)
       {
@@ -229,7 +230,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          authenticate(credentialsProvider, authorizationAttempts == AUTHORIZATION_ATTEMPTS);
+          authenticate(credentials, credentialsProvider);
 
           Request request = prepareRequest();
           HttpResponse response = sendRequest(request, uri);
@@ -260,13 +261,15 @@ public class Session implements Headers, Codes
         }
         finally
         {
+          credentials = null;
+
           IOUtil.closeSilent(body);
           body = null;
         }
       }
     }
 
-    protected final void authenticate(ICredentialsProvider credentialsProvider, boolean firstAttempt) throws IOException
+    protected final void authenticate(Credentials credentials, ICredentialsProvider credentialsProvider) throws IOException
     {
       if (sessionID == null)
       {
@@ -277,7 +280,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          Credentials credentials = getCredentials(credentialsProvider, firstAttempt);
+          credentials = getCredentials(credentials, credentialsProvider);
 
           Map<String, String> arguments = new LinkedHashMap<String, String>();
           arguments.put("username", credentials.getUsername());
@@ -502,9 +505,8 @@ public class Session implements Headers, Codes
       return "HTTP";
     }
 
-    protected final Credentials getCredentials(ICredentialsProvider credentialsProvider, boolean firstAttempt) throws OperationCanceledException
+    protected final Credentials getCredentials(Credentials credentials, ICredentialsProvider credentialsProvider) throws OperationCanceledException
     {
-      Credentials credentials = firstAttempt ? service.getCredentials() : null;
       if (credentials == null)
       {
         if (credentialsProvider != null)
