@@ -136,7 +136,7 @@ public class Session implements Headers, Codes
           return Blob.NOT_MODIFIED;
         }
 
-        // NOT_FOUND
+        // Blob wasn't found.
         properties.remove(Blob.ETAG);
         return null;
       }
