@@ -86,7 +86,7 @@ public class Session implements Headers, Codes
     sessionID = null;
     csrfToken = null;
 
-    // Make sure no old session session cookies are sent.
+    // Make sure no old session cookies are sent.
     // Otherwise the server would reply with "401: CSRF Validation Failed".
     cookieStore.clear();
   }
