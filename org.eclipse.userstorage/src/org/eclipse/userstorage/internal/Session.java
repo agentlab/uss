@@ -137,6 +137,7 @@ public class Session implements Headers, Codes
         }
 
         // NOT_FOUND
+        properties.remove(Blob.ETAG);
         return null;
       }
     }.send(credentialsProvider);

@@ -288,7 +288,9 @@ public final class StorageTests extends AbstractTest
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob("aaaaaaaaaa");
+    blob.setETag("<invalid_etag>");
     assertThat(blob.getContents(), isNull());
+    assertThat(blob.getETag(), isNull());
   }
 
   @Test
