@@ -59,6 +59,8 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   private static final String DEFAULT_SERVICE_URI = "https://api.eclipse.org/";
 
+  private static final String STAGING_SERVICE_URI = "https://api-staging.eclipse.org/";
+
   private final List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
   private final Set<WeakReference<Storage>> storages = new HashSet<WeakReference<Storage>>();
@@ -290,7 +292,19 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
         try
         {
-          URI serviceURI = StringUtil.newURI(System.getProperty(PREFIX + SERVICE_URI, DEFAULT_SERVICE_URI));
+          URI serviceURI = StringUtil.newURI(System.getProperty(PREFIX + SERVICE_URI, null));
+          if (serviceURI == null)
+          {
+            if (Boolean.getBoolean(PREFIX + "staging"))
+            {
+              serviceURI = StringUtil.newURI(STAGING_SERVICE_URI);
+            }
+            else
+            {
+              serviceURI = StringUtil.newURI(DEFAULT_SERVICE_URI);
+            }
+          }
+
           if (serviceURI != null)
           {
             String serviceLabel = System.getProperty(PREFIX + SERVICE_LABEL, DEFAULT_SERVICE_LABEL);
