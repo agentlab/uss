@@ -142,8 +142,19 @@ public class StorageService implements IStorageService
         }
         else
         {
-          securePreferences.put(USERNAME_KEY, credentials.getUsername(), true);
-          securePreferences.put(PASSWORD_KEY, credentials.getPassword(), true);
+          String username = credentials.getUsername();
+          String password = credentials.getPassword();
+
+          if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password))
+          {
+            securePreferences.remove(USERNAME_KEY);
+            securePreferences.remove(PASSWORD_KEY);
+          }
+          else
+          {
+            securePreferences.put(USERNAME_KEY, username, true);
+            securePreferences.put(PASSWORD_KEY, password, true);
+          }
         }
 
         securePreferences.flush();
