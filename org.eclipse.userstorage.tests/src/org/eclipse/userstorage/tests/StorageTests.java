@@ -34,9 +34,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.UUID;
 
@@ -319,6 +321,13 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value);
 
     assertThat(blob.getContentsUTF(), is(value));
+    assertThat(clientFixture.readCache(blob.getKey(), null), is(value));
+    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
+
+    InputStream contents = blob.getContents();
+    assertThat(contents, instanceOf(FileInputStream.class));
+
+    IOUtil.copy(contents, new ByteArrayOutputStream());
     assertThat(clientFixture.readCache(blob.getKey(), null), is(value));
     assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + blob.getETag()));
   }
