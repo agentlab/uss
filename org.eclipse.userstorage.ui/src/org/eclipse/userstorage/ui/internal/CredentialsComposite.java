@@ -164,8 +164,8 @@ public class CredentialsComposite extends Composite
     }
     else
     {
-      usernameText.setText("");
-      passwordText.setText("");
+      usernameText.setText(StringUtil.EMPTY);
+      passwordText.setText(StringUtil.EMPTY);
     }
   }
 

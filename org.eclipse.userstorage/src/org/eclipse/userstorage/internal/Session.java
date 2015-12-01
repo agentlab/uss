@@ -221,8 +221,20 @@ public class Session implements Headers, Codes
 
     public final synchronized T send(ICredentialsProvider credentialsProvider) throws IOException
     {
+      int authorizationAttempts = AUTHORIZATION_ATTEMPTS;
+
       Credentials credentials = service.getCredentials();
-      int authorizationAttempts = (credentials == null ? 0 : 1) + AUTHORIZATION_ATTEMPTS;
+      if (credentials != null)
+      {
+        if (StringUtil.isEmpty(credentials.getUsername()) || StringUtil.isEmpty(credentials.getPassword()))
+        {
+          credentials = null;
+        }
+        else
+        {
+          ++authorizationAttempts;
+        }
+      }
 
       for (;;)
       {

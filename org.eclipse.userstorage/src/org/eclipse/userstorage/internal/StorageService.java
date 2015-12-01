@@ -114,7 +114,17 @@ public class StorageService implements IStorageService
         String username = securePreferences.get(USERNAME_KEY, null);
         String password = securePreferences.get(PASSWORD_KEY, null);
 
-        if (username != null && password != null)
+        if (StringUtil.isEmpty(username))
+        {
+          username = null;
+        }
+
+        if (StringUtil.isEmpty(password))
+        {
+          password = null;
+        }
+
+        if (username != null || password != null)
         {
           return new Credentials(username, password);
         }
@@ -135,26 +145,24 @@ public class StorageService implements IStorageService
       ISecurePreferences securePreferences = getSecurePreferences();
       if (securePreferences != null)
       {
-        if (credentials == null)
+        String username = credentials == null ? null : credentials.getUsername();
+        if (StringUtil.isEmpty(username))
         {
           securePreferences.remove(USERNAME_KEY);
+        }
+        else
+        {
+          securePreferences.put(USERNAME_KEY, username, false);
+        }
+
+        String password = credentials == null ? null : credentials.getPassword();
+        if (StringUtil.isEmpty(password))
+        {
           securePreferences.remove(PASSWORD_KEY);
         }
         else
         {
-          String username = credentials.getUsername();
-          String password = credentials.getPassword();
-
-          if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password))
-          {
-            securePreferences.remove(USERNAME_KEY);
-            securePreferences.remove(PASSWORD_KEY);
-          }
-          else
-          {
-            securePreferences.put(USERNAME_KEY, username, true);
-            securePreferences.put(PASSWORD_KEY, password, true);
-          }
+          securePreferences.put(PASSWORD_KEY, password, true);
         }
 
         securePreferences.flush();
