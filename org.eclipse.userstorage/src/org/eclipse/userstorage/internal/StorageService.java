@@ -33,6 +33,8 @@ public class StorageService implements IStorageService
 
   private static final String PASSWORD_KEY = "password";
 
+  private static final String TERMS_OF_USE_AGREED_KEY = "termsOfUseAgreed";
+
   private final Semaphore authenticationSemaphore = new Semaphore(1);
 
   private final String serviceLabel;
@@ -45,11 +47,13 @@ public class StorageService implements IStorageService
 
   private final URI recoverPasswordURI;
 
+  private final String termsOfUseLink;
+
   private ICredentialsProvider credentialsProvider;
 
   private Session session;
 
-  public StorageService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
+  public StorageService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI, String termsOfUseLink)
   {
     if (StringUtil.isEmpty(serviceLabel))
     {
@@ -66,6 +70,7 @@ public class StorageService implements IStorageService
     this.createAccountURI = createAccountURI;
     this.editAccountURI = editAccountURI;
     this.recoverPasswordURI = recoverPasswordURI;
+    this.termsOfUseLink = termsOfUseLink;
   }
 
   @Override
@@ -96,6 +101,12 @@ public class StorageService implements IStorageService
   public URI getRecoverPasswordURI()
   {
     return recoverPasswordURI;
+  }
+
+  @Override
+  public String getTermsOfUseLink()
+  {
+    return termsOfUseLink;
   }
 
   @Override
@@ -175,6 +186,62 @@ public class StorageService implements IStorageService
     finally
     {
       if (session != null)
+      {
+        session.reset();
+      }
+    }
+  }
+
+  public boolean isTermsOfUseAgreed()
+  {
+    try
+    {
+      ISecurePreferences securePreferences = getSecurePreferences();
+      if (securePreferences != null)
+      {
+        String value = securePreferences.get(TERMS_OF_USE_AGREED_KEY, null);
+        if ("true".equalsIgnoreCase(value))
+        {
+          return true;
+        }
+      }
+    }
+    catch (StorageException ex)
+    {
+      Activator.log(ex);
+    }
+
+    return false;
+  }
+
+  public void setTermsOfUseAgreed(boolean agreed)
+  {
+    try
+    {
+      ISecurePreferences securePreferences = getSecurePreferences();
+      if (securePreferences != null)
+      {
+        if (agreed)
+        {
+          securePreferences.putBoolean(TERMS_OF_USE_AGREED_KEY, true, false);
+        }
+        else
+        {
+          securePreferences.remove(USERNAME_KEY);
+          securePreferences.remove(PASSWORD_KEY);
+          securePreferences.remove(TERMS_OF_USE_AGREED_KEY);
+        }
+
+        securePreferences.flush();
+      }
+    }
+    catch (Exception ex)
+    {
+      Activator.log(ex);
+    }
+    finally
+    {
+      if (session != null && !agreed)
       {
         session.reset();
       }
@@ -320,9 +387,9 @@ public class StorageService implements IStorageService
    */
   public static final class DynamicService extends StorageService implements IStorageService.Dynamic
   {
-    public DynamicService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
+    public DynamicService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI, String termsOfUseLink)
     {
-      super(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+      super(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
     }
 
     @Override

@@ -12,6 +12,8 @@ package org.eclipse.userstorage.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,14 @@ public abstract class SystemBrowser
   private static final String[] MAC_COMMANDS = { "open" };
 
   private static final String[] LINUX_COMMANDS = { "kde-open", "gnome-open", "xdg-open", "sensible-browser" };
+
+  public static void openSafe(Shell shell, String url, String defaultMessage)
+  {
+    if (!open(url))
+    {
+      MessageDialog.openInformation(shell, "System Browser Not Found", defaultMessage);
+    }
+  }
 
   public static boolean open(String url)
   {

@@ -15,14 +15,15 @@ import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.StorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -36,6 +37,8 @@ import java.util.concurrent.Callable;
  */
 public class CredentialsComposite extends Composite
 {
+  public static final Point INITIAL_SIZE = new Point(500, 350);
+
   private final Callable<URI> createAccountURIProvider = new Callable<URI>()
   {
     @Override
@@ -79,6 +82,14 @@ public class CredentialsComposite extends Composite
 
   private Credentials credentials;
 
+  private boolean termsOfUseAgreed;
+
+  private Button termsOfUseButton;
+
+  private MultiLink termsOfUseMultiLink;
+
+  private Label spacer;
+
   private Label usernameLabel;
 
   private Text usernameText;
@@ -117,36 +128,57 @@ public class CredentialsComposite extends Composite
     this.service = service;
     if (service != null)
     {
-      usernameLabel.setEnabled(true);
-      usernameText.setEnabled(true);
-      passwordLabel.setEnabled(true);
-      passwordText.setEnabled(true);
+      String termsOfUse = service.getTermsOfUseLink();
+      if (StringUtil.isEmpty(termsOfUse))
+      {
+        hideTermsOfUse();
+      }
+      else
+      {
+        int columns = getGridColumns();
 
-      enableLink(createAccountLink, createAccountURIProvider);
-      enableLink(editAccountLink, editAccountURIProvider);
-      enableLink(recoverPasswordLink, recoverPasswordURIProvider);
+        termsOfUseButton.setVisible(true);
+        termsOfUseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+
+        termsOfUseMultiLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, columns - 1, 1));
+        termsOfUseMultiLink.setVisible(true);
+        termsOfUseMultiLink.setText(termsOfUse);
+
+        spacer.setVisible(true);
+        spacer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, columns, 1));
+      }
 
       if (showServiceCredentials)
       {
         setCredentials(((StorageService)service).getCredentials());
+        setTermsOfUseAgreed(((StorageService)service).isTermsOfUseAgreed());
       }
     }
     else
     {
-      usernameLabel.setEnabled(false);
-      usernameText.setEnabled(false);
-      passwordLabel.setEnabled(false);
-      passwordText.setEnabled(false);
-
-      createAccountLink.setEnabled(false);
-      editAccountLink.setEnabled(false);
-      recoverPasswordLink.setEnabled(false);
+      hideTermsOfUse();
 
       if (showServiceCredentials)
       {
         setCredentials(null);
+        setTermsOfUseAgreed(false);
       }
     }
+
+    updateEnablement();
+    layout();
+  }
+
+  public boolean isTermsOfUseAgreed()
+  {
+    return termsOfUseAgreed;
+  }
+
+  public void setTermsOfUseAgreed(boolean termsOfUseAgreed)
+  {
+    this.termsOfUseAgreed = termsOfUseAgreed;
+    termsOfUseButton.setSelection(termsOfUseAgreed);
+    updateEnablement();
   }
 
   public Credentials getCredentials()
@@ -188,6 +220,22 @@ public class CredentialsComposite extends Composite
 
   protected void createUI(Composite parent, int columns)
   {
+    termsOfUseButton = new Button(parent, SWT.CHECK);
+    termsOfUseButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        termsOfUseAgreed = termsOfUseButton.getSelection();
+        updateEnablement();
+        validate();
+      }
+    });
+
+    termsOfUseMultiLink = new MultiLink.ForSystemBrowser(parent, SWT.WRAP);
+    spacer = new Label(parent, SWT.NONE);
+    hideTermsOfUse();
+
     usernameLabel = new Label(parent, SWT.NONE);
     usernameLabel.setText("User name:");
 
@@ -228,10 +276,7 @@ public class CredentialsComposite extends Composite
           try
           {
             String uri = uriProvider.call().toString();
-            if (!SystemBrowser.open(uri))
-            {
-              MessageDialog.openInformation(getShell(), "System Browser Not Found", "Go to " + uri + " to " + label.toLowerCase() + ".");
-            }
+            SystemBrowser.openSafe(getShell(), uri, "Go to " + uri + " to " + label.toLowerCase() + ".");
           }
           catch (Exception ex)
           {
@@ -248,12 +293,44 @@ public class CredentialsComposite extends Composite
   {
     try
     {
-      URI uri = uriProvider.call();
-      link.setEnabled(uri != null);
+      link.setEnabled(termsOfUseAgreed && uriProvider.call() != null);
     }
     catch (Exception ex)
     {
       //$FALL-THROUGH$
     }
+  }
+
+  private void updateEnablement()
+  {
+    usernameLabel.setEnabled(termsOfUseAgreed);
+    usernameText.setEnabled(termsOfUseAgreed);
+    passwordLabel.setEnabled(termsOfUseAgreed);
+    passwordText.setEnabled(termsOfUseAgreed);
+
+    enableLink(createAccountLink, createAccountURIProvider);
+    enableLink(editAccountLink, editAccountURIProvider);
+    enableLink(recoverPasswordLink, recoverPasswordURIProvider);
+  }
+
+  private void hideTermsOfUse()
+  {
+    termsOfUseButton.setVisible(false);
+    termsOfUseButton.setLayoutData(emptyGridData(1, 1));
+
+    termsOfUseMultiLink.setVisible(false);
+    termsOfUseMultiLink.setLayoutData(emptyGridData(getGridColumns() - 1, 1));
+    termsOfUseMultiLink.setText(StringUtil.EMPTY);
+
+    spacer.setVisible(false);
+    spacer.setLayoutData(emptyGridData(getGridColumns(), 1));
+  }
+
+  private static GridData emptyGridData(int horizontalSpan, int verticalSpan)
+  {
+    GridData gridData = new GridData(0, 0);
+    gridData.horizontalSpan = horizontalSpan;
+    gridData.verticalSpan = verticalSpan;
+    return gridData;
   }
 }

@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -46,6 +47,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author Eike Stepper
@@ -58,6 +60,8 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
   private Map<IStorageService, Credentials> credentialsMap = new HashMap<IStorageService, Credentials>();
 
+  private Map<IStorageService, Boolean> termsOfUseAgreedMap = new HashMap<IStorageService, Boolean>();
+
   private TableViewer servicesViewer;
 
   private CredentialsComposite credentialsComposite;
@@ -69,6 +73,8 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
   private Button testButton;
 
   private IStorageService selectedService;
+
+  private boolean performingDefaults;
 
   public ServicesPreferencePage()
   {
@@ -143,10 +149,14 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       @Override
       protected void validate()
       {
-        if (selectedService != null)
+        if (selectedService != null && !performingDefaults)
         {
           Credentials credentials = getCredentials();
           credentialsMap.put(selectedService, credentials);
+
+          boolean termsOfUseAgreed = isTermsOfUseAgreed();
+          termsOfUseAgreedMap.put(selectedService, termsOfUseAgreed);
+
           updateEnablement();
         }
       }
@@ -177,8 +187,9 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
             URI createAccountURI = dialog.getCreateAccountURI();
             URI editAccountURI = dialog.getEditAccountURI();
             URI recoverPasswordURI = dialog.getRecoverPasswordURI();
+            String termsOfUseLink = dialog.getTermsOfUseLink();
 
-            REGISTRY.addService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+            REGISTRY.addService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
           }
         }
       });
@@ -295,12 +306,28 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
   protected void performDefaults()
   {
     credentialsMap.clear();
+    termsOfUseAgreedMap.clear();
 
-    IStorageService service = selectedService;
-    selectedService = null;
-    setSelectedService(service);
+    try
+    {
+      performingDefaults = true;
+
+      IStorageService service = selectedService;
+      selectedService = null;
+      setSelectedService(service);
+    }
+    finally
+    {
+      performingDefaults = false;
+    }
 
     updateEnablement();
+  }
+
+  @Override
+  protected Point doComputeSize()
+  {
+    return CredentialsComposite.INITIAL_SIZE;
   }
 
   @Override
@@ -311,6 +338,13 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       IStorageService service = entry.getKey();
       Credentials credentials = entry.getValue();
       ((StorageService)service).setCredentials(credentials);
+    }
+
+    for (Entry<IStorageService, Boolean> entry : termsOfUseAgreedMap.entrySet())
+    {
+      IStorageService service = entry.getKey();
+      Boolean termsOfUseAgreed = entry.getValue();
+      ((StorageService)service).setTermsOfUseAgreed(Boolean.TRUE.equals(termsOfUseAgreed));
     }
 
     updateEnablement();
@@ -346,8 +380,16 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
           }
         }
 
+        Boolean termsOfUseAgreed = termsOfUseAgreedMap.get(selectedService);
+        if (termsOfUseAgreed == null)
+        {
+          termsOfUseAgreed = ((StorageService)selectedService).isTermsOfUseAgreed();
+          termsOfUseAgreedMap.put(selectedService, termsOfUseAgreed);
+        }
+
         credentialsComposite.setService(selectedService);
         credentialsComposite.setCredentials(credentials);
+        credentialsComposite.setTermsOfUseAgreed(termsOfUseAgreed);
 
         if (removeButton != null)
         {
@@ -375,6 +417,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
   private void updateEnablement()
   {
     boolean dirty = false;
+
     for (IStorageService service : REGISTRY.getServices())
     {
       Credentials localCredentials = credentialsMap.get(service);
@@ -406,9 +449,18 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       }
     }
 
-    if (testButton != null)
+    if (!dirty)
     {
-      testButton.setEnabled(!dirty);
+      for (IStorageService service : REGISTRY.getServices())
+      {
+        boolean localTermsOfUseAgreed = Boolean.TRUE.equals(termsOfUseAgreedMap.get(service));
+        boolean termsOfUseAgreed = ((StorageService)service).isTermsOfUseAgreed();
+        if (localTermsOfUseAgreed != termsOfUseAgreed)
+        {
+          dirty = true;
+          break;
+        }
+      }
     }
 
     Button defaultsButton = getDefaultsButton();

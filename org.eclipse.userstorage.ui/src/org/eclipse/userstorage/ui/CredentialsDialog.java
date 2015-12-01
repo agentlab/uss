@@ -18,6 +18,7 @@ import org.eclipse.userstorage.ui.internal.CredentialsComposite;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -54,6 +55,12 @@ public class CredentialsDialog extends AbstractDialog
   }
 
   @Override
+  protected Point getInitialSize()
+  {
+    return CredentialsComposite.INITIAL_SIZE;
+  }
+
+  @Override
   protected void configureShell(Shell newShell)
   {
     super.configureShell(newShell);
@@ -66,7 +73,7 @@ public class CredentialsDialog extends AbstractDialog
   protected Control createDialogArea(Composite parent)
   {
     setTitle("Log-In");
-    setMessage("Enter the log-in information for your '" + service.getServiceLabel() + "' account.");
+    setMessage("Enter the log-in information for your " + service.getServiceLabel() + " account.");
     initializeDialogUnits(parent);
 
     Composite area = (Composite)super.createDialogArea(parent);
@@ -102,12 +109,43 @@ public class CredentialsDialog extends AbstractDialog
     super.okPressed();
   }
 
-  protected void validatePage()
+  protected boolean isPageValid()
+  {
+    String termsOfUseLink = service.getTermsOfUseLink();
+    if (!StringUtil.isEmpty(termsOfUseLink))
+    {
+      boolean termsOfUseAgreed = credentialsComposite.isTermsOfUseAgreed();
+      if (!termsOfUseAgreed)
+      {
+        return false;
+      }
+    }
+  
+    Credentials credentials = credentialsComposite.getCredentials();
+    if (credentials == null)
+    {
+      return false;
+    }
+  
+    if (StringUtil.isEmpty(credentials.getUsername()))
+    {
+      return false;
+    }
+  
+    if (StringUtil.isEmpty(credentials.getPassword()))
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
+  private void validatePage()
   {
     if (okButton != null)
     {
-      Credentials credentials = credentialsComposite.getCredentials();
-      okButton.setEnabled(credentials != null && !StringUtil.isEmpty(credentials.getUsername()) && !StringUtil.isEmpty(credentials.getPassword()));
+      boolean valid = isPageValid();
+      okButton.setEnabled(valid);
     }
   }
 }

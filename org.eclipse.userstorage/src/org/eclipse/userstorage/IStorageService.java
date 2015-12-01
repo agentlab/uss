@@ -20,7 +20,7 @@ import java.util.concurrent.Semaphore;
  * Represents a remote <i>user storage service</i> (USS).
  * <p>
  * The {@link Registry storage service registry} makes known storages available and supports the
- * {@link Registry#addService(String, URI, URI, URI, URI) addition} of {@link Dynamic dynamic}
+ * {@link Registry#addService(String, URI, URI, URI, URI, String) addition} of {@link Dynamic dynamic}
  * storages.
  * <p>
  *
@@ -69,6 +69,13 @@ public interface IStorageService extends Comparable<IStorageService>
   public URI getRecoverPasswordURI();
 
   /**
+   * Returns the terms of use link of this storage.
+   *
+   * @return the terms of use link of this storage, can be <code>null</code>.<p>
+   */
+  public String getTermsOfUseLink();
+
+  /**
    * Returns a one-permit semaphore that this service acquires while control is passed to a {@link ICredentialsProvider credentials provider},
    * such a a login dialog.
    *
@@ -81,7 +88,7 @@ public interface IStorageService extends Comparable<IStorageService>
    * A {@link IStorageService storage service} that is dynamically created as opposed to being
    * statically contributed via the <code>org.eclipse.userstorage.storages</code> extension point).
    * <p>
-   * Dynamic storages can be created and registered via the {@link Registry#addService(String, URI, URI, URI, URI) addStorage()} method
+   * Dynamic storages can be created and registered via the {@link Registry#addService(String, URI, URI, URI, URI, String) addStorage()} method
    * and only dynamic storages can be {@link #remove() removed} from the {@link Registry storage service registry}.
    * <p>
    *
@@ -104,7 +111,7 @@ public interface IStorageService extends Comparable<IStorageService>
    * <p>
    * <ul>
    * <li> Static storages that are contributed via the <code>org.eclipse.userstorage.storages</code> extension point.
-   * <li> {@link Dynamic Dynamic} storages that are created via the {@link #addService(String, URI, URI, URI, URI) addStorage()} method.
+   * <li> {@link Dynamic Dynamic} storages that are created via the {@link #addService(String, URI, URI, URI, URI, String) addStorage()} method.
    * </ul>
    * <p>
    * To access the storages in this registry an application uses the {@link #INSTANCE} constant as follows:
@@ -156,14 +163,16 @@ public interface IStorageService extends Comparable<IStorageService>
      *        of the user account needed for the REST service behind the storage to be created and registered. See also {@link IStorageService#getEditAccountURI()}.<p>
      * @param recoverPasswordURI an optional (<i>can be</i> <code>null</code>) URI that a user interface can use to point the user to a web page that supports the recovery
      *        of the password needed to log into the REST service behind the storage to be created and registered. See also {@link IStorageService#getRecoverPasswordURI()}.<p>
+     * @param termsOfUseLink an optional (<i>can be</i> <code>null</code>) string that a user interface can use to point the user to a web page that supports the terms of use
+     *        of the REST service behind the storage. See also {@link IStorageService#getTermsOfUseLink()}.<p>
      *
      * @return the newly created and registered storage, never <code>null</code>.<p>
      * @throws IllegalStateException if a storage with the same <code>serviceURI</code> is already registered in this registry.<p>
      *
      * @see #addService(String, URI)
      */
-    public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
-        throws IllegalStateException;
+    public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI,
+        String termsOfUseLink) throws IllegalStateException;
 
     /**
      * Adds a new dynamic storage with the given <code>serviceLabel</code> and the given <code>serviceURI</code> to this registry.
@@ -181,7 +190,7 @@ public interface IStorageService extends Comparable<IStorageService>
      * @return the newly created and registered storage, never <code>null</code>.<p>
      * @throws IllegalStateException if a storage with the same <code>serviceURI</code> is already registered in this registry.<p>
      *
-     * @see #addService(String, URI, URI, URI, URI)
+     * @see #addService(String, URI, URI, URI, URI, String)
      */
     public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI) throws IllegalStateException;
 

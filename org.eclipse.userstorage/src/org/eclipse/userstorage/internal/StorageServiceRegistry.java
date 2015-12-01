@@ -55,6 +55,8 @@ public final class StorageServiceRegistry implements IStorageService.Registry
 
   private static final String RECOVER_PASSWORD_URI = "recoverPasswordURI";
 
+  private static final String TERMS_OF_USE_LINK = "termsOfUseLink";
+
   private static final String DEFAULT_SERVICE_LABEL = "Eclipse.org";
 
   private static final String DEFAULT_SERVICE_URI = "https://api.eclipse.org/";
@@ -109,10 +111,10 @@ public final class StorageServiceRegistry implements IStorageService.Registry
   }
 
   @Override
-  public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI)
-      throws IllegalStateException
+  public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI, URI createAccountURI, URI editAccountURI, URI recoverPasswordURI,
+      String termsOfUseLink) throws IllegalStateException
   {
-    DynamicService service = new DynamicService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+    DynamicService service = new DynamicService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
     addService(service);
 
     ISecurePreferences securePreferences = service.getSecurePreferences();
@@ -139,7 +141,7 @@ public final class StorageServiceRegistry implements IStorageService.Registry
   @Override
   public IStorageService.Dynamic addService(String serviceLabel, URI serviceURI) throws IllegalStateException
   {
-    return addService(serviceLabel, serviceURI, null, null, null);
+    return addService(serviceLabel, serviceURI, null, null, null, null);
   }
 
   @Override
@@ -171,8 +173,9 @@ public final class StorageServiceRegistry implements IStorageService.Registry
           URI createAccountURI = StringUtil.newURI(child.get(CREATE_ACCOUNT_URI, null));
           URI editAccountURI = StringUtil.newURI(child.get(EDIT_ACCOUNT_URI, null));
           URI recoverPasswordURI = StringUtil.newURI(child.get(RECOVER_PASSWORD_URI, null));
+          String termsOfUseLink = child.get(TERMS_OF_USE_LINK, null);
 
-          IStorageService.Dynamic service = new DynamicService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+          IStorageService.Dynamic service = new DynamicService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
           addService(service);
           result.add(service);
         }
@@ -308,11 +311,13 @@ public final class StorageServiceRegistry implements IStorageService.Registry
           if (serviceURI != null)
           {
             String serviceLabel = System.getProperty(PREFIX + SERVICE_LABEL, DEFAULT_SERVICE_LABEL);
-            URI createAccountURI = getURI(serviceURI, CREATE_ACCOUNT_URI, "https://dev.eclipse.org/site_login/");
-            URI editAccountURI = getURI(serviceURI, EDIT_ACCOUNT_URI, "https://dev.eclipse.org/site_login/myaccount.php");
-            URI recoverPasswordURI = getURI(serviceURI, RECOVER_PASSWORD_URI, "https://dev.eclipse.org/site_login/password_recovery.php");
+            URI createAccountURI = StringUtil.newURI(getValue(serviceURI, CREATE_ACCOUNT_URI, "https://dev.eclipse.org/site_login/"));
+            URI editAccountURI = StringUtil.newURI(getValue(serviceURI, EDIT_ACCOUNT_URI, "https://dev.eclipse.org/site_login/myaccount.php"));
+            URI recoverPasswordURI = StringUtil.newURI(getValue(serviceURI, RECOVER_PASSWORD_URI, "https://dev.eclipse.org/site_login/password_recovery.php"));
+            String termsOfUseLink = getValue(serviceURI, TERMS_OF_USE_LINK,
+                "I agree the use of this beta service is governed by the Eclipse Foundation <a href='http://www.eclipse.org/legal/termsofuse.php'>Terms of Use</a> and the Eclipse Foundation <a href='http://www.eclipse.org/legal/privacy.php'>Privacy Policy</a>.");
 
-            StorageService eclipseStorage = new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+            StorageService eclipseStorage = new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
             services.put(eclipseStorage.getServiceURI(), eclipseStorage);
           }
 
@@ -356,19 +361,19 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     }
   }
 
-  private static URI getURI(URI serviceURI, String property, String defaultURI)
+  private static String getValue(URI serviceURI, String property, String defaultValue)
   {
-    String uri = System.getProperty(PREFIX + property);
-    if (StringUtil.isEmpty(uri))
+    String value = System.getProperty(PREFIX + property);
+    if (StringUtil.isEmpty(value))
     {
       String authority = serviceURI.getAuthority();
       if (authority != null && authority.endsWith(".eclipse.org"))
       {
-        uri = defaultURI;
+        value = defaultValue;
       }
     }
 
-    return StringUtil.newURI(uri);
+    return value;
   }
 
   private static void setSecurePreference(ISecurePreferences securePreferences, String key, URI uri) throws StorageException
@@ -479,8 +484,9 @@ public final class StorageServiceRegistry implements IStorageService.Registry
       URI createAccountURI = StringUtil.newURI(configurationElement.getAttribute(CREATE_ACCOUNT_URI));
       URI editAccountURI = StringUtil.newURI(configurationElement.getAttribute(EDIT_ACCOUNT_URI));
       URI recoverPasswordURI = StringUtil.newURI(configurationElement.getAttribute(RECOVER_PASSWORD_URI));
+      String termsOfUseLink = configurationElement.getAttribute(TERMS_OF_USE_LINK);
 
-      return new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI);
+      return new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
     }
   }
 }

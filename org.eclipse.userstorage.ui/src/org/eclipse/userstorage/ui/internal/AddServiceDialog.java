@@ -46,6 +46,8 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
 
   private Text recoverPasswordURIText;
 
+  private Text termsOfUseLinkText;
+
   private Button okButton;
 
   private String serviceLabel;
@@ -57,6 +59,8 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
   private URI editAccountURI;
 
   private URI recoverPasswordURI;
+
+  private String termsOfUseLink;
 
   public AddServiceDialog(Shell parentShell)
   {
@@ -86,6 +90,11 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
   public URI getRecoverPasswordURI()
   {
     return recoverPasswordURI;
+  }
+
+  public String getTermsOfUseLink()
+  {
+    return termsOfUseLink;
   }
 
   @Override
@@ -150,6 +159,15 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
     recoverPasswordURIText = new Text(container, SWT.BORDER);
     recoverPasswordURIText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     recoverPasswordURIText.addModifyListener(this);
+
+    Label termsOfUseLinkLabel = new Label(container, SWT.NONE);
+    termsOfUseLinkLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+    termsOfUseLinkLabel.setText("Terms of Use Link:");
+
+    termsOfUseLinkText = new Text(container, SWT.BORDER);
+    termsOfUseLinkText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+    termsOfUseLinkText.addModifyListener(this);
+
     return area;
   }
 
@@ -237,6 +255,9 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
       okButton.setEnabled(false);
       return;
     }
+
+    String text = termsOfUseLinkText.getText();
+    termsOfUseLink = StringUtil.isEmpty(text) ? null : text;
 
     if (StringUtil.isEmpty(serviceLabel))
     {
