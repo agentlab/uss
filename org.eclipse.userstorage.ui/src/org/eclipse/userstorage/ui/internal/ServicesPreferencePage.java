@@ -142,6 +142,8 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
       TableColumn tableColumn = new TableColumn(servicesViewer.getTable(), SWT.LEFT);
       tableLayout.setColumnData(tableColumn, new ColumnWeightData(100));
+
+      new Label(leftArea, SWT.NONE);
     }
 
     credentialsComposite = new CredentialsComposite(leftArea, SWT.NONE, 0, 0, false)

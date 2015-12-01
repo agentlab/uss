@@ -98,6 +98,12 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
   }
 
   @Override
+  protected Point getInitialSize()
+  {
+    return new Point(600, 350);
+  }
+
+  @Override
   protected void configureShell(Shell newShell)
   {
     super.configureShell(newShell);
@@ -178,12 +184,6 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
     okButton.setEnabled(false);
 
     createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-  }
-
-  @Override
-  protected Point getInitialSize()
-  {
-    return new Point(450, 300);
   }
 
   @Override
