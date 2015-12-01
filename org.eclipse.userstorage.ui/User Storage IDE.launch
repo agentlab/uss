@@ -21,7 +21,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.userstorage.ui.showServices=false&#13;&#10;-Dorg.eclipse.userstorage.ui.showTestButton=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.userstorage.ui.showServices=false&#13;&#10;-Dorg.eclipse.userstorage.ui.showTestButton=true&#13;&#10;-DXXXorg.eclipse.userstorage.serviceURI=http://localhost:8080/&#13;&#10;-DXXXorg.eclipse.userstorage.termsOfUseLink="/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.eclipse.sdk.ide"/>
 <booleanAttribute key="show_selected_only" value="false"/>

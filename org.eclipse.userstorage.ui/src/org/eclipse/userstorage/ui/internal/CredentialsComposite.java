@@ -289,11 +289,11 @@ public class CredentialsComposite extends Composite
     return link;
   }
 
-  private void enableLink(Link link, Callable<URI> uriProvider)
+  private void enableLink(Link link, Callable<URI> uriProvider, boolean enabled)
   {
     try
     {
-      link.setEnabled(termsOfUseAgreed && uriProvider.call() != null);
+      link.setEnabled(enabled && uriProvider.call() != null);
     }
     catch (Exception ex)
     {
@@ -303,14 +303,32 @@ public class CredentialsComposite extends Composite
 
   private void updateEnablement()
   {
-    usernameLabel.setEnabled(termsOfUseAgreed);
-    usernameText.setEnabled(termsOfUseAgreed);
-    passwordLabel.setEnabled(termsOfUseAgreed);
-    passwordText.setEnabled(termsOfUseAgreed);
+    boolean enabled = isValid();
 
-    enableLink(createAccountLink, createAccountURIProvider);
-    enableLink(editAccountLink, editAccountURIProvider);
-    enableLink(recoverPasswordLink, recoverPasswordURIProvider);
+    usernameLabel.setEnabled(enabled);
+    usernameText.setEnabled(enabled);
+    passwordLabel.setEnabled(enabled);
+    passwordText.setEnabled(enabled);
+
+    enableLink(createAccountLink, createAccountURIProvider, enabled);
+    enableLink(editAccountLink, editAccountURIProvider, enabled);
+    enableLink(recoverPasswordLink, recoverPasswordURIProvider, enabled);
+  }
+
+  private boolean isValid()
+  {
+    if (service == null)
+    {
+      return false;
+    }
+
+    String termsOfUseLink = service.getTermsOfUseLink();
+    if (StringUtil.isEmpty(termsOfUseLink))
+    {
+      return true;
+    }
+
+    return termsOfUseAgreed;
   }
 
   private void hideTermsOfUse()
