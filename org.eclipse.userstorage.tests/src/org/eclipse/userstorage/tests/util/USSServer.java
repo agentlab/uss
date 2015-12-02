@@ -221,8 +221,8 @@ public final class USSServer
     }
 
     String etag = IOUtil.readUTF(etagFile);
-    String ifNonMatch = getETag(request, "If-Non-Match");
-    if (ifNonMatch != null && ifNonMatch.equals(etag))
+    String ifNoneMatch = getETag(request, "If-None-Match");
+    if (ifNoneMatch != null && ifNoneMatch.equals(etag))
     {
       response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
       return;

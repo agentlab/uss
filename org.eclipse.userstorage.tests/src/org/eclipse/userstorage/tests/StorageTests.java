@@ -28,6 +28,7 @@ import org.eclipse.userstorage.tests.util.USSServer;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
+import org.eclipse.userstorage.util.NotFoundException;
 import org.eclipse.userstorage.util.ProtocolException;
 
 import org.junit.FixMethodOrder;
@@ -291,7 +292,17 @@ public final class StorageTests extends AbstractTest
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob("aaaaaaaaaa");
     blob.setETag("<invalid_etag>");
-    assertThat(blob.getContents(), isNull());
+
+    try
+    {
+      blob.getContents();
+      fail("NotFoundException expected");
+    }
+    catch (NotFoundException expected)
+    {
+      // SUCCESS
+    }
+
     assertThat(blob.getETag(), isNull());
   }
 

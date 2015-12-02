@@ -17,6 +17,7 @@ import org.eclipse.userstorage.internal.util.ProxyUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.util.ConflictException;
+import org.eclipse.userstorage.util.NotFoundException;
 import org.eclipse.userstorage.util.ProtocolException;
 
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -108,7 +109,7 @@ public class Session implements Headers, Codes
           String eTag = properties.get(Blob.ETAG);
           if (!StringUtil.isEmpty(eTag))
           {
-            request.setHeader(IF_NON_MATCH, "\"" + eTag + "\"");
+            request.setHeader(IF_NONE_MATCH, "\"" + eTag + "\"");
           }
         }
 
@@ -138,7 +139,9 @@ public class Session implements Headers, Codes
 
         // Blob wasn't found.
         properties.remove(Blob.ETAG);
-        return null;
+
+        StatusLine statusLine = response.getStatusLine();
+        throw new NotFoundException("GET", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase());
       }
     }.send(credentialsProvider);
   }
@@ -579,7 +582,7 @@ interface Headers
 
   public static final String IF_MATCH = "If-Match";
 
-  public static final String IF_NON_MATCH = "If-Non-Match";
+  public static final String IF_NONE_MATCH = "If-None-Match";
 }
 
 /**

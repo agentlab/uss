@@ -13,6 +13,7 @@ package org.eclipse.userstorage;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.NoServiceException;
+import org.eclipse.userstorage.util.NotFoundException;
 import org.eclipse.userstorage.util.ProtocolException;
 
 import java.io.DataInput;
@@ -148,15 +149,16 @@ public interface IBlob
    * returned input stream is fully read and closed.
    * <p>
    *
-   * @return an {@link InputStream} that represents the current contents of this blob, or <code>null</code> if this blob does not exist on the server.<p>
+   * @return an {@link InputStream} that represents the current contents of this blob, never <code>null</code>.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
+   * @throws NotFoundException if this blob does not exist on the server.<p>
    *
    * @see #setContents(InputStream)
    * @see #getETag()
    */
-  public InputStream getContents() throws IOException, NoServiceException, IllegalStateException;
+  public InputStream getContents() throws IOException, NoServiceException, IllegalStateException, NotFoundException;
 
   /**
    * Sets an {@link InputStream} that represents the new contents of this blob.
@@ -194,14 +196,15 @@ public interface IBlob
    * Otherwise the semantics of this method are identical to the ones of {@link #getContents()}.
    * <p>
    *
-   * @return a {@link String} that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
+   * @return a {@link String} that represents the current contents of this blob, never <code>null</code>.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
+   * @throws NotFoundException if this blob does not exist on the server.<p>
    *
    * @see #getContents()
    */
-  public String getContentsUTF() throws IOException, NoServiceException, IllegalStateException;
+  public String getContentsUTF() throws IOException, NoServiceException, IllegalStateException, NotFoundException;
 
   /**
    * Sets a {@link String} that represents the new contents of this blob.
@@ -230,14 +233,15 @@ public interface IBlob
    * Otherwise the semantics of this method are identical to the ones of {@link #getContents()}.
    * <p>
    *
-   * @return a primitive int value that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
+   * @return a primitive int value that represents the current contents of this blob.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
+   * @throws NotFoundException if this blob does not exist on the server.<p>
    *
    * @see #getContents()
    */
-  public int getContentsInt() throws IOException, NumberFormatException, NoServiceException, IllegalStateException;
+  public int getContentsInt() throws IOException, NumberFormatException, NoServiceException, IllegalStateException, NotFoundException;
 
   /**
    * Sets a a primitive int value that represents the new contents of this blob.
@@ -266,14 +270,15 @@ public interface IBlob
    * Otherwise the semantics of this method are identical to the ones of {@link #getContents()}.
    * <p>
    *
-   * @return a primitive boolean value that represents the current contents of this blob, <code>null</code> if this blob does not exist on the server.<p>
+   * @return a primitive boolean value that represents the current contents of this blob.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
    * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
+   * @throws NotFoundException if this blob does not exist on the server.<p>
    *
    * @see #getContents()
    */
-  public boolean getContentsBoolean() throws IOException, NoServiceException, IllegalStateException;
+  public boolean getContentsBoolean() throws IOException, NoServiceException, IllegalStateException, NotFoundException;
 
   /**
    * Sets a a primitive boolean value that represents the new contents of this blob.
