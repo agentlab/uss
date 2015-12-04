@@ -227,8 +227,6 @@ public class StorageService implements IStorageService
         }
         else
         {
-          securePreferences.remove(USERNAME_KEY);
-          securePreferences.remove(PASSWORD_KEY);
           securePreferences.remove(TERMS_OF_USE_AGREED_KEY);
         }
 

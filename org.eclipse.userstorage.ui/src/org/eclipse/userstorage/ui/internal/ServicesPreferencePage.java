@@ -74,7 +74,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
   private IStorageService selectedService;
 
-  private boolean performingDefaults;
+  private boolean skipValidate;
 
   public ServicesPreferencePage()
   {
@@ -151,15 +151,11 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
       @Override
       protected void validate()
       {
-        if (selectedService != null && !performingDefaults)
+        if (selectedService != null && !skipValidate)
         {
           Credentials credentials = getCredentials();
-          credentialsMap.put(selectedService, credentials);
-
           boolean termsOfUseAgreed = isTermsOfUseAgreed();
-          termsOfUseAgreedMap.put(selectedService, termsOfUseAgreed);
-
-          updateEnablement();
+          update(credentials, termsOfUseAgreed);
         }
       }
     };
@@ -312,7 +308,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
 
     try
     {
-      performingDefaults = true;
+      skipValidate = true;
 
       IStorageService service = selectedService;
       selectedService = null;
@@ -320,7 +316,7 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
     }
     finally
     {
-      performingDefaults = false;
+      skipValidate = false;
     }
 
     updateEnablement();
@@ -389,9 +385,20 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
           termsOfUseAgreedMap.put(selectedService, termsOfUseAgreed);
         }
 
-        credentialsComposite.setService(selectedService);
-        credentialsComposite.setCredentials(credentials);
-        credentialsComposite.setTermsOfUseAgreed(termsOfUseAgreed);
+        try
+        {
+          skipValidate = true;
+
+          credentialsComposite.setService(selectedService);
+          credentialsComposite.setCredentials(credentials);
+          credentialsComposite.setTermsOfUseAgreed(termsOfUseAgreed);
+        }
+        finally
+        {
+          skipValidate = false;
+        }
+
+        update(credentials, termsOfUseAgreed);
 
         if (removeButton != null)
         {
@@ -414,6 +421,13 @@ public class ServicesPreferencePage extends PreferencePage implements IWorkbench
         }
       }
     }
+  }
+
+  private void update(Credentials credentials, boolean termsOfUseAgreed)
+  {
+    credentialsMap.put(selectedService, credentials);
+    termsOfUseAgreedMap.put(selectedService, termsOfUseAgreed);
+    updateEnablement();
   }
 
   private void updateEnablement()
