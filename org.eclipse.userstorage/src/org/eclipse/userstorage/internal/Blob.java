@@ -161,6 +161,13 @@ public class Blob implements IBlob
   }
 
   @Override
+  public void delete() throws IOException, ConflictException, NoServiceException, IllegalStateException
+  {
+    checkNotDisposed();
+    storage.deleteBlob(key, properties);
+  }
+
+  @Override
   public String toString()
   {
     return storage.getService() + " (" + storage.getApplicationToken() + "/" + key + ")";

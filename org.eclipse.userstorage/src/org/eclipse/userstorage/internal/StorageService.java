@@ -270,6 +270,18 @@ public class StorageService implements IStorageService
     return session.updateBlob(appToken, key, properties, in, credentialsProvider);
   }
 
+  public synchronized void deleteBlob(ICredentialsProvider credentialsProvider, String appToken, String key, Map<String, String> properties)
+      throws IOException, ConflictException
+  {
+    if (credentialsProvider == null)
+    {
+      credentialsProvider = getCredentialsProvider();
+    }
+
+    Session session = getSession();
+    session.deleteBlob(appToken, key, properties, credentialsProvider);
+  }
+
   @Override
   public int hashCode()
   {

@@ -299,6 +299,30 @@ public interface IBlob
   public boolean setContentsBoolean(boolean value) throws IOException, ConflictException, NoServiceException, IllegalStateException;
 
   /**
+   * Deletes this blob.
+   * <p>
+   * This method always contacts the server.
+   * <p>
+   * If this blob has an ETag it will be used to detect and avoid conflicts on the server side.
+   * The ETag of this blob can be {@link #setETag(String) set} to <code>null</code> if server-side conflict detection is not desired.
+   * Server-side conflicts are indicated by throwing a {@link ConflictException}.
+   * <p>
+   * If the {@link #getStorage() storage} of this blob was created with a
+   * {@link StorageFactory#create(String, StorageCache) storage cache}
+   * and the server successfully deleted the blob (i.e., the blob's ETag was up-to-date)
+   * the cache will be deleted, too.
+   * <p>
+   *
+   * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws ConflictException if the server detected a conflict and did not update the blob.<p>
+   * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
+   * @throws IllegalStateException if this blob is {@link #isDisposed() disposed}.<p>
+   *
+   * @see #setETag(String)
+   */
+  public void delete() throws IOException, ConflictException, NoServiceException, IllegalStateException;
+
+  /**
    * Returns <code>true</code> if this blob is disposed, <code>false</code> otherwise.
    * <p>
    * The only way for a blob to become disposed is when the storage of the {@link IStorage storage} of that blob

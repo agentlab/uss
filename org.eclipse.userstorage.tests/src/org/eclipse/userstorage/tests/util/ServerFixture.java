@@ -20,6 +20,7 @@ import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.ISettings;
 import org.eclipse.userstorage.tests.util.USSServer.NOOPLogger;
 import org.eclipse.userstorage.tests.util.USSServer.User;
+import org.eclipse.userstorage.util.NotFoundException;
 import org.eclipse.userstorage.util.Settings.MemorySettings;
 
 import org.eclipse.jetty.util.log.Log;
@@ -137,17 +138,24 @@ public class ServerFixture extends Fixture
     }
     else
     {
-      StorageFactory factory = createFactory(applicationToken);
-      IStorage tmpStorage = factory.create(applicationToken);
-      IBlob tmpBlob = tmpStorage.getBlob(key);
+      try
+      {
+        StorageFactory factory = createFactory(applicationToken);
+        IStorage tmpStorage = factory.create(applicationToken);
+        IBlob tmpBlob = tmpStorage.getBlob(key);
 
-      result.contents = tmpBlob.getContentsUTF();
-      if (result.contents == null)
+        result.contents = tmpBlob.getContentsUTF();
+        if (result.contents == null)
+        {
+          return null;
+        }
+
+        result.eTag = tmpBlob.getETag();
+      }
+      catch (NotFoundException ex)
       {
         return null;
       }
-
-      result.eTag = tmpBlob.getETag();
     }
 
     return result;

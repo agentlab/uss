@@ -582,6 +582,65 @@ public final class StorageTests extends AbstractTest
     }
   }
 
+  @Test
+  public void testDelete() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+
+    String value = "A short UTF-8 string value";
+    blob.setContentsUTF(value);
+    assertThat(blob.getContentsUTF(), is(value));
+
+    blob.delete();
+
+    BlobInfo blobInfo = serverFixture.readServer(blob);
+    assertThat(blobInfo, isNull());
+
+    try
+    {
+      blob.getContentsUTF();
+      fail("NotFoundException expected");
+    }
+    catch (NotFoundException expected)
+    {
+      // SUCCESS
+    }
+  }
+
+  @Test
+  public void testDeleteWithCache() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN, cache);
+    IBlob blob = storage.getBlob(makeKey());
+
+    String value = "A short UTF-8 string value";
+    blob.setContentsUTF(value);
+    assertThat(blob.getContentsUTF(), is(value));
+
+    blob.delete();
+
+    try
+    {
+      clientFixture.readCache(blob.getKey(), null);
+      fail("FileNotFoundException expected");
+    }
+    catch (FileNotFoundException expected)
+    {
+      // SUCCESS
+    }
+
+    try
+    {
+      clientFixture.readCache(blob.getKey(), ".properties");
+      fail("FileNotFoundException expected");
+    }
+    catch (FileNotFoundException expected)
+    {
+      // SUCCESS
+    }
+  }
+
   private String makeKey()
   {
     if (serverFixture.hasLocalServer())

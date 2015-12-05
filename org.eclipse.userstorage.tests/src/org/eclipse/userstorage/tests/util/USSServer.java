@@ -283,6 +283,30 @@ public final class USSServer
     response.setHeader("ETag", "\"" + etag + "\"");
   }
 
+  protected void deleteBlob(HttpServletRequest request, HttpServletResponse response, File blobFile, File etagFile, boolean exists) throws IOException
+  {
+    if (exists)
+    {
+      String etag = IOUtil.readUTF(etagFile);
+      String ifMatch = getETag(request, "If-Match");
+      if (ifMatch != null && !ifMatch.equals(etag))
+      {
+        response.sendError(HttpServletResponse.SC_CONFLICT);
+        return;
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
+
+    IOUtil.delete(blobFile);
+    IOUtil.delete(etagFile);
+
+    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+  }
+
   private Session getSession(HttpServletRequest request)
   {
     String csrfToken = request.getHeader("X-CSRF-Token");
@@ -485,6 +509,12 @@ public final class USSServer
         if (HttpMethod.PUT.is(method))
         {
           updateBlob(request, response, blobFile, etagFile, exists);
+          return;
+        }
+
+        if (HttpMethod.DELETE.is(method))
+        {
+          deleteBlob(request, response, blobFile, etagFile, exists);
           return;
         }
 

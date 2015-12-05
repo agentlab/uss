@@ -31,6 +31,7 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
+import org.apache.http.conn.HttpClientConnectionManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +41,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Eike Stepper
@@ -190,6 +192,67 @@ public class Session implements Headers, Codes
         return statusCode == CREATED;
       }
     }.send(credentialsProvider);
+  }
+
+  public void deleteBlob(String appToken, String key, final Map<String, String> properties, ICredentialsProvider credentialsProvider)
+      throws IOException, ConflictException
+  {
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + appToken + "/" + key);
+
+    new RequestTemplate<Boolean>(uri)
+    {
+      @Override
+      protected Request prepareRequest() throws IOException
+      {
+        Request request = configureRequest(Request.Delete(uri), uri);
+
+        String eTag = properties.get(Blob.ETAG);
+        if (!StringUtil.isEmpty(eTag))
+        {
+          request.setHeader(IF_MATCH, "\"" + eTag + "\"");
+        }
+
+        return request;
+      }
+
+      @Override
+      protected Boolean handleResponse(HttpResponse response, HttpEntity responseEntity) throws IOException
+      {
+        int statusCode = getStatusCode("DELETE", uri, response, NO_CONTENT, CONFLICT);
+        String eTag = getETag(response);
+
+        if (statusCode == CONFLICT)
+        {
+          StatusLine statusLine = response.getStatusLine();
+          throw new ConflictException("DELETE", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase(), eTag);
+        }
+
+        properties.put(Blob.ETAG, "<deleted_etag>");
+        return true;
+      }
+    }.send(credentialsProvider);
+
+    int xxx; // Work around bug 483709.
+    if (uri.toString().contains(".eclipse.org/"))
+    {
+      try
+      {
+        Field connmgrField = Executor.class.getDeclaredField("CONNMGR");
+        connmgrField.setAccessible(true);
+
+        HttpClientConnectionManager connectionManager = (HttpClientConnectionManager)connmgrField.get(null);
+        connectionManager.closeIdleConnections(0, TimeUnit.MILLISECONDS);
+        connectionManager.closeExpiredConnections();
+      }
+      catch (Throwable ex)
+      {
+        ex.printStackTrace();
+        //$FALL-THROUGH$
+      }
+
+      sessionID = null;
+      csrfToken = null;
+    }
   }
 
   private static String getETag(HttpResponse response)
