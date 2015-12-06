@@ -307,7 +307,7 @@ public final class StorageTests extends AbstractTest
       // SUCCESS
     }
 
-    assertThat(blob.getETag(), isNull());
+    assertThat(blob.getETag(), is(Session.NOT_FOUND_ETAG));
   }
 
   @Test

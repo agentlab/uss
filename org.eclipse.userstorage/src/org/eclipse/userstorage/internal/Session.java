@@ -57,6 +57,8 @@ public class Session implements Headers, Codes
 
   public static final String USER_AGENT_PROPERTY = Session.class.getName() + ".userAgent";
 
+  public static final String NOT_FOUND_ETAG = "<not_found>";
+
   private static final int AUTHORIZATION_ATTEMPTS = 3;
 
   private static final boolean DEBUG = Boolean.getBoolean("org.eclipse.userstorage.session.debug");
@@ -208,7 +210,7 @@ public class Session implements Headers, Codes
         }
 
         // Blob wasn't found.
-        properties.remove(Blob.ETAG);
+        properties.put(Blob.ETAG, NOT_FOUND_ETAG);
 
         StatusLine statusLine = response.getStatusLine();
         throw new NotFoundException("GET", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase());
