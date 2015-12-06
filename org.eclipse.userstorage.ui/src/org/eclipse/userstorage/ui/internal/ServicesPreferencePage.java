@@ -15,9 +15,9 @@ import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.IStorageService.Registry;
 import org.eclipse.userstorage.StorageFactory;
-import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.StorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.Credentials;
 import org.eclipse.userstorage.ui.ServiceSelectorComposite;
 
 import org.eclipse.jface.dialogs.ErrorDialog;

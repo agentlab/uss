@@ -11,8 +11,8 @@
 package org.eclipse.userstorage.ui;
 
 import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.Credentials;
 import org.eclipse.userstorage.ui.internal.CredentialsComposite;
 
 import org.eclipse.jface.dialogs.Dialog;

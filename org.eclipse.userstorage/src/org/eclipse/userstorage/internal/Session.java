@@ -15,6 +15,7 @@ import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.ProxyUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.Credentials;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.NotFoundException;

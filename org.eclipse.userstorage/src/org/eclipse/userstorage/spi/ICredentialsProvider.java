@@ -12,7 +12,6 @@ package org.eclipse.userstorage.spi;
 
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.Activator;
-import org.eclipse.userstorage.internal.Credentials;
 
 /**
  * Provides the user's credentials for a given {@link IStorageService storage service}.

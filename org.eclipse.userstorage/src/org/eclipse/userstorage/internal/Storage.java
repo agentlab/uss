@@ -227,6 +227,12 @@ public final class Storage implements IStorage
 
             return chunk.next();
           }
+
+          @Override
+          public void remove()
+          {
+            throw new UnsupportedOperationException();
+          }
         };
       }
     };

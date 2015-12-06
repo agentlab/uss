@@ -12,6 +12,7 @@ package org.eclipse.userstorage.internal;
 
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
+import org.eclipse.userstorage.spi.Credentials;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.util.ConflictException;
 

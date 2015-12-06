@@ -11,7 +11,7 @@
 package org.eclipse.userstorage.tests.util;
 
 import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.internal.Credentials;
+import org.eclipse.userstorage.spi.Credentials;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 
 /**
