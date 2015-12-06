@@ -10,6 +10,8 @@
  */
 package org.eclipse.userstorage.tests;
 
+import org.eclipse.userstorage.internal.util.IOUtil;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.hamcrest.CoreMatchers;
@@ -21,7 +23,6 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -156,7 +157,7 @@ public abstract class AbstractTest extends CoreMatchers
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     ex.printStackTrace(new PrintStream(baos));
 
-    BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(IOUtil.streamUTF(baos.toByteArray())));
     String line;
     StringBuilder builder = new StringBuilder();
 

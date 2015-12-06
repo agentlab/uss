@@ -40,7 +40,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -358,6 +362,29 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
+  public void testRetrieveKeys() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    storage.getBlob("anykey1").setContentsUTF("A short UTF-8 string value");
+    storage.getBlob("anykey2").setContentsUTF("A short UTF-8 string value");
+    storage.getBlob("anykey3").setContentsUTF("A short UTF-8 string value");
+    storage.getBlob("anykey4").setContentsUTF("A short UTF-8 string value");
+
+    Set<String> keys = new HashSet<String>();
+
+    for (IBlob blob : storage.getBlobs())
+    {
+      System.out.println(blob);
+      keys.add(blob.getKey());
+    }
+
+    assertThat(keys.contains("anykey1"), is(true));
+    assertThat(keys.contains("anykey2"), is(true));
+    assertThat(keys.contains("anykey3"), is(true));
+    assertThat(keys.contains("anykey4"), is(true));
+  }
+
+  @Test
   public void testConflict() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
@@ -639,6 +666,48 @@ public final class StorageTests extends AbstractTest
     {
       // SUCCESS
     }
+  }
+
+  @Test
+  public void testDeleteAll() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    assertThat(storage.getBlob(makeKey()).setContentsUTF("A short UTF-8 string value"), is(true));
+
+    int xxx;
+    // for (IBlob blob : storage.getBlobs())
+    // {
+    // System.out.println(blob);
+    // blob.delete();
+    // }
+
+    boolean deleted = false;
+
+    for (;;)
+    {
+      try
+      {
+        int page = 0;
+        List<IBlob> blobs = Collections.emptyList();
+        while (blobs.isEmpty())
+        {
+          blobs = storage.getBlobs(100, ++page);
+        }
+
+        for (IBlob blob : blobs)
+        {
+          blob.delete();
+          deleted = true;
+        }
+      }
+      catch (NotFoundException ex)
+      {
+        break;
+      }
+    }
+
+    assertThat(deleted, is(true));
+    assertThat(storage.getBlobs().iterator().hasNext(), is(false));
   }
 
   private String makeKey()

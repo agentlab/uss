@@ -12,21 +12,22 @@ package org.eclipse.userstorage.internal.util;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 
-import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.io.SequenceInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 /**
- * A scalable JSON Codec.
- *
  * See http://www.json.org
  *
  * @author Eike Stepper
@@ -39,225 +40,340 @@ public final class JSONUtil
   {
   }
 
-  private static String escape(String str)
+  public static void dump(Object value)
   {
-    if (str == null)
-    {
-      return null;
-    }
-
-    int len = str.length();
-    StringBuilder builder = new StringBuilder(len);
-
-    for (int i = 0; i < len; i++)
-    {
-      char c = str.charAt(i);
-
-      if (c > 0xfff)
-      {
-        builder.append("\\u" + StringUtil.charToHex(c));
-      }
-      else if (c > 0xff)
-      {
-        builder.append("\\u0" + StringUtil.charToHex(c));
-      }
-      else if (c > 0x7f)
-      {
-        builder.append("\\u00" + StringUtil.charToHex(c));
-      }
-      else if (c < 32)
-      {
-        switch (c)
-        {
-          case '\r':
-            builder.append('\\');
-            builder.append('r');
-            break;
-
-          case '\n':
-            builder.append('\\');
-            builder.append('n');
-            break;
-
-          case '\t':
-            builder.append('\\');
-            builder.append('t');
-            break;
-
-          case '\f':
-            builder.append('\\');
-            builder.append('f');
-            break;
-
-          case '\b':
-            builder.append('\\');
-            builder.append('b');
-            break;
-
-          default:
-            if (c > 0xf)
-            {
-              builder.append("\\u00" + StringUtil.charToHex(c));
-            }
-            else
-            {
-              builder.append("\\u000" + StringUtil.charToHex(c));
-            }
-        }
-      }
-      else if (c == '\\')
-      {
-        builder.append('\\');
-        builder.append('\\');
-      }
-      else if (c == '"')
-      {
-        builder.append('\\');
-        builder.append('"');
-      }
-      else
-      {
-        builder.append(c);
-      }
-    }
-
-    return builder.toString();
+    JSONDumper dumper = new JSONDumper(System.out);
+    dumper.dumpValue(value);
+    System.out.println();
   }
 
-  public static InputStream encode(Map<String, String> properties, String streamKey, InputStream in)
+  public static InputStream build(Object value)
   {
-    StringBuilder builder = new StringBuilder();
-    builder.append("{");
-
-    boolean first = true;
-    for (Map.Entry<String, String> entry : properties.entrySet())
-    {
-      if (first)
-      {
-        first = false;
-      }
-      else
-      {
-        builder.append(",");
-      }
-
-      builder.append("\"");
-      builder.append(entry.getKey());
-      builder.append("\":\"");
-      builder.append(escape(entry.getValue()));
-      builder.append("\"");
-    }
-
-    if (in == null)
-    {
-      builder.append("}");
-      InputStream result = new ByteArrayInputStream(StringUtil.toUTF(builder.toString()));
-
-      if (DEBUG)
-      {
-        return new DebugInputStream(result, "ENCODE ");
-      }
-
-      return result;
-    }
-
-    if (!first)
-    {
-      builder.append(",");
-    }
-
-    builder.append("\"");
-    builder.append(streamKey);
-    builder.append("\":\"");
-
-    Vector<InputStream> streams = new Vector<InputStream>(3);
-    streams.add(new ByteArrayInputStream(StringUtil.toUTF(builder.toString())));
-    streams.add(new Base64InputStream(in, true, Integer.MAX_VALUE, null));
-    streams.add(new ByteArrayInputStream(StringUtil.toUTF("\"}")));
-
-    InputStream result = new SequenceInputStream(streams.elements());
+    JSONBuilder builder = new JSONBuilder();
+    InputStream result = builder.buildValue(value);
 
     if (DEBUG)
     {
-      result = new DebugInputStream(result, "ENCODE-STREAM ");
+      result = new DebugInputStream(result, "ENCODE ");
     }
 
     return result;
   }
 
-  public static InputStream decode(InputStream in, Map<String, String> properties, String streamKey) throws IOException
+  public static <T> T parse(InputStream in, String streamKey) throws IOException
   {
     if (DEBUG)
     {
-      System.out.print(streamKey != null ? "DECODE-STREAM " : "DECODE ");
+      System.out.print("DECODE ");
     }
 
-    JSONParser parser = new JSONParser(in);
-    return parser.parse(properties, streamKey);
+    JSONParser parser = new JSONParser(in, streamKey);
+
+    @SuppressWarnings("unchecked")
+    T value = (T)parser.parseValue();
+    return value;
   }
 
   /**
    * @author Eike Stepper
    */
-  private static final class DebugInputStream extends FilterInputStream
+  private static final class JSONDumper
   {
-    private final String prefix;
+    private final PrintStream out;
 
-    private boolean prefixDumped;
+    private int level;
 
-    public DebugInputStream(InputStream in, String prefix)
+    public JSONDumper(PrintStream out)
     {
-      super(in);
-      this.prefix = prefix;
+      this.out = out;
     }
 
-    @Override
-    public int read() throws IOException
+    public void dumpValue(Object value)
     {
-      int c = super.read();
-      if (c != -1)
+      if (value instanceof Map)
       {
-        dump(new byte[] { (byte)c }, 0, 1);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> object = (Map<String, Object>)value;
+        dumpObject(object);
+      }
+      else if (value instanceof List)
+      {
+        @SuppressWarnings("unchecked")
+        List<Object> array = (List<Object>)value;
+        dumpArray(array);
+      }
+      else if (value instanceof InputStream)
+      {
+        InputStream stream = (InputStream)value;
+        dumpStream(stream);
+      }
+      else if (value instanceof String)
+      {
+        out.print("\"" + value + "\"");
+      }
+      else
+      {
+        out.print(String.valueOf(value));
+      }
+    }
+
+    public void dumpObject(Map<String, Object> object)
+    {
+      indent();
+      out.println("{");
+      ++level;
+
+      int i = 0;
+      for (Map.Entry<String, Object> entry : object.entrySet())
+      {
+        indent();
+        out.print(entry.getKey());
+        out.print(" : ");
+        dumpValue(entry.getValue());
+
+        if (++i == object.size())
+        {
+          out.println();
+        }
+        else
+        {
+          out.println(",");
+        }
       }
 
-      return c;
+      --level;
+      indent();
+      out.print("}");
     }
 
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException
+    public void dumpArray(List<Object> array)
     {
-      int n = super.read(b, off, len);
-      dump(b, off, n);
-      return n;
-    }
+      out.println("[");
+      ++level;
 
-    @Override
-    public void close() throws IOException
-    {
-      System.out.println();
-      super.close();
-    }
-
-    private void dump(byte[] b, int off, int len)
-    {
-      if (!prefixDumped)
+      int i = 0;
+      for (Object value : array)
       {
-        if (prefix != null)
+        dumpValue(value);
+
+        if (++i == array.size())
         {
-          System.out.print(prefix);
+          out.println();
+        }
+        else
+        {
+          out.println(",");
+        }
+      }
+
+      --level;
+      indent();
+      out.print("]");
+    }
+
+    public void dumpStream(InputStream stream)
+    {
+      out.print("STREAM");
+    }
+
+    private void indent()
+    {
+      for (int i = 0; i < level; i++)
+      {
+        out.print("  ");
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class JSONBuilder
+  {
+    public JSONBuilder()
+    {
+    }
+
+    public InputStream buildValue(Object value)
+    {
+      if (value == null)
+      {
+        return IOUtil.streamUTF("null");
+      }
+
+      if (value == Boolean.TRUE)
+      {
+        return IOUtil.streamUTF("true");
+      }
+
+      if (value == Boolean.FALSE)
+      {
+        return IOUtil.streamUTF("false");
+      }
+
+      if (value.getClass() == Integer.class)
+      {
+        return IOUtil.streamUTF(Integer.toString((Integer)value));
+      }
+
+      if (value.getClass() == String.class)
+      {
+        return IOUtil.streamUTF("\"" + escape((String)value) + "\"");
+      }
+
+      if (value instanceof Map)
+      {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> object = (Map<String, Object>)value;
+        return buildObject(object);
+      }
+
+      if (value instanceof List)
+      {
+        @SuppressWarnings("unchecked")
+        List<Object> array = (List<Object>)value;
+        return buildArray(array);
+      }
+
+      if (value instanceof InputStream)
+      {
+        return buildStream((InputStream)value);
+      }
+
+      throw new IllegalArgumentException("Invalid value: " + value);
+    }
+
+    public InputStream buildObject(Map<String, Object> object)
+    {
+      Vector<InputStream> streams = new Vector<InputStream>(2 * object.size() + 1);
+      streams.add(IOUtil.streamUTF("{"));
+
+      for (Map.Entry<String, Object> entry : object.entrySet())
+      {
+        if (streams.size() > 1)
+        {
+          streams.add(IOUtil.streamUTF(","));
         }
 
-        prefixDumped = true;
+        streams.add(IOUtil.streamUTF("\"" + entry.getKey() + "\":"));
+        streams.add(buildValue(entry.getValue()));
       }
 
-      if (len > 0)
+      streams.add(IOUtil.streamUTF("}"));
+      return new SequenceInputStream(streams.elements());
+    }
+
+    public InputStream buildArray(List<Object> array)
+    {
+      Vector<InputStream> streams = new Vector<InputStream>(2 * array.size() + 1);
+      streams.add(IOUtil.streamUTF("["));
+
+      for (Object value : array)
       {
-        for (int i = off; i < len; i++)
+        if (streams.size() > 1)
         {
-          byte c = b[i];
-          System.out.print((char)c);
+          streams.add(IOUtil.streamUTF(","));
+        }
+
+        streams.add(buildValue(value));
+      }
+
+      streams.add(IOUtil.streamUTF("]"));
+      return new SequenceInputStream(streams.elements());
+    }
+
+    public InputStream buildStream(InputStream stream)
+    {
+      Vector<InputStream> streams = new Vector<InputStream>(3);
+      streams.add(IOUtil.streamUTF("\""));
+      streams.add(new Base64InputStream(stream, true, Integer.MAX_VALUE, null));
+      streams.add(IOUtil.streamUTF("\""));
+      return new SequenceInputStream(streams.elements());
+    }
+
+    private static String escape(String str)
+    {
+      if (str == null)
+      {
+        return null;
+      }
+
+      int len = str.length();
+      StringBuilder builder = new StringBuilder(len);
+
+      for (int i = 0; i < len; i++)
+      {
+        char c = str.charAt(i);
+
+        if (c > 0xfff)
+        {
+          builder.append("\\u" + StringUtil.charToHex(c));
+        }
+        else if (c > 0xff)
+        {
+          builder.append("\\u0" + StringUtil.charToHex(c));
+        }
+        else if (c > 0x7f)
+        {
+          builder.append("\\u00" + StringUtil.charToHex(c));
+        }
+        else if (c < 32)
+        {
+          switch (c)
+          {
+            case '\r':
+              builder.append('\\');
+              builder.append('r');
+              break;
+
+            case '\n':
+              builder.append('\\');
+              builder.append('n');
+              break;
+
+            case '\t':
+              builder.append('\\');
+              builder.append('t');
+              break;
+
+            case '\f':
+              builder.append('\\');
+              builder.append('f');
+              break;
+
+            case '\b':
+              builder.append('\\');
+              builder.append('b');
+              break;
+
+            default:
+              if (c > 0xf)
+              {
+                builder.append("\\u00" + StringUtil.charToHex(c));
+              }
+              else
+              {
+                builder.append("\\u000" + StringUtil.charToHex(c));
+              }
+          }
+        }
+        else if (c == '\\')
+        {
+          builder.append('\\');
+          builder.append('\\');
+        }
+        else if (c == '"')
+        {
+          builder.append('\\');
+          builder.append('"');
+        }
+        else
+        {
+          builder.append(c);
         }
       }
+
+      return builder.toString();
     }
   }
 
@@ -266,13 +382,15 @@ public final class JSONUtil
    */
   private static final class JSONParser
   {
-    private static final char[] CONTROL_CHARS = { '"', '\\', '/', 'b', 'f', 'n', 'r', 't', 'u' };
-
-    private static final char[] OBJECT_CHARS = { '"', '{', '[', 'n', 't', 'f', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '}' };
-
-    private static final char[] ARRAY_CHARS = { '"', '{', '[', 'n', 't', 'f', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ']' };
+    private static final char[] VALUE_CHARS = { '"', '-', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '{', '[', 'n', 't', 'f' };
 
     private static final char[] NUMBER_CHARS = { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', 'e', 'E' };
+
+    private static final char[] CONTROL_CHARS = { '"', '\\', '/', 'b', 'f', 'n', 'r', 't', 'u' };
+
+    private final String streamKey;
+
+    private boolean streamAdded;
 
     private Reader reader;
 
@@ -280,8 +398,10 @@ public final class JSONUtil
 
     private int pos;
 
-    public JSONParser(InputStream in)
+    public JSONParser(InputStream in, String streamKey)
     {
+      this.streamKey = streamKey;
+
       try
       {
         reader = new InputStreamReader(in, StringUtil.UTF8);
@@ -292,198 +412,60 @@ public final class JSONUtil
       }
     }
 
-    public InputStream parse(Map<String, String> properties, String streamKey) throws IOException
+    public Object parseValue() throws IOException
     {
-      char c = skipWhitespace('{', '[');
+      char c = skipWhitespace();
+
+      if (c == '"')
+      {
+        return parseString(true);
+      }
+
+      if (c == '-' || c >= '0' && c <= '9')
+      {
+        return parseNumber(c);
+      }
+
       if (c == '{')
       {
-        InputStream result = parseObject(properties, streamKey);
-
-        if (DEBUG)
-        {
-          if (streamKey == null)
-          {
-            System.out.println();
-          }
-        }
-
-        return result;
+        return parseObject();
       }
 
-      // parseArray();
-      return null;
-    }
-
-    private InputStream parseObject(Map<String, String> properties, String streamKey) throws IOException
-    {
-      for (;;)
+      if (c == '[')
       {
-        char c = skipWhitespace('"');
-
-        String key = readText(false);
-
-        c = skipWhitespace(':');
-        c = skipWhitespace(OBJECT_CHARS);
-
-        if (c == '}')
-        {
-          return null;
-        }
-        else if (c == '{')
-        {
-          parseObject(null, null);
-        }
-        else if (c == '[')
-        {
-          parseArray();
-        }
-        else if (c == '"')
-        {
-          if (key.equals(streamKey))
-          {
-            // Store result in local variable to avoid resource leak warning at the "return null" statement below.
-            InputStream result = new Base64InputStream(new ValueInputStream());
-
-            return result;
-          }
-
-          String value = readText(true);
-          put(properties, key, value);
-        }
-        else
-        {
-          parseLiteral(properties, key, c);
-        }
-
-        c = skipWhitespace(',', '}');
-        if (c == '}')
-        {
-          return null;
-        }
+        return parseArray();
       }
-    }
 
-    private void parseArray() throws IOException
-    {
-      for (;;)
-      {
-        char c = skipWhitespace(ARRAY_CHARS);
-
-        if (c == ']')
-        {
-          return;
-        }
-
-        if (c == '{')
-        {
-          parseObject(null, null);
-        }
-        else if (c == '[')
-        {
-          parseArray();
-        }
-        else if (c == '"')
-        {
-          readText(false);
-        }
-        else
-        {
-          parseLiteral(null, null, c);
-        }
-        if (c == 'n')
-        {
-          expectChar(readChar(), 'u');
-          expectChar(readChar(), 'l');
-          expectChar(readChar(), 'l');
-        }
-        else if (c == 't')
-        {
-          expectChar(readChar(), 'r');
-          expectChar(readChar(), 'u');
-          expectChar(readChar(), 'e');
-        }
-        else if (c == 'f')
-        {
-          expectChar(readChar(), 'a');
-          expectChar(readChar(), 'l');
-          expectChar(readChar(), 's');
-          expectChar(readChar(), 'e');
-        }
-
-        c = skipWhitespace(',', ']');
-        if (c == ']')
-        {
-          return;
-        }
-      }
-    }
-
-    private void parseLiteral(Map<String, String> properties, String key, char c) throws IOException
-    {
       if (c == 'n')
       {
         expectChar(readChar(), 'u');
         expectChar(readChar(), 'l');
         expectChar(readChar(), 'l');
-        put(properties, key, "null");
+        return null;
       }
-      else if (c == 't')
+
+      if (c == 't')
       {
         expectChar(readChar(), 'r');
         expectChar(readChar(), 'u');
         expectChar(readChar(), 'e');
-        put(properties, key, "true");
+        return true;
       }
-      else if (c == 'f')
+
+      if (c == 'f')
       {
         expectChar(readChar(), 'a');
         expectChar(readChar(), 'l');
         expectChar(readChar(), 's');
         expectChar(readChar(), 'e');
-        put(properties, key, "false");
-      }
-      else if (c == '-' || c >= '0' && c <= '9')
-      {
-        StringBuilder builder = new StringBuilder();
-        builder.append(c);
-
-        while (isNumberChar(c = readChar()))
-        {
-          builder.append(c);
-        }
-
-        rememberChar(c);
-        put(properties, key, builder.toString());
-      }
-    }
-
-    private void put(Map<String, String> properties, String key, String value)
-    {
-      if (properties != null)
-      {
-        properties.put(key, value);
-      }
-    }
-
-    private char skipWhitespace(char... expectedChars) throws IOException
-    {
-      char c = skipWhitespace();
-      expectChar(c, expectedChars);
-      return c;
-    }
-
-    private char skipWhitespace() throws IOException
-    {
-      char c = readChar();
-      while (Character.isWhitespace(c))
-      {
-        c = readChar();
+        return false;
       }
 
-      return c;
+      expectChar(c, VALUE_CHARS);
+      return null; // Not reachable.
     }
 
-    private String readText(boolean unescape) throws IOException
+    public String parseString(boolean unescape) throws IOException
     {
       StringBuilder builder = new StringBuilder();
 
@@ -553,6 +535,96 @@ public final class JSONUtil
       return builder.toString();
     }
 
+    public Object parseNumber(char c) throws IOException
+    {
+      StringBuilder builder = new StringBuilder();
+      builder.append(c);
+
+      while (isNumberChar(c = readChar()))
+      {
+        builder.append(c);
+      }
+
+      rememberChar(c);
+      return Integer.parseInt(builder.toString());
+    }
+
+    public Map<String, Object> parseObject() throws IOException
+    {
+      Map<String, Object> object = new LinkedHashMap<String, Object>();
+
+      for (;;)
+      {
+        char c = skipWhitespace();
+        if (c == '}')
+        {
+          return object;
+        }
+
+        if (c == ',')
+        {
+          c = skipWhitespace();
+        }
+
+        if (c == '"')
+        {
+          String key = parseString(false);
+
+          c = skipWhitespace();
+          expectChar(c, ':');
+
+          if (key.equals(streamKey))
+          {
+            c = skipWhitespace();
+            expectChar(c, '"');
+
+            InputStream stream = new Base64InputStream(new ValueInputStream());
+            object.put(key, stream);
+
+            streamAdded = true;
+            return object;
+          }
+          else
+          {
+            Object value = parseValue();
+            object.put(key, value);
+
+            if (streamAdded)
+            {
+              return object;
+            }
+          }
+        }
+      }
+    }
+
+    public List<Object> parseArray() throws IOException
+    {
+      List<Object> array = new ArrayList<Object>();
+
+      for (;;)
+      {
+        char c = skipWhitespace();
+        if (c == ']')
+        {
+          return array;
+        }
+
+        if (c != ',')
+        {
+          rememberChar(c);
+        }
+
+        Object value = parseValue();
+        array.add(value);
+
+        if (streamAdded)
+        {
+          return array;
+        }
+      }
+    }
+
     private char readChar() throws IOException
     {
       pos++;
@@ -615,6 +687,17 @@ public final class JSONUtil
       throw new JSONParseException("Expected " + builder + " but found '" + c + "' at position " + pos);
     }
 
+    private char skipWhitespace() throws IOException
+    {
+      char c = readChar();
+      while (Character.isWhitespace(c))
+      {
+        c = readChar();
+      }
+
+      return c;
+    }
+
     private static boolean isNumberChar(char c)
     {
       for (int i = 0; i < NUMBER_CHARS.length; i++)
@@ -673,6 +756,71 @@ public final class JSONUtil
 
         reader.close();
         super.close();
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class DebugInputStream extends FilterInputStream
+  {
+    private final String prefix;
+
+    private boolean prefixDumped;
+
+    public DebugInputStream(InputStream in, String prefix)
+    {
+      super(in);
+      this.prefix = prefix;
+    }
+
+    @Override
+    public int read() throws IOException
+    {
+      int c = super.read();
+      if (c != -1)
+      {
+        dump(new byte[] { (byte)c }, 0, 1);
+      }
+
+      return c;
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException
+    {
+      int n = super.read(b, off, len);
+      dump(b, off, n);
+      return n;
+    }
+
+    @Override
+    public void close() throws IOException
+    {
+      System.out.println();
+      super.close();
+    }
+
+    private void dump(byte[] b, int off, int len)
+    {
+      if (!prefixDumped)
+      {
+        if (prefix != null)
+        {
+          System.out.print(prefix);
+        }
+
+        prefixDumped = true;
+      }
+
+      if (len > 0)
+      {
+        for (int i = off; i < len; i++)
+        {
+          byte c = b[i];
+          System.out.print((char)c);
+        }
       }
     }
   }

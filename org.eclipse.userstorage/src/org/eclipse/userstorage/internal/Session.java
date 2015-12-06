@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,10 +96,66 @@ public class Session implements Headers, Codes
     cookieStore.clear();
   }
 
-  public InputStream retrieveBlob(String appToken, String key, final Map<String, String> properties, final boolean useETag,
+  public Map<String, Map<String, Object>> retrieveProperties(final String applicationToken, ICredentialsProvider credentialsProvider, int pageSize, int page)
+      throws IOException
+  {
+    if (pageSize < 1 || pageSize > 100)
+    {
+      throw new IllegalArgumentException("pageSize=" + pageSize);
+    }
+
+    if (page < 1)
+    {
+      throw new IllegalArgumentException("page=" + page);
+    }
+
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "?pageSize=" + pageSize + "&page=" + page);
+
+    return new RequestTemplate<Map<String, Map<String, Object>>>(uri)
+    {
+      @Override
+      protected Request prepareRequest() throws IOException
+      {
+        return configureRequest(Request.Get(uri), uri);
+      }
+
+      @Override
+      protected Map<String, Map<String, Object>> handleResponse(HttpResponse response, HttpEntity responseEntity) throws IOException
+      {
+        int statusCode = getStatusCode("GET", uri, response, OK, REQUESTED_RANGE_NOT_SATISFIABLE);
+        if (statusCode == REQUESTED_RANGE_NOT_SATISFIABLE)
+        {
+          StatusLine statusLine = response.getStatusLine();
+          throw new NotFoundException("GET", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase());
+        }
+
+        Map<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
+
+        List<Object> array = JSONUtil.parse(responseEntity.getContent(), null);
+        for (Object element : array)
+        {
+          @SuppressWarnings("unchecked")
+          Map<String, Object> map = (Map<String, Object>)element;
+
+          Object appToken = map.remove("application_token");
+          if (applicationToken.equals(appToken))
+          {
+            map.remove("url");
+
+            String key = (String)map.remove("key");
+            result.put(key, map);
+          }
+        }
+
+        return result;
+      }
+    }.send(credentialsProvider);
+  }
+
+  public InputStream retrieveBlob(String applicationToken, String key, final Map<String, String> properties, final boolean useETag,
       ICredentialsProvider credentialsProvider) throws IOException
   {
-    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + appToken + "/" + key);
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "/" + key);
 
     return new RequestTemplate<InputStream>(uri)
     {
@@ -131,7 +189,16 @@ public class Session implements Headers, Codes
 
         if (statusCode == OK)
         {
-          return JSONUtil.decode(responseEntity.getContent(), properties, "value");
+          Map<String, Object> object = JSONUtil.parse(responseEntity.getContent(), "value");
+          InputStream stream = (InputStream)object.remove("value");
+
+          for (Map.Entry<String, Object> entry : object.entrySet())
+          {
+            Object value = entry.getValue();
+            properties.put(entry.getKey(), String.valueOf(value));
+          }
+
+          return stream;
         }
 
         if (statusCode == NOT_MODIFIED)
@@ -148,10 +215,10 @@ public class Session implements Headers, Codes
     }.send(credentialsProvider);
   }
 
-  public boolean updateBlob(String appToken, String key, final Map<String, String> properties, final InputStream in, ICredentialsProvider credentialsProvider)
-      throws IOException, ConflictException
+  public boolean updateBlob(String applicationToken, String key, final Map<String, String> properties, final InputStream in,
+      ICredentialsProvider credentialsProvider) throws IOException, ConflictException
   {
-    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + appToken + "/" + key);
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "/" + key);
 
     return new RequestTemplate<Boolean>(uri)
     {
@@ -166,7 +233,7 @@ public class Session implements Headers, Codes
           request.setHeader(IF_MATCH, "\"" + eTag + "\"");
         }
 
-        body = JSONUtil.encode(Blob.NO_PROPERTIES, "value", in);
+        body = JSONUtil.build(Collections.singletonMap("value", in));
         request.bodyStream(body);
         return request;
       }
@@ -194,10 +261,10 @@ public class Session implements Headers, Codes
     }.send(credentialsProvider);
   }
 
-  public void deleteBlob(String appToken, String key, final Map<String, String> properties, ICredentialsProvider credentialsProvider)
+  public void deleteBlob(String applicationToken, String key, final Map<String, String> properties, ICredentialsProvider credentialsProvider)
       throws IOException, ConflictException
   {
-    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + appToken + "/" + key);
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "/" + key);
 
     new RequestTemplate<Boolean>(uri)
     {
@@ -361,14 +428,14 @@ public class Session implements Headers, Codes
         {
           credentials = getCredentials(credentials, credentialsProvider);
 
-          Map<String, String> arguments = new LinkedHashMap<String, String>();
+          Map<String, Object> arguments = new LinkedHashMap<String, Object>();
           arguments.put("username", credentials.getUsername());
           arguments.put("password", credentials.getPassword());
 
           URI uri = StringUtil.newURI(service.getServiceURI(), "api/user/login");
 
           Request request = configureRequest(Request.Post(uri), uri);
-          body = JSONUtil.encode(arguments, null, null);
+          body = JSONUtil.build(arguments);
           request.bodyStream(body);
 
           HttpResponse response = sendRequest(request, uri);
@@ -376,16 +443,15 @@ public class Session implements Headers, Codes
 
           getStatusCode("POST", uri, response, OK);
 
-          Map<String, String> properties = new LinkedHashMap<String, String>();
-          IOUtil.closeSilent(JSONUtil.decode(responseEntity.getContent(), properties, null));
+          Map<String, Object> object = JSONUtil.parse(responseEntity.getContent(), null);
 
-          sessionID = properties.get("sessid");
+          sessionID = (String)object.get("sessid");
           if (sessionID == null)
           {
             throw new IOException("No session ID");
           }
 
-          csrfToken = properties.get("token");
+          csrfToken = (String)object.get("token");
         }
         catch (IOException ex)
         {
@@ -422,10 +488,9 @@ public class Session implements Headers, Codes
           HttpResponse response = sendRequest(request, uri);
           responseEntity = response.getEntity();
 
-          Map<String, String> properties = new LinkedHashMap<String, String>();
-          IOUtil.closeSilent(JSONUtil.decode(responseEntity.getContent(), properties, null));
+          Map<String, Object> object = JSONUtil.parse(responseEntity.getContent(), null);
 
-          csrfToken = properties.get("token");
+          csrfToken = (String)object.get("token");
           if (csrfToken == null)
           {
             throw new IOException("No CSRF token");
@@ -672,6 +737,8 @@ interface Codes
   public static final int NOT_ACCEPTABLE = 406;
 
   public static final int CONFLICT = 409;
+
+  public static final int REQUESTED_RANGE_NOT_SATISFIABLE = 422; // TODO This should become 416!!!
 
   public static final int BAD_RESPONSE = 444;
 }

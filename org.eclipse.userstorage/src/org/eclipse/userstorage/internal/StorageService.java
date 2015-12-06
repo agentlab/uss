@@ -246,7 +246,19 @@ public class StorageService implements IStorageService
     }
   }
 
-  public synchronized InputStream retrieveBlob(ICredentialsProvider credentialsProvider, String appToken, String key, Map<String, String> properties,
+  public Map<String, Map<String, Object>> retrieveProperties(ICredentialsProvider credentialsProvider, String applicationToken, int pageSize, int page)
+      throws IOException
+  {
+    if (credentialsProvider == null)
+    {
+      credentialsProvider = getCredentialsProvider();
+    }
+
+    Session session = getSession();
+    return session.retrieveProperties(applicationToken, credentialsProvider, pageSize, page);
+  }
+
+  public synchronized InputStream retrieveBlob(ICredentialsProvider credentialsProvider, String applicationToken, String key, Map<String, String> properties,
       boolean useETag) throws IOException
   {
     if (credentialsProvider == null)
@@ -255,10 +267,22 @@ public class StorageService implements IStorageService
     }
 
     Session session = getSession();
-    return session.retrieveBlob(appToken, key, properties, useETag, credentialsProvider);
+    return session.retrieveBlob(applicationToken, key, properties, useETag, credentialsProvider);
   }
 
-  public synchronized boolean updateBlob(ICredentialsProvider credentialsProvider, String appToken, String key, Map<String, String> properties, InputStream in)
+  public synchronized boolean updateBlob(ICredentialsProvider credentialsProvider, String applicationToken, String key, Map<String, String> properties,
+      InputStream in) throws IOException, ConflictException
+  {
+    if (credentialsProvider == null)
+    {
+      credentialsProvider = getCredentialsProvider();
+    }
+
+    Session session = getSession();
+    return session.updateBlob(applicationToken, key, properties, in, credentialsProvider);
+  }
+
+  public synchronized void deleteBlob(ICredentialsProvider credentialsProvider, String applicationToken, String key, Map<String, String> properties)
       throws IOException, ConflictException
   {
     if (credentialsProvider == null)
@@ -267,19 +291,7 @@ public class StorageService implements IStorageService
     }
 
     Session session = getSession();
-    return session.updateBlob(appToken, key, properties, in, credentialsProvider);
-  }
-
-  public synchronized void deleteBlob(ICredentialsProvider credentialsProvider, String appToken, String key, Map<String, String> properties)
-      throws IOException, ConflictException
-  {
-    if (credentialsProvider == null)
-    {
-      credentialsProvider = getCredentialsProvider();
-    }
-
-    Session session = getSession();
-    session.deleteBlob(appToken, key, properties, credentialsProvider);
+    session.deleteBlob(applicationToken, key, properties, credentialsProvider);
   }
 
   @Override

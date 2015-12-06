@@ -120,23 +120,23 @@ public class CredentialsDialog extends AbstractDialog
         return false;
       }
     }
-  
+
     Credentials credentials = credentialsComposite.getCredentials();
     if (credentials == null)
     {
       return false;
     }
-  
+
     if (StringUtil.isEmpty(credentials.getUsername()))
     {
       return false;
     }
-  
+
     if (StringUtil.isEmpty(credentials.getPassword()))
     {
       return false;
     }
-  
+
     return true;
   }
 

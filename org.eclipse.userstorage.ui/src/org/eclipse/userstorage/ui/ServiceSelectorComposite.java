@@ -151,7 +151,7 @@ public class ServiceSelectorComposite extends Composite
     {
       return IStorageService.Registry.INSTANCE.getServices().length > 1;
     }
-  
+
     return Boolean.parseBoolean(property);
   }
 }

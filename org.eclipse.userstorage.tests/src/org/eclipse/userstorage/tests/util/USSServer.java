@@ -10,7 +10,6 @@
  */
 package org.eclipse.userstorage.tests.util;
 
-import org.eclipse.userstorage.internal.Blob;
 import org.eclipse.userstorage.internal.Credentials;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
@@ -36,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -111,7 +111,12 @@ public final class USSServer
 
   public File getUserFile(User user, String applicationToken, String key, String extension)
   {
-    return new File(new File(new File(folder, user.getUsername()), applicationToken), key + StringUtil.safe(extension));
+    return new File(getApplicationFolder(user, applicationToken), key + StringUtil.safe(extension));
+  }
+
+  public File getApplicationFolder(User user, String applicationToken)
+  {
+    return new File(new File(folder, user.getUsername()), applicationToken);
   }
 
   public Map<String, Session> getSessions()
@@ -174,11 +179,10 @@ public final class USSServer
 
   protected void login(HttpServletRequest request, HttpServletResponse response) throws IOException
   {
-    Map<String, String> properties = new LinkedHashMap<String, String>();
-    IOUtil.closeSilent(JSONUtil.decode(request.getInputStream(), properties, null));
+    Map<String, Object> requestObject = JSONUtil.parse(request.getInputStream(), null);
 
-    String username = properties.get("username");
-    String password = properties.get("password");
+    String username = (String)requestObject.get("username");
+    String password = (String)requestObject.get("password");
 
     User user = users.get(username);
     if (user == null || password == null || !password.equals(user.getPassword()))
@@ -195,10 +199,109 @@ public final class USSServer
     cookie.setPath("/");
     response.addCookie(cookie);
 
-    properties.clear();
-    properties.put("sessid", session.getID());
-    properties.put("token", session.getCSRFToken());
-    InputStream body = JSONUtil.encode(properties, null, null);
+    Map<String, Object> responseObject = new LinkedHashMap<String, Object>();
+    responseObject.put("sessid", session.getID());
+    responseObject.put("token", session.getCSRFToken());
+    InputStream body = JSONUtil.build(responseObject);
+
+    try
+    {
+      ServletOutputStream out = response.getOutputStream();
+      IOUtil.copy(body, out);
+      out.flush();
+    }
+    finally
+    {
+      IOUtil.closeSilent(body);
+    }
+  }
+
+  protected void retrieveProperties(HttpServletRequest request, HttpServletResponse response, File applicationFolder) throws IOException
+  {
+    if (!applicationFolder.isDirectory())
+    {
+      response.sendError(422);
+      return;
+    }
+
+    String applicationToken = applicationFolder.getName();
+
+    int pageSize = getIntParameter(request, "pageSize", 20);
+    if (pageSize < 1 || pageSize > 100)
+    {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page size");
+      return;
+    }
+
+    int page = getIntParameter(request, "page", 20);
+    if (page < 1)
+    {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page");
+      return;
+    }
+
+    boolean empty = true;
+
+    StringBuilder builder = new StringBuilder();
+    builder.append('[');
+
+    File[] files = applicationFolder.listFiles();
+    if (files != null)
+    {
+      int first = (page - 1) * pageSize + 1;
+      System.out.println("##### " + first);
+      int i = 0;
+
+      for (File file : files)
+      {
+        String name = file.getName();
+        if (name.endsWith(ETAG_EXTENSION))
+        {
+          if (++i >= first)
+          {
+            String key = name.substring(0, name.length() - ETAG_EXTENSION.length());
+            System.out.println("##### " + key);
+            String etag = IOUtil.readUTF(file);
+
+            if (empty)
+            {
+              empty = false;
+            }
+            else
+            {
+              builder.append(",");
+            }
+
+            builder.append("{\"application_token\":\"");
+            builder.append(applicationToken);
+            builder.append("\",\"key\":\"");
+            builder.append(key);
+            builder.append("\",\"etag\":\"");
+            builder.append(etag);
+            builder.append("\"}");
+
+            if (--pageSize == 0)
+            {
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (empty)
+    {
+      response.sendError(422);
+      return;
+    }
+
+    builder.append(']');
+    System.out.println(builder);
+
+    response.setStatus(HttpServletResponse.SC_OK);
+    response.setContentType("application/json");
+
+    InputStream body = IOUtil.streamUTF(builder.toString());
 
     try
     {
@@ -232,7 +335,7 @@ public final class USSServer
     response.setContentType("application/json");
     response.setHeader("ETag", "\"" + etag + "\"");
 
-    InputStream body = JSONUtil.encode(Blob.NO_PROPERTIES, "value", new FileInputStream(blobFile));
+    InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile)));
 
     try
     {
@@ -267,8 +370,9 @@ public final class USSServer
 
     try
     {
-      Map<String, String> properties = new LinkedHashMap<String, String>();
-      body = JSONUtil.decode(request.getInputStream(), properties, "value");
+      Map<String, Object> requestObject = JSONUtil.parse(request.getInputStream(), "value");
+      body = (InputStream)requestObject.get("value");
+
       IOUtil.copy(body, out);
     }
     finally
@@ -366,6 +470,24 @@ public final class USSServer
     {
       return "";
     }
+  }
+
+  private static int getIntParameter(HttpServletRequest request, String name, int defaultValue)
+  {
+    String parameter = request.getParameter(name);
+    if (parameter != null)
+    {
+      try
+      {
+        return Integer.parseInt(parameter);
+      }
+      catch (NumberFormatException ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    return defaultValue;
   }
 
   /**
@@ -485,17 +607,29 @@ public final class USSServer
       if (path.startsWith("/api/blob"))
       {
         User user = session.getUser();
-
         Path segments = new Path(path);
-        String applicationToken = segments.segment(2);
-        String key = segments.segment(3);
 
+        String applicationToken = segments.segment(2);
         if (!applicationTokens.contains(applicationToken))
         {
           response.sendError(HttpServletResponse.SC_NOT_FOUND);
           return;
         }
 
+        if (segments.segmentCount() < 4)
+        {
+          if (HttpMethod.GET.is(method))
+          {
+            File applicationFolder = getApplicationFolder(user, applicationToken);
+            retrieveProperties(request, response, applicationFolder);
+            return;
+          }
+
+          response.sendError(HttpServletResponse.SC_FORBIDDEN);
+          return;
+        }
+
+        String key = segments.segment(3);
         File blobFile = getUserFile(user, applicationToken, key, BLOB_EXTENSION);
         File etagFile = getUserFile(user, applicationToken, key, ETAG_EXTENSION);
         boolean exists = etagFile.exists();

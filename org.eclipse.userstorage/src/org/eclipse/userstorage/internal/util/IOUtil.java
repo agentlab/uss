@@ -215,7 +215,7 @@ public final class IOUtil
     {
       mkdirs(file.getParentFile());
 
-      InputStream inputStream = new ByteArrayInputStream(StringUtil.toUTF(contents));
+      InputStream inputStream = streamUTF(contents);
       outputStream = new FileOutputStream(file);
 
       copy(inputStream, outputStream);
@@ -236,6 +236,16 @@ public final class IOUtil
     {
       close(outputStream);
     }
+  }
+
+  public static InputStream streamUTF(String str)
+  {
+    return streamUTF(StringUtil.toUTF(str));
+  }
+
+  public static ByteArrayInputStream streamUTF(byte[] bytes)
+  {
+    return new ByteArrayInputStream(bytes);
   }
 
   public static void close(Closeable closeable) throws RuntimeException

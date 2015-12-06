@@ -18,7 +18,6 @@ import org.eclipse.userstorage.util.BadKeyException;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.NoServiceException;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,6 +76,17 @@ public class Blob implements IBlob
     return Collections.unmodifiableMap(properties);
   }
 
+  public void setProperties(Map<String, Object> properties)
+  {
+    for (Map.Entry<String, Object> entry : properties.entrySet())
+    {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+
+      this.properties.put(key, String.valueOf(value));
+    }
+  }
+
   @Override
   public String getETag() throws IllegalStateException
   {
@@ -133,7 +143,7 @@ public class Blob implements IBlob
   @Override
   public boolean setContentsUTF(String value) throws IOException, ConflictException, NoServiceException, IllegalStateException
   {
-    return setContents(new ByteArrayInputStream(StringUtil.toUTF(value)));
+    return setContents(IOUtil.streamUTF(value));
   }
 
   @Override

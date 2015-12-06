@@ -23,15 +23,18 @@ import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadApplicationTokenException;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.NoServiceException;
+import org.eclipse.userstorage.util.NotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -152,6 +155,103 @@ public final class Storage implements IStorage
   public void setCredentialsProvider(ICredentialsProvider credentialsProvider)
   {
     this.credentialsProvider = credentialsProvider;
+  }
+
+  @Override
+  public Iterable<IBlob> getBlobs() throws IOException
+  {
+    return new Iterable<IBlob>()
+    {
+      @Override
+      public Iterator<IBlob> iterator()
+      {
+        return new Iterator<IBlob>()
+        {
+          private int page;
+
+          private boolean endReached;
+
+          private Iterator<IBlob> chunk;
+
+          private RuntimeException exception;
+
+          @Override
+          public boolean hasNext()
+          {
+            for (;;)
+            {
+              if (endReached)
+              {
+                return false;
+              }
+
+              if (exception != null)
+              {
+                throw exception;
+              }
+
+              if (chunk != null && chunk.hasNext())
+              {
+                return true;
+              }
+
+              try
+              {
+                chunk = getBlobs(100, ++page).iterator();
+              }
+              catch (NotFoundException ex)
+              {
+                chunk = null;
+                endReached = true;
+              }
+              catch (IOException ex)
+              {
+                chunk = null;
+                exception = new RuntimeException(ex);
+              }
+            }
+          }
+
+          @Override
+          public IBlob next()
+          {
+            if (exception != null)
+            {
+              throw exception;
+            }
+
+            if (chunk == null)
+            {
+              throw new NoSuchElementException();
+            }
+
+            return chunk.next();
+          }
+        };
+      }
+    };
+  }
+
+  @Override
+  public List<IBlob> getBlobs(int pageSize, int page) throws IOException, NotFoundException
+  {
+    List<IBlob> blobs = new ArrayList<IBlob>();
+
+    StorageService service = getServiceSafe();
+    Map<String, Map<String, Object>> properties = service.retrieveProperties(credentialsProvider, applicationToken, pageSize, page);
+
+    for (Map.Entry<String, Map<String, Object>> entry : properties.entrySet())
+    {
+      String key = entry.getKey();
+      Map<String, Object> value = entry.getValue();
+
+      Blob blob = (Blob)getBlob(key);
+      blob.setProperties(value);
+
+      blobs.add(blob);
+    }
+
+    return blobs;
   }
 
   @Override

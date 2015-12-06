@@ -13,6 +13,12 @@ package org.eclipse.userstorage;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.BadKeyException;
+import org.eclipse.userstorage.util.NoServiceException;
+import org.eclipse.userstorage.util.NotFoundException;
+import org.eclipse.userstorage.util.ProtocolException;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Represents a partition of the data in a {@link #getService() storage service} that
@@ -111,21 +117,56 @@ public interface IStorage
   public void setCredentialsProvider(ICredentialsProvider credentialsProvider);
 
   /**
+   * Returns an {@link Iterable} of all blobs that this storage maintains for the logged-in user.
+   * <p>
+   * This method causes the remote service being contacted to return the metadata of the blobs.
+   * Blob contents are not transferred during this call.
+   * <p>
+   * This storage ensures that at no time two different IBlob instances for the same logged-in user and the same <code>key</code> exist.
+   * It also ensures that an IBlob instance becomes subject to garbage collection when the application releases its last strong reference on it.
+   * <p>
+   *
+   * @returns an {@link Iterable} of all blobs that this storage maintains for the logged-in user, never <code>null</code>.<p>
+   * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if this storage has no {@link IStorageService service} assigned.<p>
+   */
+  public Iterable<IBlob> getBlobs() throws IOException;
+
+  /**
+   * Returns a list of specified blobs that this storage maintains for the logged-in user.
+   * <p>
+   * This method causes the remote service being contacted to return the metadata of the blobs.
+   * Blob contents are not transferred during this call.
+   * <p>
+   * This storage ensures that at no time two different IBlob instances for the same logged-in user and the same <code>key</code> exist.
+   * It also ensures that an IBlob instance becomes subject to garbage collection when the application releases its last strong reference on it.
+   * <p>
+   *
+   * @param pageSize the maximum number of blobs to return, must be between 1 and 100.<p>
+   * @param page the page of blobs to return, must be greater or equal to 1.<p>
+   * @returns a list of specified blobs that this storage maintains for the logged-in user, never <code>null</code>.<p>
+   * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if this storage has no {@link IStorageService service} assigned.<p>
+   * @throws NotFoundException if no blobs on the specified page exist on the server.<p>
+   */
+  public List<IBlob> getBlobs(int pageSize, int page) throws IOException, NotFoundException;
+
+  /**
    * Provides access to a specific piece of data that this storage maintains for the logged-in user under the given <code>key</code>.
    * <p>
    * This method does not cause the remote service being contacted. It only performs minimal
    * {@link BadKeyException#validate(String) lexical validation} of the given <code>key</code>
    * and returns an {@link IBlob} instance that can be used to read or write the actual blob content.
    * <p>
-   * This storage ensures that at no time two different IBlob instances for the same logged-in user and the same <code>key</code> exist in the same storage.
+   * This storage ensures that at no time two different IBlob instances for the same logged-in user and the same <code>key</code> exist.
    * It also ensures that an IBlob instance becomes subject to garbage collection when the application releases its last strong reference on it.
    * <p>
    *
    * @param key the key that uniquely identifies this blob in the scope of the logged-in user and of this storage.
    *        Minimal {@link BadKeyException#validate(String) lexical validation} is performed on the passed key.<p>
-   * @throws BadKeyException if {@link BadKeyException#validate(String) lexical validation} of the passed key fails.<p>
    * @returns the IBlob instance that represents the piece of data that this storage
    *          maintains for the logged-in user under the given <code>key</code>, never <code>null</code>.<p>
+   * @throws BadKeyException if {@link BadKeyException#validate(String) lexical validation} of the passed key fails.<p>
    */
   public IBlob getBlob(String key) throws BadKeyException;
 
