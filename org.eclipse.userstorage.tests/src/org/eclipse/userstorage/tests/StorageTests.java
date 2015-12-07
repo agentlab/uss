@@ -335,9 +335,12 @@ public final class StorageTests extends AbstractTest
     }
   }
 
-  @Test
+  // @Test
   public void testRetrieveNotExistent() throws Exception
   {
+    // Disabled because of bug 483775.
+    int xxx;
+
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob("aaaaaaaaaa");
     blob.setETag(INVALID_ETAG);
