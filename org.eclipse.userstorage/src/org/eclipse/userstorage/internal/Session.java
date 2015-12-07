@@ -57,7 +57,7 @@ public class Session implements Headers, Codes
 
   public static final String USER_AGENT_PROPERTY = Session.class.getName() + ".userAgent";
 
-  public static final String NOT_FOUND_ETAG = "<not_found>";
+  public static final String NOT_FOUND_ETAG = "not_found";
 
   private static final int AUTHORIZATION_ATTEMPTS = 3;
 
@@ -210,7 +210,12 @@ public class Session implements Headers, Codes
         }
 
         // Blob wasn't found.
-        properties.put(Blob.ETAG, NOT_FOUND_ETAG);
+
+        // TODO This does not work because of bug 483775.
+        // properties.put(Blob.ETAG, NOT_FOUND_ETAG);
+
+        int xxx;
+        properties.remove(Blob.ETAG);
 
         StatusLine statusLine = response.getStatusLine();
         throw new NotFoundException("GET", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase());
@@ -264,12 +269,12 @@ public class Session implements Headers, Codes
     }.send(credentialsProvider);
   }
 
-  public void deleteBlob(String applicationToken, String key, final Map<String, String> properties, ICredentialsProvider credentialsProvider)
+  public boolean deleteBlob(String applicationToken, String key, final Map<String, String> properties, ICredentialsProvider credentialsProvider)
       throws IOException, ConflictException
   {
     URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "/" + key);
 
-    new RequestTemplate<Boolean>(uri)
+    boolean deleted = new RequestTemplate<Boolean>(uri)
     {
       @Override
       protected Request prepareRequest() throws IOException
@@ -288,7 +293,7 @@ public class Session implements Headers, Codes
       @Override
       protected Boolean handleResponse(HttpResponse response, HttpEntity responseEntity) throws IOException
       {
-        int statusCode = getStatusCode("DELETE", uri, response, NO_CONTENT, CONFLICT);
+        int statusCode = getStatusCode("DELETE", uri, response, NO_CONTENT, CONFLICT, NOT_FOUND);
         String eTag = getETag(response);
 
         if (statusCode == CONFLICT)
@@ -298,7 +303,7 @@ public class Session implements Headers, Codes
         }
 
         properties.put(Blob.ETAG, "<deleted_etag>");
-        return true;
+        return statusCode == NO_CONTENT;
       }
     }.send(credentialsProvider);
 
@@ -322,6 +327,18 @@ public class Session implements Headers, Codes
 
       sessionID = null;
       csrfToken = null;
+    }
+
+    return deleted;
+  }
+
+  private void debugResponseEntity(HttpEntity responseEntity) throws IOException
+  {
+    if (DEBUG && responseEntity != null)
+    {
+      responseEntity.writeTo(System.out);
+      System.out.println();
+      System.out.println();
     }
   }
 
@@ -392,10 +409,7 @@ public class Session implements Headers, Codes
         }
         catch (IOException ex)
         {
-          if (DEBUG && responseEntity != null)
-          {
-            responseEntity.writeTo(System.out);
-          }
+          debugResponseEntity(responseEntity);
 
           if (ex instanceof ProtocolException)
           {
@@ -461,10 +475,7 @@ public class Session implements Headers, Codes
           sessionID = null;
           csrfToken = null;
 
-          if (DEBUG && responseEntity != null)
-          {
-            responseEntity.writeTo(System.out);
-          }
+          debugResponseEntity(responseEntity);
 
           throw ex;
         }
@@ -503,10 +514,7 @@ public class Session implements Headers, Codes
         {
           csrfToken = null;
 
-          if (DEBUG && responseEntity != null)
-          {
-            responseEntity.writeTo(System.out);
-          }
+          debugResponseEntity(responseEntity);
 
           throw ex;
         }

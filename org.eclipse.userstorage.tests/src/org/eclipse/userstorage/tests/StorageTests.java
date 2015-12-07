@@ -60,6 +60,8 @@ public final class StorageTests extends AbstractTest
 
   private static final String KEY = "test_blob";
 
+  private static final String INVALID_ETAG = "<invalid_etag>";
+
   private ServerFixture serverFixture;
 
   private ClientFixture clientFixture;
@@ -219,6 +221,49 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
+  public void testCreateWithInvalidETag() throws Exception
+  {
+    String key = makeKey();
+
+    IBlob blob1 = factory.create(APPLICATION_TOKEN).getBlob(key);
+    blob1.setContentsUTF("A short UTF-8 string value");
+    blob1.delete();
+
+    IBlob blob2 = factory.create(APPLICATION_TOKEN).getBlob(key);
+    blob2.setContentsUTF("A short UTF-8 string value");
+  }
+
+  @Test
+  public void testCreateAfterRetrieve() throws Exception
+  {
+    String key = makeKey();
+
+    IBlob blob1 = factory.create(APPLICATION_TOKEN).getBlob(key);
+    blob1.setContentsUTF("A short UTF-8 string value");
+    blob1.delete();
+
+    IBlob blob2 = factory.create(APPLICATION_TOKEN).getBlob(key);
+
+    try
+    {
+      blob2.getContentsUTF();
+      fail("NotFoundException expected");
+    }
+    catch (NotFoundException expected)
+    {
+      // SUCCESS
+    }
+
+    String value = "A short UTF-8 string value";
+    blob2.setContentsUTF(value);
+
+    BlobInfo blobInfo = serverFixture.readServer(blob2);
+    assertThat(blobInfo.contents, is(value));
+    assertThat(blobInfo.eTag, is(blob2.getETag()));
+    assertThat(blobInfo.eTag, is(not(Session.NOT_FOUND_ETAG)));
+  }
+
+  @Test
   public void testUpdateWithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
@@ -291,11 +336,11 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
-  public void testRetrieveNotFound() throws Exception
+  public void testRetrieveNotExistent() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob("aaaaaaaaaa");
-    blob.setETag("<invalid_etag>");
+    blob.setETag(INVALID_ETAG);
 
     try
     {
@@ -581,6 +626,34 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
+  public void testAuthenticateFailure() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+
+    Credentials credentials = new Credentials("abcd", "wrong123");
+    Credentials oldCredentials = FixedCredentialsProvider.setCredentials(credentials);
+
+    try
+    {
+      ((StorageService)storage.getService()).setCredentials(credentials);
+
+      String value1 = "A short UTF-8 string value";
+      assertThat(blob.setContentsUTF(value1), is(true));
+
+      fail("ProtocolException: HTTP/1.1 401 Unauthorized expected");
+    }
+    catch (ProtocolException expected)
+    {
+      assertThat(expected.getStatusCode(), is(401));
+    }
+    finally
+    {
+      FixedCredentialsProvider.setCredentials(oldCredentials);
+    }
+  }
+
+  @Test
   public void testReauthenticate() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
@@ -619,6 +692,33 @@ public final class StorageTests extends AbstractTest
     blob.setContentsUTF(value);
     assertThat(blob.getContentsUTF(), is(value));
 
+    blob.delete();
+
+    BlobInfo blobInfo = serverFixture.readServer(blob);
+    assertThat(blobInfo, isNull());
+
+    try
+    {
+      blob.getContentsUTF();
+      fail("NotFoundException expected");
+    }
+    catch (NotFoundException expected)
+    {
+      // SUCCESS
+    }
+  }
+
+  @Test
+  public void testDeleteWithoutETag() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+
+    String value = "A short UTF-8 string value";
+    blob.setContentsUTF(value);
+    assertThat(blob.getContentsUTF(), is(value));
+
+    blob.setETag(null);
     blob.delete();
 
     BlobInfo blobInfo = serverFixture.readServer(blob);
@@ -708,6 +808,54 @@ public final class StorageTests extends AbstractTest
 
     assertThat(deleted, is(true));
     assertThat(storage.getBlobs().iterator().hasNext(), is(false));
+  }
+
+  @Test
+  public void testDeleteNotExistent() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+
+    try
+    {
+      blob.getContentsUTF();
+
+      // Do not fail if the blob exists.
+      // Just skip this test in the unlikely case.
+      return;
+    }
+    catch (NotFoundException expected)
+    {
+      // SUCCESS
+    }
+
+    boolean deleted = blob.delete();
+    assertThat(deleted, is(false));
+  }
+
+  @Test
+  public void testDeleteNotExistentWithInvalidETag() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(makeKey());
+
+    try
+    {
+      blob.getContentsUTF();
+
+      // Do not fail if the blob exists.
+      // Just skip this test in the unlikely case.
+      return;
+    }
+    catch (NotFoundException expected)
+    {
+      // SUCCESS
+    }
+
+    blob.setETag(INVALID_ETAG);
+
+    boolean deleted = blob.delete();
+    assertThat(deleted, is(false));
   }
 
   private String makeKey()

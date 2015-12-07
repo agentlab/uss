@@ -29,7 +29,7 @@ public class Example
   {
     IStorage storage = StorageFactory.DEFAULT.create("pDKTqBfDuNxlAKydhEwxBZPxa4q", new FileStorageCache());
 
-    IBlob blob = storage.getBlob("user_setup");
+    IBlob blob = storage.getBlob("test_blob");
     blob.setContentsUTF("A short UTF-8 string value");
 
     InputStream in = blob.getContents();

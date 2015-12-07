@@ -313,6 +313,7 @@ public interface IBlob
    * the cache will be deleted, too.
    * <p>
    *
+   * @return <code>true</code> if this blob was successfully deleted from the server, <code>false</code> if it did not exist.<p>
    * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
    * @throws ConflictException if the server detected a conflict and did not update the blob.<p>
    * @throws NoServiceException if the {@link #getStorage() storage} of this blob has no {@link IStorageService service} assigned.<p>
@@ -320,7 +321,7 @@ public interface IBlob
    *
    * @see #setETag(String)
    */
-  public void delete() throws IOException, ConflictException, NoServiceException, IllegalStateException;
+  public boolean delete() throws IOException, ConflictException, NoServiceException, IllegalStateException;
 
   /**
    * Returns <code>true</code> if this blob is disposed, <code>false</code> otherwise.

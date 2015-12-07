@@ -406,15 +406,17 @@ public final class Storage implements IStorage
     return created;
   }
 
-  public void deleteBlob(String key, Map<String, String> properties) throws IOException, ConflictException, NoServiceException
+  public boolean deleteBlob(String key, Map<String, String> properties) throws IOException, ConflictException, NoServiceException
   {
     StorageService service = getServiceSafe();
-    service.deleteBlob(credentialsProvider, applicationToken, key, properties);
+    boolean deleted = service.deleteBlob(credentialsProvider, applicationToken, key, properties);
 
     if (cache != null)
     {
       cache.internalDelete(applicationToken, key);
     }
+
+    return deleted;
   }
 
   @Override

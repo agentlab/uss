@@ -283,7 +283,7 @@ public class StorageService implements IStorageService
     return session.updateBlob(applicationToken, key, properties, in, credentialsProvider);
   }
 
-  public synchronized void deleteBlob(ICredentialsProvider credentialsProvider, String applicationToken, String key, Map<String, String> properties)
+  public synchronized boolean deleteBlob(ICredentialsProvider credentialsProvider, String applicationToken, String key, Map<String, String> properties)
       throws IOException, ConflictException
   {
     if (credentialsProvider == null)
@@ -292,7 +292,7 @@ public class StorageService implements IStorageService
     }
 
     Session session = getSession();
-    session.deleteBlob(applicationToken, key, properties, credentialsProvider);
+    return session.deleteBlob(applicationToken, key, properties, credentialsProvider);
   }
 
   @Override
