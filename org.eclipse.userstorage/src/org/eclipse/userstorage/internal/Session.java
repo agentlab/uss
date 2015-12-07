@@ -110,7 +110,7 @@ public class Session implements Headers, Codes
       throw new IllegalArgumentException("page=" + page);
     }
 
-    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "?pageSize=" + pageSize + "&page=" + page);
+    URI uri = StringUtil.newURI(service.getServiceURI(), "api/blob/" + applicationToken + "?pagesize=" + pageSize + "&page=" + page);
 
     return new RequestTemplate<Map<String, Map<String, Object>>>(uri)
     {
