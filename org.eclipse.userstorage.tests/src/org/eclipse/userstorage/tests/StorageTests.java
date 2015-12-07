@@ -40,9 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -777,38 +775,7 @@ public final class StorageTests extends AbstractTest
     IStorage storage = factory.create(APPLICATION_TOKEN);
     assertThat(storage.getBlob(makeKey()).setContentsUTF("A short UTF-8 string value"), is(true));
 
-    int xxx;
-    // for (IBlob blob : storage.getBlobs())
-    // {
-    // System.out.println(blob);
-    // blob.delete();
-    // }
-
-    boolean deleted = false;
-
-    for (;;)
-    {
-      try
-      {
-        int page = 0;
-        List<IBlob> blobs = Collections.emptyList();
-        while (blobs.isEmpty())
-        {
-          blobs = storage.getBlobs(100, ++page);
-        }
-
-        for (IBlob blob : blobs)
-        {
-          blob.delete();
-          deleted = true;
-        }
-      }
-      catch (NotFoundException ex)
-      {
-        break;
-      }
-    }
-
+    boolean deleted = storage.deleteAllBlobs();
     assertThat(deleted, is(true));
     assertThat(storage.getBlobs().iterator().hasNext(), is(false));
   }

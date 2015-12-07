@@ -32,7 +32,6 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
-import org.apache.http.conn.HttpClientConnectionManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +43,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Eike Stepper
@@ -125,29 +123,28 @@ public class Session implements Headers, Codes
       @Override
       protected Map<String, Map<String, Object>> handleResponse(HttpResponse response, HttpEntity responseEntity) throws IOException
       {
-        int statusCode = getStatusCode("GET", uri, response, OK, REQUESTED_RANGE_NOT_SATISFIABLE);
-        if (statusCode == REQUESTED_RANGE_NOT_SATISFIABLE)
-        {
-          StatusLine statusLine = response.getStatusLine();
-          throw new NotFoundException("GET", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase());
-        }
+        getStatusCode("GET", uri, response, OK);
+        List<Object> array = JSONUtil.parse(responseEntity.getContent(), null);
 
         Map<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
 
-        List<Object> array = JSONUtil.parse(responseEntity.getContent(), null);
         for (Object element : array)
         {
           @SuppressWarnings("unchecked")
           Map<String, Object> map = (Map<String, Object>)element;
 
           Object appToken = map.remove("application_token");
-          if (applicationToken.equals(appToken))
+          if (!applicationToken.equals(appToken))
           {
-            map.remove("url");
-
-            String key = (String)map.remove("key");
-            result.put(key, map);
+            StatusLine statusLine = response.getStatusLine();
+            String protocolVersion = statusLine == null ? "HTTP" : getProtocolVersion(statusLine);
+            throw new ProtocolException("GET", uri, protocolVersion, BAD_RESPONSE, "Bad Response : Wrong application token: " + appToken);
           }
+
+          map.remove("url");
+
+          String key = (String)map.remove("key");
+          result.put(key, map);
         }
 
         return result;
@@ -306,28 +303,6 @@ public class Session implements Headers, Codes
         return statusCode == NO_CONTENT;
       }
     }.send(credentialsProvider);
-
-    int xxx; // Work around bug 483709.
-    if (uri.toString().contains(".eclipse.org/"))
-    {
-      try
-      {
-        Field connmgrField = Executor.class.getDeclaredField("CONNMGR");
-        connmgrField.setAccessible(true);
-
-        HttpClientConnectionManager connectionManager = (HttpClientConnectionManager)connmgrField.get(null);
-        connectionManager.closeIdleConnections(0, TimeUnit.MILLISECONDS);
-        connectionManager.closeExpiredConnections();
-      }
-      catch (Throwable ex)
-      {
-        ex.printStackTrace();
-        //$FALL-THROUGH$
-      }
-
-      sessionID = null;
-      csrfToken = null;
-    }
 
     return deleted;
   }
@@ -748,8 +723,6 @@ interface Codes
   public static final int NOT_ACCEPTABLE = 406;
 
   public static final int CONFLICT = 409;
-
-  public static final int REQUESTED_RANGE_NOT_SATISFIABLE = 422; // TODO This should become 416!!!
 
   public static final int BAD_RESPONSE = 444;
 }

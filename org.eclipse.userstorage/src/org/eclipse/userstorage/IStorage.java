@@ -171,6 +171,18 @@ public interface IStorage
   public IBlob getBlob(String key) throws BadKeyException;
 
   /**
+   * Deletes <b>all</b> blobs that this storage maintains for the logged-in user.
+   * <p>
+   * The blobs of other storages/applications are not affected by this call.
+   * <p>
+   *
+   * @return <code>true</code> if at least one blob was successfully deleted from the server, <code>false</code> if no blob existed.<p>
+   * @throws IOException if remote I/O was unsuccessful. A {@link ProtocolException} may contain more information about protocol-specific problems.<p>
+   * @throws NoServiceException if this storage has no {@link IStorageService service} assigned.<p>
+   */
+  public boolean deleteAllBlobs() throws IOException, NoServiceException;
+
+  /**
    * Adds the given listener to the list of listeners that are notified about {@link IStorageService service} changes.
    *
    * @param listener the listener to add to the list of listeners that are notified about service changes.

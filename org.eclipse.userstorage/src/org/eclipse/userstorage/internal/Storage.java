@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -44,6 +43,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public final class Storage implements IStorage
 {
   private static final String DEFAULT_APPLICATION_TOKEN = "<default>";
+
+  private static final int CHUNK_SIZE = 100;
 
   private final List<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
@@ -169,6 +170,8 @@ public final class Storage implements IStorage
         {
           private int page;
 
+          private boolean lastChunk;
+
           private boolean endReached;
 
           private Iterator<IBlob> chunk;
@@ -190,14 +193,29 @@ public final class Storage implements IStorage
                 throw exception;
               }
 
-              if (chunk != null && chunk.hasNext())
+              if (chunk != null)
               {
-                return true;
+                if (chunk.hasNext())
+                {
+                  return true;
+                }
+
+                if (lastChunk)
+                {
+                  endReached = true;
+                  return false;
+                }
               }
 
               try
               {
-                chunk = getBlobs(100, ++page).iterator();
+                List<IBlob> blobs = getBlobs(CHUNK_SIZE, ++page);
+                if (blobs.size() < CHUNK_SIZE)
+                {
+                  lastChunk = true;
+                }
+
+                chunk = blobs.iterator();
               }
               catch (NotFoundException ex)
               {
@@ -215,16 +233,7 @@ public final class Storage implements IStorage
           @Override
           public IBlob next()
           {
-            if (exception != null)
-            {
-              throw exception;
-            }
-
-            if (chunk == null)
-            {
-              throw new NoSuchElementException();
-            }
-
+            hasNext();
             return chunk.next();
           }
 
@@ -414,6 +423,29 @@ public final class Storage implements IStorage
     if (cache != null)
     {
       cache.internalDelete(applicationToken, key);
+    }
+
+    return deleted;
+  }
+
+  @Override
+  public boolean deleteAllBlobs() throws IOException, NoServiceException
+  {
+    boolean deleted = false;
+
+    for (;;)
+    {
+      List<IBlob> blobs = getBlobs(100, 1);
+      if (blobs.isEmpty())
+      {
+        break;
+      }
+
+      for (IBlob blob : blobs)
+      {
+        blob.delete();
+        deleted = true;
+      }
     }
 
     return deleted;
