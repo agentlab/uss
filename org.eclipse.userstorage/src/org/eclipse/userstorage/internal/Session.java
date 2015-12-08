@@ -404,18 +404,21 @@ public class Session implements Headers, Codes
           if (ex instanceof ProtocolException)
           {
             ProtocolException protocolException = (ProtocolException)ex;
-            if (protocolException.getStatusCode() == AUTHORIZATION_REQUIRED && --authenticationAttempts > 0)
+            if (protocolException.getStatusCode() == AUTHORIZATION_REQUIRED)
             {
-              reauthentication = true;
-
               if (authenticated)
               {
                 // This means that the initial authenticate() call was skipped because we already have a session,
                 // but this session is no longer valid on the server. So reset() to force a full reauthentication.
                 reset();
+                continue;
               }
 
-              continue;
+              if (--authenticationAttempts > 0)
+              {
+                reauthentication = true;
+                continue;
+              }
             }
           }
 
