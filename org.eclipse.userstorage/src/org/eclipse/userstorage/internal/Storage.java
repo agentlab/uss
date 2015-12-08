@@ -385,6 +385,11 @@ public final class Storage implements IStorage
     }
     catch (NotFoundException ex)
     {
+      if (cacheStream != null)
+      {
+        IOUtil.closeSilent(cacheStream);
+      }
+
       if (cache != null)
       {
         cache.internalDelete(applicationToken, key);
