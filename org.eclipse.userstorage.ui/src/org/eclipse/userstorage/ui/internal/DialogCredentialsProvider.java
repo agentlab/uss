@@ -25,7 +25,7 @@ public final class DialogCredentialsProvider implements ICredentialsProvider
   public static final DialogCredentialsProvider INSTANCE = new DialogCredentialsProvider();
 
   @Override
-  public Credentials provideCredentials(final IStorageService service)
+  public Credentials provideCredentials(final IStorageService service, final boolean reauthentication)
   {
     final Credentials[] credentials = { null };
 
@@ -37,7 +37,7 @@ public final class DialogCredentialsProvider implements ICredentialsProvider
         @Override
         public void run()
         {
-          CredentialsDialog dialog = new CredentialsDialog(shell, service);
+          CredentialsDialog dialog = new CredentialsDialog(shell, service, reauthentication);
           if (dialog.open() == CredentialsDialog.OK)
           {
             credentials[0] = dialog.getCredentials();

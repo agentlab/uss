@@ -28,7 +28,7 @@ public class FixedCredentialsProvider implements ICredentialsProvider
   }
 
   @Override
-  public Credentials provideCredentials(IStorageService service)
+  public Credentials provideCredentials(IStorageService service, boolean reauthentication)
   {
     return credentials;
   }

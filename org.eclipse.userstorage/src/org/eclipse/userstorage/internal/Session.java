@@ -57,7 +57,7 @@ public class Session implements Headers, Codes
 
   public static final String NOT_FOUND_ETAG = "not_found";
 
-  private static final int AUTHORIZATION_ATTEMPTS = 3;
+  private static final int AUTHENTICATION_ATTEMPTS = 3;
 
   private static final boolean DEBUG = Boolean.getBoolean("org.eclipse.userstorage.session.debug");
 
@@ -359,7 +359,8 @@ public class Session implements Headers, Codes
 
     public final synchronized T send(ICredentialsProvider credentialsProvider) throws IOException
     {
-      int authorizationAttempts = AUTHORIZATION_ATTEMPTS;
+      int authenticationAttempts = AUTHENTICATION_ATTEMPTS;
+      boolean reauthentication = false;
 
       Credentials credentials = service.getCredentials();
       if (credentials != null)
@@ -370,7 +371,8 @@ public class Session implements Headers, Codes
         }
         else
         {
-          ++authorizationAttempts;
+          // The first attempt will be made with the stored credentials, so increase authenticationAttempts to 4 to prompt 3 times.
+          ++authenticationAttempts;
         }
       }
 
@@ -381,7 +383,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          authenticate(credentials, credentialsProvider);
+          authenticate(credentials, credentialsProvider, reauthentication);
 
           Request request = prepareRequest();
           HttpResponse response = sendRequest(request, uri);
@@ -399,8 +401,9 @@ public class Session implements Headers, Codes
           if (ex instanceof ProtocolException)
           {
             ProtocolException protocolException = (ProtocolException)ex;
-            if (protocolException.getStatusCode() == AUTHORIZATION_REQUIRED && --authorizationAttempts > 0)
+            if (protocolException.getStatusCode() == AUTHORIZATION_REQUIRED && --authenticationAttempts > 0)
             {
+              reauthentication = true;
               continue;
             }
           }
@@ -417,7 +420,7 @@ public class Session implements Headers, Codes
       }
     }
 
-    protected final void authenticate(Credentials credentials, ICredentialsProvider credentialsProvider) throws IOException
+    protected final void authenticate(Credentials credentials, ICredentialsProvider credentialsProvider, boolean reauthentication) throws IOException
     {
       if (sessionID == null)
       {
@@ -428,7 +431,7 @@ public class Session implements Headers, Codes
 
         try
         {
-          credentials = getCredentials(credentials, credentialsProvider);
+          credentials = getCredentials(credentials, credentialsProvider, reauthentication);
 
           Map<String, Object> arguments = new LinkedHashMap<String, Object>();
           arguments.put("username", credentials.getUsername());
@@ -645,7 +648,8 @@ public class Session implements Headers, Codes
       return "HTTP";
     }
 
-    protected final Credentials getCredentials(Credentials credentials, ICredentialsProvider credentialsProvider) throws OperationCanceledException
+    protected final Credentials getCredentials(Credentials credentials, ICredentialsProvider credentialsProvider, boolean reauthentication)
+        throws OperationCanceledException
     {
       if (credentials == null)
       {
@@ -657,7 +661,7 @@ public class Session implements Headers, Codes
           {
             semaphore.acquire();
 
-            credentials = credentialsProvider.provideCredentials(service);
+            credentials = credentialsProvider.provideCredentials(service, reauthentication);
           }
           catch (InterruptedException ex)
           {

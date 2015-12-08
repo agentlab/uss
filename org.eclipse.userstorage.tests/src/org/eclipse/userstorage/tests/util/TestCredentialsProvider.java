@@ -44,7 +44,7 @@ public class TestCredentialsProvider implements ICredentialsProvider
   }
 
   @Override
-  public Credentials provideCredentials(IStorageService service)
+  public Credentials provideCredentials(IStorageService service, boolean reauthentication)
   {
     if (CREDENTIALS_FILE.exists())
     {

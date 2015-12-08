@@ -30,8 +30,9 @@ public interface ICredentialsProvider
    * <p>
    *
    * @param service the storage service for which to provide the user's credentials, must not be <code>null</code>.<p>
+   * @param reauthentication <code>true</code> if this method has been called before (and returned wrong credentials), <code>false</code> if this call is the first.
    * @return the user's credentials for the given storage service,
    *         or <code>null</code> as an indication to cancel the authentication process.<p>
    */
-  public Credentials provideCredentials(IStorageService service);
+  public Credentials provideCredentials(IStorageService service, boolean reauthentication);
 }

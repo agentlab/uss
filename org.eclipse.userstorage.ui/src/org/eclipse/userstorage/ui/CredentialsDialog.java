@@ -32,16 +32,19 @@ public class CredentialsDialog extends AbstractDialog
 {
   private final IStorageService service;
 
+  private final boolean reauthentication;
+
   private Credentials credentials;
 
   private CredentialsComposite credentialsComposite;
 
   private Button okButton;
 
-  public CredentialsDialog(Shell parentShell, IStorageService service)
+  public CredentialsDialog(Shell parentShell, IStorageService service, boolean reauthentication)
   {
     super(parentShell);
     this.service = service;
+    this.reauthentication = reauthentication;
   }
 
   public final IStorageService getService()
@@ -73,9 +76,16 @@ public class CredentialsDialog extends AbstractDialog
   protected Control createDialogArea(Composite parent)
   {
     setTitle("Log-In");
-    setMessage("Enter the log-in information for your " + service.getServiceLabel() + " account.");
-    initializeDialogUnits(parent);
+    if (reauthentication)
+    {
+      setErrorMessage("You could not be logged in to your " + service.getServiceLabel() + " account. Please try again.");
+    }
+    else
+    {
+      setMessage("Enter the log-in information for your " + service.getServiceLabel() + " account.");
+    }
 
+    initializeDialogUnits(parent);
     Composite area = (Composite)super.createDialogArea(parent);
 
     credentialsComposite = new CredentialsComposite(area, SWT.NONE, 10, 10, true)

@@ -231,7 +231,7 @@ public class Activator extends Plugin
   private static final class CancelCredentialsProvider implements ICredentialsProvider
   {
     @Override
-    public Credentials provideCredentials(IStorageService service)
+    public Credentials provideCredentials(IStorageService service, boolean reauthentication)
     {
       return null;
     }
