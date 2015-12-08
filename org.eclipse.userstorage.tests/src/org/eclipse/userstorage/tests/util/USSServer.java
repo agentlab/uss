@@ -218,12 +218,6 @@ public final class USSServer
 
   protected void retrieveProperties(HttpServletRequest request, HttpServletResponse response, File applicationFolder) throws IOException
   {
-    if (!applicationFolder.isDirectory())
-    {
-      response.sendError(422);
-      return;
-    }
-
     String applicationToken = applicationFolder.getName();
 
     int pageSize = getIntParameter(request, "pageSize", 20);
@@ -287,12 +281,6 @@ public final class USSServer
           }
         }
       }
-    }
-
-    if (empty)
-    {
-      response.sendError(422);
-      return;
     }
 
     builder.append(']');
