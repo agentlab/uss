@@ -207,7 +207,7 @@ public class Session implements Headers, Codes
         }
 
         // Blob wasn't found.
-        properties.remove(Blob.ETAG);
+        properties.clear();
 
         StatusLine statusLine = response.getStatusLine();
         throw new NotFoundException("GET", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase());

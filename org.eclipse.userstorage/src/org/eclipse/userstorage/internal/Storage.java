@@ -377,17 +377,20 @@ public final class Storage implements IStorage
           return cacheStreamResult;
         }
 
-        if (contents == null)
-        {
-          cache.internalDelete(applicationToken, key);
-          return null;
-        }
-
         OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
         return new TeeInputStream(contents, output);
       }
 
       return contents;
+    }
+    catch (NotFoundException ex)
+    {
+      if (cache != null)
+      {
+        cache.internalDelete(applicationToken, key);
+      }
+
+      throw ex;
     }
     finally
     {
@@ -395,7 +398,7 @@ public final class Storage implements IStorage
     }
   }
 
-  public boolean updateBlob(String key, Map<String, String> properties, InputStream in) throws IOException, ConflictException, NoServiceException
+  public boolean updateBlob(String key, Map<String, String> properties, InputStream in) throws IOException, NoServiceException, ConflictException
   {
     StorageService service = getServiceSafe();
 
@@ -431,7 +434,7 @@ public final class Storage implements IStorage
     return created;
   }
 
-  public boolean deleteBlob(String key, Map<String, String> properties) throws IOException, ConflictException, NoServiceException
+  public boolean deleteBlob(String key, Map<String, String> properties) throws IOException, NoServiceException, ConflictException
   {
     StorageService service = getServiceSafe();
     boolean deleted = service.deleteBlob(credentialsProvider, applicationToken, key, properties);
@@ -481,7 +484,7 @@ public final class Storage implements IStorage
     }
   }
 
-  private StorageService getServiceSafe()
+  private StorageService getServiceSafe() throws NoServiceException
   {
     StorageService service = getService();
     if (service != null)
