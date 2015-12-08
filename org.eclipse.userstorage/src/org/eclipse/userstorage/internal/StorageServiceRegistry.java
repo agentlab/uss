@@ -285,7 +285,7 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     }
   }
 
-  void start()
+  public void start()
   {
     synchronized (services)
     {
@@ -336,7 +336,7 @@ public final class StorageServiceRegistry implements IStorageService.Registry
     }
   }
 
-  void stop() throws Exception
+  public void stop() throws Exception
   {
     synchronized (services)
     {

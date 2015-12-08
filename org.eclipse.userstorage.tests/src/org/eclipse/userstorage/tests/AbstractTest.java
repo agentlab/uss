@@ -197,6 +197,11 @@ public abstract class AbstractTest extends CoreMatchers
     return org.hamcrest.core.IsNull.nullValue();
   }
 
+  public static org.hamcrest.Matcher<java.lang.Object> isNotNull()
+  {
+    return org.hamcrest.core.IsNull.notNullValue();
+  }
+
   /**
    * @author Eike Stepper
    */

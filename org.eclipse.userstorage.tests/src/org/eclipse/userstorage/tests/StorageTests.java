@@ -17,6 +17,7 @@ import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.StorageFactory;
 import org.eclipse.userstorage.internal.Session;
 import org.eclipse.userstorage.internal.StorageService;
+import org.eclipse.userstorage.internal.StorageServiceRegistry;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.spi.Credentials;
 import org.eclipse.userstorage.tests.util.ClientFixture;
@@ -43,7 +44,6 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @author Eike Stepper
@@ -58,7 +58,7 @@ public final class StorageTests extends AbstractTest
 
   private static final String KEY = "test_blob";
 
-  private static final String INVALID_ETAG = "<invalid_etag>";
+  private static final String WRONG_ETAG = "wrong_etag";
 
   private ServerFixture serverFixture;
 
@@ -72,6 +72,9 @@ public final class StorageTests extends AbstractTest
   public void setUp() throws Exception
   {
     super.setUp();
+    StorageServiceRegistry.INSTANCE.stop();
+    StorageServiceRegistry.INSTANCE.start();
+
     serverFixture = new ServerFixture(APPLICATION_TOKEN);
     clientFixture = new ClientFixture(serverFixture);
     factory = clientFixture.getFactory();
@@ -81,8 +84,18 @@ public final class StorageTests extends AbstractTest
   @Override
   public void tearDown() throws Exception
   {
-    clientFixture.dispose();
-    serverFixture.dispose();
+    if (clientFixture != null)
+    {
+      clientFixture.dispose();
+      clientFixture = null;
+    }
+
+    if (serverFixture != null)
+    {
+      serverFixture.dispose();
+      serverFixture = null;
+    }
+
     super.tearDown();
   }
 
@@ -205,10 +218,10 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
-  public void testUpdate() throws Exception
+  public void testCreate() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
@@ -219,32 +232,33 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
-  public void testCreateWithInvalidETag() throws Exception
+  public void testCreateWithWrongETag() throws Exception
   {
-    String key = makeKey();
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(KEY);
+    blob.setETag(WRONG_ETAG);
 
-    IBlob blob1 = factory.create(APPLICATION_TOKEN).getBlob(key);
-    blob1.setContentsUTF("A short UTF-8 string value");
-    blob1.delete();
-
-    IBlob blob2 = factory.create(APPLICATION_TOKEN).getBlob(key);
-    blob2.setContentsUTF("A short UTF-8 string value");
+    try
+    {
+      blob.setContentsUTF("Text 2"); // Update attempt 1
+      fail("ConflictException expected");
+    }
+    catch (ConflictException expected)
+    {
+      assertThat(expected.getETag(), isNull());
+      assertThat(blob.getETag(), isNull());
+    }
   }
 
   @Test
   public void testCreateAfterRetrieve() throws Exception
   {
-    String key = makeKey();
-
-    IBlob blob1 = factory.create(APPLICATION_TOKEN).getBlob(key);
-    blob1.setContentsUTF("A short UTF-8 string value");
-    blob1.delete();
-
-    IBlob blob2 = factory.create(APPLICATION_TOKEN).getBlob(key);
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(KEY);
 
     try
     {
-      blob2.getContentsUTF();
+      blob.getContentsUTF();
       fail("NotFoundException expected");
     }
     catch (NotFoundException expected)
@@ -253,19 +267,19 @@ public final class StorageTests extends AbstractTest
     }
 
     String value = "A short UTF-8 string value";
-    blob2.setContentsUTF(value);
+    blob.setContentsUTF(value);
 
-    BlobInfo blobInfo = serverFixture.readServer(blob2);
+    BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value));
-    assertThat(blobInfo.eTag, is(blob2.getETag()));
+    assertThat(blobInfo.eTag, is(blob.getETag()));
     assertThat(blobInfo.eTag, is(not(Session.NOT_FOUND_ETAG)));
   }
 
   @Test
-  public void testUpdateWithCache() throws Exception
+  public void testCreateWithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value), is(true));
@@ -274,21 +288,42 @@ public final class StorageTests extends AbstractTest
   }
 
   @Test
-  public void testUpdateMulti() throws Exception
+  public void testCreateAndUpdate() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
-    blob.setContentsUTF("Text 1");
-    blob.setContentsUTF("Text 2");
-    blob.setContentsUTF("Text 3");
+    blob.setContentsUTF("Text 1"); // Create
+    blob.setContentsUTF("Text 2"); // Update 1
+    blob.setContentsUTF("Text 3"); // Update 2
+  }
+
+  @Test
+  public void testUpdateWithWrongETag() throws Exception
+  {
+    IStorage storage = factory.create(APPLICATION_TOKEN);
+    IBlob blob = storage.getBlob(KEY);
+
+    blob.setContentsUTF("Text 1"); // Create
+    blob.setETag(WRONG_ETAG);
+
+    try
+    {
+      blob.setContentsUTF("Text 2"); // Update attempt 1
+      fail("ConflictException expected");
+    }
+    catch (ConflictException expected)
+    {
+      assertThat(expected.getETag(), isNotNull());
+      assertThat(blob.getETag(), isNull());
+    }
   }
 
   @Test
   public void testUpdateFailEarly() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     assertThat(blob.setContentsUTF(value1), is(true));
@@ -333,15 +368,12 @@ public final class StorageTests extends AbstractTest
     }
   }
 
-  // @Test
+  @Test
   public void testRetrieveNotExistent() throws Exception
   {
-    // Disabled because of bug 483775.
-    int xxx;
-
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob("aaaaaaaaaa");
-    blob.setETag(INVALID_ETAG);
+    blob.setETag(WRONG_ETAG);
 
     try
     {
@@ -353,14 +385,14 @@ public final class StorageTests extends AbstractTest
       // SUCCESS
     }
 
-    assertThat(blob.getETag(), is(Session.NOT_FOUND_ETAG));
+    assertThat(blob.getETag(), isNull());
   }
 
   @Test
   public void testRetrieve() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -376,7 +408,7 @@ public final class StorageTests extends AbstractTest
   public void testRetrieveWithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -397,7 +429,7 @@ public final class StorageTests extends AbstractTest
   public void testRetrieveMulti() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
     blob.setContentsUTF("A short UTF-8 string value");
 
     blob.getContents();
@@ -434,11 +466,10 @@ public final class StorageTests extends AbstractTest
   public void testConflict() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
-    String eTag1 = blob.getETag();
 
     // Prepare the conflict.
     String value2 = "Different content";
@@ -453,11 +484,9 @@ public final class StorageTests extends AbstractTest
     }
     catch (ConflictException expected)
     {
-      assertThat(expected.getStatusCode(), is(409)); // Conflict.
-      assertThat(expected.getETag(), isNull());
+      assertThat(expected.getETag(), isNotNull());
+      assertThat(blob.getETag(), isNull());
     }
-
-    assertThat(blob.getETag(), is(eTag1));
 
     BlobInfo blobInfo = serverFixture.readServer(blob);
     assertThat(blobInfo.contents, is(value2));
@@ -468,11 +497,10 @@ public final class StorageTests extends AbstractTest
   public void testConflictWithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
-    String eTag1 = blob.getETag();
 
     // Prepare the conflict.
     serverFixture.writeServer(blob, "Different content");
@@ -486,23 +514,36 @@ public final class StorageTests extends AbstractTest
     }
     catch (ConflictException expected)
     {
-      assertThat(expected.getStatusCode(), is(409)); // Conflict.
-      assertThat(expected.getETag(), isNull());
+      assertThat(expected.getETag(), isNotNull());
+      assertThat(blob.getETag(), isNull());
     }
 
-    // It's okay for the cache to have the new value. The old ETag (see below) will cause cache refresh...
-    assertThat(clientFixture.readCache(blob.getKey(), null), is(value3));
+    try
+    {
+      clientFixture.readCache(blob.getKey(), null);
+      fail("FileNotFoundException expected");
+    }
+    catch (FileNotFoundException expected)
+    {
+      // SUCCESS
+    }
 
-    // Cache and blob ETags must still be in old state.
-    assertThat(clientFixture.readCache(blob.getKey(), ".properties"), containsString("etag=" + eTag1));
-    assertThat(blob.getETag(), is(eTag1));
+    try
+    {
+      clientFixture.readCache(blob.getKey(), ".properties");
+      fail("FileNotFoundException expected");
+    }
+    catch (FileNotFoundException expected)
+    {
+      // SUCCESS
+    }
   }
 
   @Test
   public void testConflictResolution1() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -511,7 +552,7 @@ public final class StorageTests extends AbstractTest
     String value2 = "Different content";
     String eTag2 = serverFixture.writeServer(blob, value2);
 
-    assertThat(blob.getContentsUTF(), is(value2));
+    assertThat(blob.getContentsUTF(), is(value2)); // Retrieve the latest server version.
     assertThat(blob.getETag(), is(eTag2));
 
     String value3 = "And now a non-conflicting string";
@@ -526,7 +567,7 @@ public final class StorageTests extends AbstractTest
   public void testConflictResolution1WithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -535,7 +576,7 @@ public final class StorageTests extends AbstractTest
     String value2 = "Different content";
     String eTag2 = serverFixture.writeServer(blob, value2);
 
-    assertThat(blob.getContentsUTF(), is(value2));
+    assertThat(blob.getContentsUTF(), is(value2)); // Retrieve the latest server version.
     assertThat(blob.getETag(), is(eTag2));
 
     String value3 = "And now a non-conflicting string";
@@ -548,7 +589,7 @@ public final class StorageTests extends AbstractTest
   public void testConflictResolution2() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -566,6 +607,8 @@ public final class StorageTests extends AbstractTest
     }
     catch (ConflictException expected)
     {
+      assertThat(expected.getETag(), isNotNull());
+      assertThat(blob.getETag(), isNull());
       blob.setETag(eTag2);
     }
 
@@ -580,7 +623,7 @@ public final class StorageTests extends AbstractTest
   public void testConflictResolution2WithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value1 = "A short UTF-8 string value";
     blob.setContentsUTF(value1);
@@ -598,27 +641,30 @@ public final class StorageTests extends AbstractTest
     }
     catch (ConflictException expected)
     {
+      assertThat(expected.getETag(), isNotNull());
+      assertThat(blob.getETag(), isNull());
+
       blob.setETag(eTag2); // Delete cache.
+    }
 
-      try
-      {
-        clientFixture.readCache(blob.getKey(), null);
-        fail("FileNotFoundException expected");
-      }
-      catch (FileNotFoundException expected2)
-      {
-        // SUCCESS
-      }
+    try
+    {
+      clientFixture.readCache(blob.getKey(), null);
+      fail("FileNotFoundException expected");
+    }
+    catch (FileNotFoundException expected)
+    {
+      // SUCCESS
+    }
 
-      try
-      {
-        clientFixture.readCache(blob.getKey(), ".properties");
-        fail("FileNotFoundException expected");
-      }
-      catch (FileNotFoundException expected2)
-      {
-        // SUCCESS
-      }
+    try
+    {
+      clientFixture.readCache(blob.getKey(), ".properties");
+      fail("FileNotFoundException expected");
+    }
+    catch (FileNotFoundException expected)
+    {
+      // SUCCESS
     }
 
     blob.setContentsUTF(value3);
@@ -630,7 +676,7 @@ public final class StorageTests extends AbstractTest
   public void testAuthenticateFailure() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     Credentials credentials = new Credentials("abcd", "wrong123");
     Credentials oldCredentials = FixedCredentialsProvider.setCredentials(credentials);
@@ -658,7 +704,7 @@ public final class StorageTests extends AbstractTest
   public void testReauthenticate() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -687,7 +733,7 @@ public final class StorageTests extends AbstractTest
   public void testDelete() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -713,7 +759,7 @@ public final class StorageTests extends AbstractTest
   public void testDeleteWithoutETag() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -740,7 +786,7 @@ public final class StorageTests extends AbstractTest
   public void testDeleteWithCache() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN, cache);
-    IBlob blob = storage.getBlob(makeKey());
+    IBlob blob = storage.getBlob(KEY);
 
     String value = "A short UTF-8 string value";
     blob.setContentsUTF(value);
@@ -773,7 +819,7 @@ public final class StorageTests extends AbstractTest
   public void testDeleteAll() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    assertThat(storage.getBlob(makeKey()).setContentsUTF("A short UTF-8 string value"), is(true));
+    assertThat(storage.getBlob(KEY).setContentsUTF("A short UTF-8 string value"), is(true));
 
     boolean deleted = storage.deleteAllBlobs();
     assertThat(deleted, is(true));
@@ -784,74 +830,20 @@ public final class StorageTests extends AbstractTest
   public void testDeleteNotExistent() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
-
-    try
-    {
-      blob.getContentsUTF();
-
-      // Do not fail if the blob exists.
-      // Just skip this test in the unlikely case.
-      return;
-    }
-    catch (NotFoundException expected)
-    {
-      // SUCCESS
-    }
+    IBlob blob = storage.getBlob(KEY);
 
     boolean deleted = blob.delete();
     assertThat(deleted, is(false));
   }
 
   @Test
-  public void testDeleteNotExistentWithInvalidETag() throws Exception
+  public void testDeleteNotExistentWithWrongETag() throws Exception
   {
     IStorage storage = factory.create(APPLICATION_TOKEN);
-    IBlob blob = storage.getBlob(makeKey());
-
-    try
-    {
-      blob.getContentsUTF();
-
-      // Do not fail if the blob exists.
-      // Just skip this test in the unlikely case.
-      return;
-    }
-    catch (NotFoundException expected)
-    {
-      // SUCCESS
-    }
-
-    blob.setETag(INVALID_ETAG);
+    IBlob blob = storage.getBlob(KEY);
+    blob.setETag(WRONG_ETAG);
 
     boolean deleted = blob.delete();
     assertThat(deleted, is(false));
-  }
-
-  private String makeKey()
-  {
-    if (serverFixture.hasLocalServer())
-    {
-      return KEY;
-    }
-
-    StringBuilder builder = new StringBuilder("T" + UUID.randomUUID().toString());
-    for (int i = 0; i < builder.length(); i++)
-    {
-      if (i == 25)
-      {
-        builder.setLength(25);
-        break;
-      }
-
-      char c = builder.charAt(i);
-      if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_'))
-      {
-        builder.replace(i, i + 1, "");
-        --i;
-      }
-    }
-
-    return builder.toString();
   }
 }

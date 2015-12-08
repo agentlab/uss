@@ -207,11 +207,6 @@ public class Session implements Headers, Codes
         }
 
         // Blob wasn't found.
-
-        // TODO This does not work because of bug 483775.
-        // properties.put(Blob.ETAG, NOT_FOUND_ETAG);
-
-        int xxx;
         properties.remove(Blob.ETAG);
 
         StatusLine statusLine = response.getStatusLine();
@@ -246,22 +241,37 @@ public class Session implements Headers, Codes
       @Override
       protected Boolean handleResponse(HttpResponse response, HttpEntity responseEntity) throws IOException
       {
-        int statusCode = getStatusCode("PUT", uri, response, OK, CREATED, CONFLICT);
         String eTag = getETag(response);
 
-        if (statusCode == CONFLICT)
+        try
         {
-          StatusLine statusLine = response.getStatusLine();
-          throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase(), eTag);
-        }
+          int statusCode = getStatusCode("PUT", uri, response, OK, CREATED, CONFLICT);
 
-        if (eTag == null)
+          if (statusCode == CONFLICT)
+          {
+            StatusLine statusLine = response.getStatusLine();
+            throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase(), eTag);
+          }
+
+          if (eTag == null)
+          {
+            throw new ProtocolException("PUT", uri, getProtocolVersion(response.getStatusLine()), BAD_RESPONSE, "Bad Response : No ETag");
+          }
+
+          properties.put(Blob.ETAG, eTag);
+          return statusCode == CREATED;
+        }
+        catch (ProtocolException ex)
         {
-          throw new ProtocolException("PUT", uri, getProtocolVersion(response.getStatusLine()), BAD_RESPONSE, "Bad Response : No ETag");
-        }
+          int xxx;
+          if (ex.getStatusCode() == BAD_REQUEST && ex.getReasonPhrase().contains("The resource already exist"))
+          {
+            StatusLine statusLine = response.getStatusLine();
+            throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), "The resource already exists.", eTag);
+          }
 
-        properties.put(Blob.ETAG, eTag);
-        return statusCode == CREATED;
+          throw ex;
+        }
       }
     }.send(credentialsProvider);
   }

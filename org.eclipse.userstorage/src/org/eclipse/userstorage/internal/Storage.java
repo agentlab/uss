@@ -405,7 +405,23 @@ public final class Storage implements IStorage
       in = new TeeInputStream(in, output);
     }
 
-    boolean created = service.updateBlob(credentialsProvider, applicationToken, key, properties, in);
+    boolean created;
+
+    try
+    {
+      created = service.updateBlob(credentialsProvider, applicationToken, key, properties, in);
+    }
+    catch (ConflictException ex)
+    {
+      properties.clear();
+
+      if (cache != null)
+      {
+        cache.internalDelete(applicationToken, key);
+      }
+
+      throw ex;
+    }
 
     if (cache != null)
     {

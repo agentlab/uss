@@ -57,6 +57,12 @@ public class ServerFixture extends Fixture
     if (REMOTE)
     {
       service = IStorageService.Registry.INSTANCE.addService("Eclipse.org (Staging)", StringUtil.newURI("https://api-staging.eclipse.org/"));
+
+      System.out.println();
+      System.out.println("### Reset Begin ###");
+      createFactory(applicationToken).create(applicationToken).deleteAllBlobs();
+      System.out.println("### Reset Done ###");
+      System.out.println();
     }
     else
     {

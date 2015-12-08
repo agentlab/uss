@@ -339,11 +339,22 @@ public final class USSServer
 
   protected void updateBlob(HttpServletRequest request, HttpServletResponse response, File blobFile, File etagFile, boolean exists) throws IOException
   {
+    String ifMatch = getETag(request, "If-Match");
+
     if (exists)
     {
       String etag = IOUtil.readUTF(etagFile);
-      String ifMatch = getETag(request, "If-Match");
-      if (ifMatch != null && !ifMatch.equals(etag))
+
+      if (StringUtil.isEmpty(ifMatch) || !ifMatch.equals(etag))
+      {
+        response.setHeader("ETag", "\"" + etag + "\"");
+        response.sendError(HttpServletResponse.SC_CONFLICT);
+        return;
+      }
+    }
+    else
+    {
+      if (!StringUtil.isEmpty(ifMatch))
       {
         response.sendError(HttpServletResponse.SC_CONFLICT);
         return;
