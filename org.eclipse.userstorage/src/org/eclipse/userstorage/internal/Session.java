@@ -409,7 +409,8 @@ public class Session implements Headers, Codes
               if (authenticated)
               {
                 // This means that the initial authenticate() call was skipped because we already have a session,
-                // but this session is no longer valid on the server. So reset() to force a full reauthentication.
+                // but this session is no longer valid on the server.
+                // So call reset() to force a full reauthentication with initial credentials.
                 reset();
                 continue;
               }
@@ -417,6 +418,7 @@ public class Session implements Headers, Codes
               if (--authenticationAttempts > 0)
               {
                 reauthentication = true;
+                credentials = null;
                 continue;
               }
             }
@@ -426,8 +428,6 @@ public class Session implements Headers, Codes
         }
         finally
         {
-          credentials = null;
-
           IOUtil.closeSilent(body);
           body = null;
         }
