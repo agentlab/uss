@@ -243,35 +243,21 @@ public class Session implements Headers, Codes
       {
         String eTag = getETag(response);
 
-        try
+        int statusCode = getStatusCode("PUT", uri, response, OK, CREATED, CONFLICT);
+
+        if (statusCode == CONFLICT)
         {
-          int statusCode = getStatusCode("PUT", uri, response, OK, CREATED, CONFLICT);
-
-          if (statusCode == CONFLICT)
-          {
-            StatusLine statusLine = response.getStatusLine();
-            throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase(), eTag);
-          }
-
-          if (eTag == null)
-          {
-            throw new ProtocolException("PUT", uri, getProtocolVersion(response.getStatusLine()), BAD_RESPONSE, "Bad Response : No ETag");
-          }
-
-          properties.put(Blob.ETAG, eTag);
-          return statusCode == CREATED;
+          StatusLine statusLine = response.getStatusLine();
+          throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), statusLine.getReasonPhrase(), eTag);
         }
-        catch (ProtocolException ex)
+
+        if (eTag == null)
         {
-          int xxx;
-          if (ex.getStatusCode() == BAD_REQUEST && ex.getReasonPhrase().contains("The resource already exist"))
-          {
-            StatusLine statusLine = response.getStatusLine();
-            throw new ConflictException("PUT", uri, getProtocolVersion(statusLine), "The resource already exists.", eTag);
-          }
-
-          throw ex;
+          throw new ProtocolException("PUT", uri, getProtocolVersion(response.getStatusLine()), BAD_RESPONSE, "Bad Response : No ETag");
         }
+
+        properties.put(Blob.ETAG, eTag);
+        return statusCode == CREATED;
       }
     }.send(credentialsProvider);
   }
@@ -333,11 +319,11 @@ public class Session implements Headers, Codes
     if (headers != null && headers.length != 0)
     {
       String eTag = headers[0].getValue();
-
-      // Remove the quotes.
-      eTag = eTag.substring(1, eTag.length() - 1);
-
-      return eTag;
+      if (!StringUtil.isEmpty(eTag))
+      {
+        // Remove the quotes.
+        return eTag.substring(1, eTag.length() - 1);
+      }
     }
 
     return null;

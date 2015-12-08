@@ -237,17 +237,8 @@ public final class StorageTests extends AbstractTest
     IStorage storage = factory.create(APPLICATION_TOKEN);
     IBlob blob = storage.getBlob(KEY);
     blob.setETag(WRONG_ETAG);
-
-    try
-    {
-      blob.setContentsUTF("Text 2"); // Update attempt 1
-      fail("ConflictException expected");
-    }
-    catch (ConflictException expected)
-    {
-      assertThat(expected.getETag(), isNull());
-      assertThat(blob.getETag(), isNull());
-    }
+    blob.setContentsUTF("Text 2"); // Update attempt 1
+    assertThat(blob.getETag(), isNotNull());
   }
 
   @Test

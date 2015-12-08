@@ -352,14 +352,6 @@ public final class USSServer
         return;
       }
     }
-    else
-    {
-      if (!StringUtil.isEmpty(ifMatch))
-      {
-        response.sendError(HttpServletResponse.SC_CONFLICT);
-        return;
-      }
-    }
 
     String etag = UUID.randomUUID().toString();
 
