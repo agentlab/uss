@@ -376,6 +376,7 @@ public class Session implements Headers, Codes
         }
       }
 
+      boolean authenticated = false;
       for (;;)
       {
         body = null;
@@ -383,7 +384,9 @@ public class Session implements Headers, Codes
 
         try
         {
+          authenticated = false;
           authenticate(credentials, credentialsProvider, reauthentication);
+          authenticated = true;
 
           Request request = prepareRequest();
           HttpResponse response = sendRequest(request, uri);
@@ -404,6 +407,14 @@ public class Session implements Headers, Codes
             if (protocolException.getStatusCode() == AUTHORIZATION_REQUIRED && --authenticationAttempts > 0)
             {
               reauthentication = true;
+
+              if (authenticated)
+              {
+                // This means that the initial authenticate() call was skipped because we already have a session,
+                // but this session is no longer valid on the server. So reset() to force a full reauthentication.
+                reset();
+              }
+
               continue;
             }
           }
