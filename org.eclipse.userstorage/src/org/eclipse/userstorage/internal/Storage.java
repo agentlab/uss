@@ -376,19 +376,24 @@ public final class Storage implements IStorage
           cacheStream = null; // Avoid closing the result stream in the finally block
           return cacheStreamResult;
         }
+      }
 
+      IOUtil.closeSilent(cacheStream);
+
+      if (cache != null)
+      {
         OutputStream output = cache.internalGetOutputStream(applicationToken, key, properties);
-        return new TeeInputStream(contents, output);
+        if (output != null)
+        {
+          return new TeeInputStream(contents, output);
+        }
       }
 
       return contents;
     }
     catch (NotFoundException ex)
     {
-      if (cacheStream != null)
-      {
-        IOUtil.closeSilent(cacheStream);
-      }
+      IOUtil.closeSilent(cacheStream);
 
       if (cache != null)
       {
