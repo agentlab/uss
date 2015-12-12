@@ -167,6 +167,12 @@ public class Session implements Headers, Codes
         if (useETag)
         {
           String eTag = properties.get(Blob.ETAG);
+
+          if (DEBUG)
+          {
+            System.out.println("Retrieving etag = " + eTag);
+          }
+
           if (!StringUtil.isEmpty(eTag))
           {
             request.setHeader(IF_NONE_MATCH, "\"" + eTag + "\"");
@@ -184,6 +190,11 @@ public class Session implements Headers, Codes
         String eTag = getETag(response);
         if (eTag != null)
         {
+          if (DEBUG)
+          {
+            System.out.println("Retrieved etag = " + eTag);
+          }
+
           properties.put(Blob.ETAG, eTag);
         }
 
@@ -228,6 +239,12 @@ public class Session implements Headers, Codes
         Request request = configureRequest(Request.Put(uri), uri);
 
         String eTag = properties.get(Blob.ETAG);
+
+        if (DEBUG)
+        {
+          System.out.println("Updating etag = " + eTag);
+        }
+
         if (!StringUtil.isEmpty(eTag))
         {
           request.setHeader(IF_MATCH, "\"" + eTag + "\"");
@@ -254,6 +271,11 @@ public class Session implements Headers, Codes
         if (eTag == null)
         {
           throw new ProtocolException("PUT", uri, getProtocolVersion(response.getStatusLine()), BAD_RESPONSE, "Bad Response : No ETag");
+        }
+
+        if (DEBUG)
+        {
+          System.out.println("Updated etag = " + eTag);
         }
 
         properties.put(Blob.ETAG, eTag);

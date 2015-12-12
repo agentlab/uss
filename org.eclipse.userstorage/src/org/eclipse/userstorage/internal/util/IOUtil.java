@@ -327,7 +327,8 @@ public final class IOUtil
       {
         out.write(b, off, n);
       }
-      else
+
+      if (n < len)
       {
         reachedEndOfFile();
       }
