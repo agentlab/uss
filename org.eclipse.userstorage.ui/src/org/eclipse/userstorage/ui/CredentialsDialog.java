@@ -75,14 +75,14 @@ public class CredentialsDialog extends AbstractDialog
   @Override
   protected Control createDialogArea(Composite parent)
   {
-    setTitle("Log-In");
+    setTitle("LogIn");
     if (reauthentication)
     {
       setErrorMessage("You could not be logged in to your " + service.getServiceLabel() + " account. Please try again.");
     }
     else
     {
-      setMessage("Enter the log-in information for your " + service.getServiceLabel() + " account.");
+      setMessage("Enter the login information for your " + service.getServiceLabel() + " account.");
     }
 
     initializeDialogUnits(parent);
