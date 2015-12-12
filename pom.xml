@@ -87,6 +87,7 @@ Eike Stepper - initial API and implementation
             -Xmx1g
             -Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider
             -Dorg.eclipse.userstorage.internal.Session.debug=true
+            -Dorg.eclipse.userstorage.quietSecureStorageException=true
           </argLine>
         </configuration>
       </plugin>
