@@ -36,6 +36,8 @@ public class StorageService implements IStorageService
 
   private static final String TERMS_OF_USE_AGREED_KEY = "termsOfUseAgreed";
 
+  private static final boolean QUIET_SECURE_STORAGE_EXCEPTION = Boolean.getBoolean("org.eclipse.userstorage.quietSecureStorageException");
+
   private final Semaphore authenticationSemaphore = new Semaphore(1);
 
   private final String serviceLabel;
@@ -144,7 +146,7 @@ public class StorageService implements IStorageService
     }
     catch (StorageException ex)
     {
-      Activator.log(ex);
+      logSecureStorageProblem(ex);
     }
 
     return null;
@@ -182,7 +184,7 @@ public class StorageService implements IStorageService
     }
     catch (Exception ex)
     {
-      Activator.log(ex);
+      logSecureStorageProblem(ex);
     }
     finally
     {
@@ -207,9 +209,9 @@ public class StorageService implements IStorageService
         }
       }
     }
-    catch (StorageException ex)
+    catch (Exception ex)
     {
-      Activator.log(ex);
+      logSecureStorageProblem(ex);
     }
 
     return false;
@@ -236,7 +238,7 @@ public class StorageService implements IStorageService
     }
     catch (Exception ex)
     {
-      Activator.log(ex);
+      logSecureStorageProblem(ex);
     }
     finally
     {
@@ -403,6 +405,16 @@ public class StorageService implements IStorageService
   private Session openSession()
   {
     return new Session(this);
+  }
+
+  private static void logSecureStorageProblem(Exception ex)
+  {
+    if (QUIET_SECURE_STORAGE_EXCEPTION && ex instanceof StorageException)
+    {
+      return;
+    }
+
+    Activator.log(ex);
   }
 
   /**
