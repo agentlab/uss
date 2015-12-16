@@ -37,7 +37,7 @@ import java.util.concurrent.Callable;
  */
 public class CredentialsComposite extends Composite
 {
-  public static final Point INITIAL_SIZE = new Point(500, 350);
+  public static final Point INITIAL_SIZE = new Point(600, 500);
 
   private final Callable<URI> createAccountURIProvider = new Callable<URI>()
   {
@@ -72,7 +72,7 @@ public class CredentialsComposite extends Composite
     public void modifyText(ModifyEvent e)
     {
       credentials = new Credentials(usernameText.getText(), passwordText.getText());
-      validate();
+      updateEnablement();
     }
   };
 
@@ -82,14 +82,6 @@ public class CredentialsComposite extends Composite
 
   private Credentials credentials;
 
-  private boolean termsOfUseAgreed;
-
-  private Button termsOfUseButton;
-
-  private MultiLink termsOfUseMultiLink;
-
-  private Label spacer;
-
   private Label usernameLabel;
 
   private Text usernameText;
@@ -98,11 +90,23 @@ public class CredentialsComposite extends Composite
 
   private Text passwordText;
 
+  private Label horizontalSpacer;
+
+  private boolean termsOfUseAgreed;
+
+  private Button termsOfUseButton;
+
+  private MultiLink termsOfUseMultiLink;
+
+  private Label verticalSpacer;
+
   private Link createAccountLink;
 
   private Link editAccountLink;
 
   private Link recoverPasswordLink;
+
+  private boolean valid;
 
   public CredentialsComposite(Composite parent, int style, int marginWidth, int marginHeight, boolean showServiceCredentials)
   {
@@ -137,15 +141,18 @@ public class CredentialsComposite extends Composite
       {
         int columns = getGridColumns();
 
+        horizontalSpacer.setVisible(true);
+        horizontalSpacer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+
         termsOfUseButton.setVisible(true);
         termsOfUseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
-        termsOfUseMultiLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, columns - 1, 1));
+        termsOfUseMultiLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, columns - 2, 1));
         termsOfUseMultiLink.setVisible(true);
         termsOfUseMultiLink.setText(termsOfUse);
 
-        spacer.setVisible(true);
-        spacer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, columns, 1));
+        verticalSpacer.setVisible(true);
+        verticalSpacer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, columns, 1));
       }
 
       if (showServiceCredentials)
@@ -203,12 +210,18 @@ public class CredentialsComposite extends Composite
 
   public int getGridColumns()
   {
-    return 2;
+    return 3;
+  }
+
+  public boolean isValid()
+  {
+    return valid;
   }
 
   @Override
   public void setEnabled(boolean enabled)
   {
+    super.setEnabled(true);
     usernameLabel.setEnabled(enabled);
     usernameText.setEnabled(enabled);
     passwordLabel.setEnabled(enabled);
@@ -220,6 +233,19 @@ public class CredentialsComposite extends Composite
 
   protected void createUI(Composite parent, int columns)
   {
+    usernameLabel = new Label(parent, SWT.NONE);
+    usernameLabel.setText("User name:");
+    usernameText = new Text(parent, SWT.BORDER);
+    usernameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns - 1, 1));
+    usernameText.addModifyListener(modifyListener);
+
+    passwordLabel = new Label(parent, SWT.NONE);
+    passwordLabel.setText("Password:");
+    passwordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
+    passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns - 1, 1));
+    passwordText.addModifyListener(modifyListener);
+
+    horizontalSpacer = new Label(parent, SWT.NONE);
     termsOfUseButton = new Button(parent, SWT.CHECK);
     termsOfUseButton.addSelectionListener(new SelectionAdapter()
     {
@@ -228,35 +254,47 @@ public class CredentialsComposite extends Composite
       {
         termsOfUseAgreed = termsOfUseButton.getSelection();
         updateEnablement();
-        validate();
       }
     });
 
     termsOfUseMultiLink = new MultiLink.ForSystemBrowser(parent, SWT.WRAP);
-    spacer = new Label(parent, SWT.NONE);
-    hideTermsOfUse();
-
-    usernameLabel = new Label(parent, SWT.NONE);
-    usernameLabel.setText("User name:");
-
-    usernameText = new Text(parent, SWT.BORDER);
-    usernameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns - 1, 1));
-    usernameText.addModifyListener(modifyListener);
-
-    passwordLabel = new Label(parent, SWT.NONE);
-    passwordLabel.setText("Password:");
-
-    passwordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
-    passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns - 1, 1));
-    passwordText.addModifyListener(modifyListener);
+    verticalSpacer = new Label(parent, SWT.NONE);
 
     createAccountLink = createLink(parent, columns, "Create an account", createAccountURIProvider);
     editAccountLink = createLink(parent, columns, "Edit your account", editAccountURIProvider);
     recoverPasswordLink = createLink(parent, columns, "Recover your password", recoverPasswordURIProvider);
+
+    hideTermsOfUse();
   }
 
   protected void validate()
   {
+  }
+
+  private void updateEnablement()
+  {
+    boolean enabled = isEnabled() && service != null;
+
+    enableLink(createAccountLink, createAccountURIProvider, enabled);
+    enableLink(editAccountLink, editAccountURIProvider, enabled);
+    enableLink(recoverPasswordLink, recoverPasswordURIProvider, enabled);
+
+    if (enabled)
+    {
+      String termsOfUseLink = service.getTermsOfUseLink();
+      if (!StringUtil.isEmpty(termsOfUseLink))
+      {
+        if (!termsOfUseAgreed)
+        {
+          valid = false;
+          validate();
+          return;
+        }
+      }
+    }
+
+    valid = enabled;
+    validate();
   }
 
   private Link createLink(Composite parent, int columns, final String label, final Callable<URI> uriProvider)
@@ -301,47 +339,20 @@ public class CredentialsComposite extends Composite
     }
   }
 
-  private void updateEnablement()
-  {
-    boolean enabled = isValid();
-
-    usernameLabel.setEnabled(enabled);
-    usernameText.setEnabled(enabled);
-    passwordLabel.setEnabled(enabled);
-    passwordText.setEnabled(enabled);
-
-    enableLink(createAccountLink, createAccountURIProvider, enabled);
-    enableLink(editAccountLink, editAccountURIProvider, enabled);
-    enableLink(recoverPasswordLink, recoverPasswordURIProvider, enabled);
-  }
-
-  private boolean isValid()
-  {
-    if (service == null)
-    {
-      return false;
-    }
-
-    String termsOfUseLink = service.getTermsOfUseLink();
-    if (StringUtil.isEmpty(termsOfUseLink))
-    {
-      return true;
-    }
-
-    return termsOfUseAgreed;
-  }
-
   private void hideTermsOfUse()
   {
+    horizontalSpacer.setVisible(false);
+    horizontalSpacer.setLayoutData(emptyGridData(1, 1));
+
     termsOfUseButton.setVisible(false);
     termsOfUseButton.setLayoutData(emptyGridData(1, 1));
 
     termsOfUseMultiLink.setVisible(false);
-    termsOfUseMultiLink.setLayoutData(emptyGridData(getGridColumns() - 1, 1));
+    termsOfUseMultiLink.setLayoutData(emptyGridData(getGridColumns() - 2, 1));
     termsOfUseMultiLink.setText(StringUtil.EMPTY);
 
-    spacer.setVisible(false);
-    spacer.setLayoutData(emptyGridData(getGridColumns(), 1));
+    verticalSpacer.setVisible(false);
+    verticalSpacer.setLayoutData(emptyGridData(getGridColumns(), 1));
   }
 
   private static GridData emptyGridData(int horizontalSpan, int verticalSpan)

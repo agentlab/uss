@@ -15,6 +15,7 @@ import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.ui.AbstractDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -98,7 +99,13 @@ public class AddServiceDialog extends AbstractDialog implements ModifyListener
   }
 
   @Override
-  protected Point getInitialSize()
+  protected IDialogSettings getPluginSettings()
+  {
+    return Activator.getDefault().getDialogSettings();
+  }
+
+  @Override
+  protected Point getMinimumSize()
   {
     return new Point(600, 350);
   }

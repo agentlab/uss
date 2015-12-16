@@ -8,17 +8,18 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.userstorage.ui;
+package org.eclipse.userstorage.ui.internal;
 
 import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.internal.StorageService;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.spi.Credentials;
-import org.eclipse.userstorage.ui.internal.CredentialsComposite;
+import org.eclipse.userstorage.ui.AbstractDialog;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -58,9 +59,9 @@ public class CredentialsDialog extends AbstractDialog
   }
 
   @Override
-  protected Point getInitialSize()
+  protected IDialogSettings getPluginSettings()
   {
-    return CredentialsComposite.INITIAL_SIZE;
+    return Activator.getDefault().getDialogSettings();
   }
 
   @Override
@@ -68,14 +69,21 @@ public class CredentialsDialog extends AbstractDialog
   {
     super.configureShell(newShell);
 
-    String shellText = AbstractDialog.createShellText(service);
+    String shellText = "User Storage Service";
+
+    String authority = service.getServiceURI().getAuthority();
+    if (authority != null && authority.endsWith(".eclipse.org"))
+    {
+      shellText = "Eclipse " + shellText;
+    }
+
     newShell.setText(shellText);
   }
 
   @Override
   protected Control createDialogArea(Composite parent)
   {
-    setTitle("LogIn");
+    setTitle("Login");
     if (reauthentication)
     {
       setErrorMessage("You could not be logged in to your " + service.getServiceLabel() + " account. Please try again.");
@@ -115,6 +123,7 @@ public class CredentialsDialog extends AbstractDialog
   @Override
   protected void okPressed()
   {
+    ((StorageService)service).setTermsOfUseAgreed(credentialsComposite.isTermsOfUseAgreed());
     credentials = credentialsComposite.getCredentials();
     super.okPressed();
   }
@@ -154,7 +163,7 @@ public class CredentialsDialog extends AbstractDialog
   {
     if (okButton != null)
     {
-      boolean valid = isPageValid();
+      boolean valid = credentialsComposite.isValid();
       okButton.setEnabled(valid);
     }
   }
