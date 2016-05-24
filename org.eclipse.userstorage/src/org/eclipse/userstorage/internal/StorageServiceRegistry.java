@@ -315,7 +315,7 @@ public final class StorageServiceRegistry implements IStorageService.Registry
             URI editAccountURI = StringUtil.newURI(getValue(serviceURI, EDIT_ACCOUNT_URI, "https://dev.eclipse.org/site_login/myaccount.php"));
             URI recoverPasswordURI = StringUtil.newURI(getValue(serviceURI, RECOVER_PASSWORD_URI, "https://dev.eclipse.org/site_login/password_recovery.php"));
             String termsOfUseLink = getValue(serviceURI, TERMS_OF_USE_LINK,
-                "I agree the use of this beta service is governed by the Eclipse Foundation <a href='http://www.eclipse.org/legal/services/termsofuse.php'>Terms of Use</a> and the Eclipse Foundation <a href='http://www.eclipse.org/legal/services/privacy.php'>Privacy Policy</a>.");
+                "I agree the use of this service is governed by the Eclipse Foundation <a href='http://www.eclipse.org/legal/services/termsofuse.php'>Terms of Use</a> and the Eclipse Foundation <a href='http://www.eclipse.org/legal/services/privacy.php'>Privacy Policy</a>.");
 
             StorageService eclipseStorage = new StorageService(serviceLabel, serviceURI, createAccountURI, editAccountURI, recoverPasswordURI, termsOfUseLink);
             services.put(eclipseStorage.getServiceURI(), eclipseStorage);
