@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" modified="modify" name="org.eclipse.userstorage.service.host.UserStorageComponent">
+   <implementation class="org.eclipse.userstorage.service.host.UserStorageComponent"/>
+   <service>
+      <provide interface="org.eclipse.userstorage.service.IUserStorageService"/>
+      <provide interface="org.osgi.service.cm.ManagedService"/>
+   </service>
+   <property name="service.exported.interfaces" type="String" value="*"/>
+   <property name="service.exported.configs" type="String" value="ecf.jaxrs.jersey.server"/>
+   <property name="ecf.jaxrs.jersey.server.urlContext" type="String" value="http://localhost:8080"/>
+   <property name="ecf.jaxrs.jersey.server.alias" type="String" value="/uss"/>
+   <property name="service.pid" type="String" value="org.eclipse.userstorage.service.host.UserStorageComponent"/>
+</scr:component>
