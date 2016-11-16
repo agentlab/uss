@@ -274,9 +274,9 @@
     <description></description>
   </setupTask>
   <stream name="master"
-      label="Master"/>
+      label="master"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='com.github']"/>
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='ru.agentlab']"/>
   <description>User Storage Service provides cool stuff.</description>
 </setup:Project>
