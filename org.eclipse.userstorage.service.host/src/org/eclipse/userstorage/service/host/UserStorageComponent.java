@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.ws.rs.DELETE;
@@ -21,12 +23,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
+import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.service.IUserStorageService;
 import org.eclipse.userstorage.tests.util.USSServer;
 import org.osgi.service.cm.ConfigurationException;
@@ -36,8 +41,6 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author admin
@@ -57,25 +60,43 @@ public class UserStorageComponent
     private String user;
     private String password;
     private String create;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Set<String> applicationTokens = new HashSet<>();
 
-    private final static File applicationFolder =
-        new File(System.getProperty("java.io.tmpdir"),
-            "uss-server/eclipse_test_123456789");
+    private final File applicationFolder =
+        new File(System.getProperty("java.io.tmpdir"), "uss-server/eclipse_test_123456789");
+    private final static String userApp = "eclipse_test_123456789";
 
     @PUT
     @Path("/{token}/{filename}")
     @Override
-    public void updateBlob(@PathParam("token") String token, @PathParam("filename") String filename, InputStream blob)
+    public Response updateBlob(@PathParam("token") String token, @PathParam("filename") String filename,
+        InputStream blob, @Context HttpHeaders headers)
         throws IOException {
 
-        Map<String, Object> value = JSONUtil.parse(blob, "value");
+        if (!this.isExistAppToken(token))
+        {
+            return Response.status(404).build();
+        }
+
+        File etagFile = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
+        String ifMatch = getEtag(headers, "If-Match");
+
+        if (etagFile.exists())
+        {
+            String etag = IOUtil.readUTF(etagFile);
+
+            if (StringUtil.isEmpty(ifMatch) || !ifMatch.equals(etag))
+            {
+                return Response.status(409).header("ETag", "\"" + etag + "\"").build();
+            }
+        }
 
         String etag = UUID.randomUUID().toString();
 
         File blobFile = new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
         IOUtil.mkdirs(blobFile.getParentFile());
         FileOutputStream out = new FileOutputStream(blobFile);
+        Map<String, Object> value = JSONUtil.parse(blob, "value");
 
         try
         {
@@ -87,27 +108,70 @@ public class UserStorageComponent
             IOUtil.close(out);
         }
 
+        IOUtil.writeUTF(etagFile, etag);
+
+        return Response.status(etagFile.exists() ? 200 : 201).header("Etag", "\"" + etag + "\"").build();
+
     }
 
     @DELETE
     @Path("/{token}/{filename}")
     @Override
-    public void deleteBlob(@PathParam("token") String token, @PathParam("filename") String filename) {
-        File fblob = new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
-        File fetag = new File(applicationFolder + "/" + token + "/" + filename + USSServer.ETAG_EXTENSION);
+    public Response deleteBlob(@PathParam("token") String token, @PathParam("filename") String filename,
+        @Context HttpHeaders headers) {
 
+        File etagFile = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
 
-        IOUtil.delete(fblob);
-        IOUtil.delete(fetag);
+        if (!this.isExistAppToken(token) || !etagFile.exists())
+        {
+            return Response.status(404).build();
+        }
+
+        String etag = IOUtil.readUTF(etagFile);
+        String ifMatch = getEtag(headers, "If-Match");
+        if (ifMatch != null && !ifMatch.equals(etag))
+        {
+            return Response.status(494).build();
+        }
+
+        File blobFile = getUserFile(userApp, token, filename, USSServer.BLOB_EXTENSION);
+//        new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
+//        File fetag = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
+//        new File(applicationFolder + "/" + token + "/" + filename + USSServer.ETAG_EXTENSION);
+
+        IOUtil.delete(blobFile);
+        IOUtil.delete(etagFile);
+
+        return Response.noContent().build();
     }
 
     @GET
     @Produces("application/json")
     @Path("/{token}/{filename}")
     @Override
-    public Response getBlob(@PathParam("token") String token, @PathParam("filename") String filename)
+    public Response getBlob(@PathParam("token") String token, @PathParam("filename") String filename,
+        @Context HttpHeaders headers)
         throws IOException {
-        File blobFile = new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
+
+        File etagFile = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
+
+        boolean a = this.isExistAppToken(token);
+        boolean b = etagFile.exists();
+
+        if (!this.isExistAppToken(token) || !etagFile.exists())
+        {
+            return Response.status(404).build();
+        }
+
+        String etag = IOUtil.readUTF(etagFile);
+        String ifNoneMatch = getEtag(headers, "If-None-Match");
+        if (ifNoneMatch != null && ifNoneMatch.equals(etag))
+        {
+            return Response.status(304).build();
+        }
+
+        File blobFile = getUserFile(userApp, token, filename, USSServer.BLOB_EXTENSION);
+//            new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
 
         InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile)));
 
@@ -121,8 +185,32 @@ public class UserStorageComponent
                 }
             };
 
-            return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).build();
+        return Response.ok().header("Etag", "\"" + etag + "\"").entity(stream).type(MediaType.APPLICATION_JSON).build();
+    }
 
+    private Set<String> getApplicationTokens() {
+        return this.applicationTokens;
+    }
+
+    private boolean isExistAppToken(String appToken) {
+        return this.applicationTokens.contains(appToken);
+    }
+
+    private File getUserFile(String user, String applicationToken, String key, String extension) {
+        return new File(getApplicationFolder(user, applicationToken), key + StringUtil.safe(extension));
+    }
+
+    private File getApplicationFolder(String user, String applicationFolder) {
+        return new File(new File(this.applicationFolder, user), applicationFolder);
+    }
+
+    private String getEtag(HttpHeaders headers, String headerName) {
+        String eTag = headers.getRequestHeader(headerName).get(0);
+        if (eTag != null)
+        {
+            eTag = eTag.substring(1, eTag.length() - 1);
+        }
+        return eTag;
     }
 
     @Override
@@ -140,7 +228,9 @@ public class UserStorageComponent
         user = (String)properties.get("user");
         password = (String)properties.get("password");
         create = (String)properties.get("create");
+        this.getApplicationTokens().add("pDKTqBfDuNxlAKydhEwxBZPxa4q");
         System.out.println("USS service started");
+
     }
 
     @Deactivate

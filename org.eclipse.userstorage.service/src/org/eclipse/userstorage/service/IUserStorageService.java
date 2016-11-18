@@ -12,6 +12,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 @Path("/api/blob")
@@ -19,7 +21,8 @@ public interface IUserStorageService {
 
     @DELETE
     @Path("/{token}/{filename}")
-    public void deleteBlob(@PathParam("token") String token, @PathParam("filename") String filename);
+    public Response deleteBlob(@PathParam("token") String token, @PathParam("filename") String filename,
+        @Context HttpHeaders headers);
 //
 //    public OutputStream retrieveBlob(BlobServiceModel blob) throws IOException;
 //
@@ -28,13 +31,15 @@ public interface IUserStorageService {
 
     @PUT
     @Path("/{token}/{filename}")
-    public void updateBlob(@PathParam("token") String token, @PathParam("filename") String filename, InputStream blob)
+    public Response updateBlob(@PathParam("token") String token, @PathParam("filename") String filename,
+        InputStream blob, @Context HttpHeaders headers)
         throws IOException;
 
     @GET
     @Produces("application/json")
     @Path("/{token}/{filename}")
-    public Response getBlob(@PathParam("token") String token, @PathParam("filename") String filename)
+    public Response getBlob(@PathParam("token") String token, @PathParam("filename") String filename,
+        @Context HttpHeaders headers)
         throws IOException;
 
 }
