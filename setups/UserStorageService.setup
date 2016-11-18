@@ -238,7 +238,7 @@
         <repository
             url="http://download.eclipse.org/releases/neon/"/>
         <repository
-            url="https://eclipseguru.github.io/missing-swt-fragments/"/>
+            url="http://agentlab.ru/p2/orbit/missing-swt-fragments/"/>
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         <repository
