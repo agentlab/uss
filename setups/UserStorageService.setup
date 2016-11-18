@@ -248,9 +248,9 @@
         <repository
             url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.3.10.v20160621"/>
         <repository
-            url="http://10.72.103.217:8090/p2/che/"/>
+            url="http://agentlab.ru/pd/p2/che/"/>
         <repository
-            url="http://10.72.103.217:8090/p2/cloud-jaxrsproviders"/>
+            url="http://agentlab.ru/pd/p2/cloud-jaxrsproviders"/>
       </repositoryList>
     </targlet>
   </setupTask>
