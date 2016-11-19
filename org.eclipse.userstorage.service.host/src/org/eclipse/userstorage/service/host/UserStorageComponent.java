@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -63,7 +64,7 @@ public class UserStorageComponent
     private final Set<String> applicationTokens = new HashSet<>();
 
     private final File applicationFolder =
-        new File(System.getProperty("java.io.tmpdir"), "uss-server/eclipse_test_123456789");
+        new File(System.getProperty("java.io.tmpdir"), "uss-server");
     private final static String userApp = "eclipse_test_123456789";
 
     @PUT
@@ -93,7 +94,7 @@ public class UserStorageComponent
 
         String etag = UUID.randomUUID().toString();
 
-        File blobFile = new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
+        File blobFile = getUserFile(userApp, token, filename, USSServer.BLOB_EXTENSION);
         IOUtil.mkdirs(blobFile.getParentFile());
         FileOutputStream out = new FileOutputStream(blobFile);
         Map<String, Object> value = JSONUtil.parse(blob, "value");
@@ -135,9 +136,6 @@ public class UserStorageComponent
         }
 
         File blobFile = getUserFile(userApp, token, filename, USSServer.BLOB_EXTENSION);
-//        new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
-//        File fetag = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
-//        new File(applicationFolder + "/" + token + "/" + filename + USSServer.ETAG_EXTENSION);
 
         IOUtil.delete(blobFile);
         IOUtil.delete(etagFile);
@@ -154,9 +152,6 @@ public class UserStorageComponent
         throws IOException {
 
         File etagFile = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
-
-        boolean a = this.isExistAppToken(token);
-        boolean b = etagFile.exists();
 
         if (!this.isExistAppToken(token) || !etagFile.exists())
         {
@@ -205,7 +200,8 @@ public class UserStorageComponent
     }
 
     private String getEtag(HttpHeaders headers, String headerName) {
-        String eTag = headers.getRequestHeader(headerName).get(0);
+        List<String> h = headers.getRequestHeader(headerName);
+        String eTag = h == null ? null : h.get(0);
         if (eTag != null)
         {
             eTag = eTag.substring(1, eTag.length() - 1);
