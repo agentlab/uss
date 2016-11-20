@@ -166,7 +166,6 @@ public class UserStorageComponent
         }
 
         File blobFile = getUserFile(userApp, token, filename, USSServer.BLOB_EXTENSION);
-//            new File(applicationFolder + "/" + token + "/" + filename + USSServer.BLOB_EXTENSION);
 
         InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile)));
 
@@ -218,7 +217,6 @@ public class UserStorageComponent
     @Activate
     public void activate(ComponentContext context) throws IOException {
         Dictionary<String, Object> properties = context.getProperties();
-        //properties.put("database.id", "wewe");
         id = (String)properties.get("database.id");
         database = (String)properties.get("database");
         user = (String)properties.get("user");
