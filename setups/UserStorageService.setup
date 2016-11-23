@@ -36,14 +36,6 @@
     <description>Initialize JDT's package explorer to show working sets as its root objects</description>
   </setupTask>
   <setupTask
-      xsi:type="setup:VariableTask"
-      name="eclipse.target.platform"
-      defaultValue="Neon"
-      storageURI="scope://Workspace"
-      label="Target Platform">
-    <description>Choose the compatibility level of the target platform</description>
-  </setupTask>
-  <setupTask
       xsi:type="setup.p2:P2Task">
     <requirement
         name="org.eclipse.jdt.feature.group"/>
@@ -100,127 +92,6 @@
         </detail>
       </annotation>
       <requirement
-          name="com.google.guava"/>
-      <requirement
-          name="ch.qos.logback.classic"/>
-      <requirement
-          name="ch.qos.logback.core"/>
-      <requirement
-          name="ch.qos.logback.slf4j"/>
-      <requirement
-          name="com.fasterxml.jackson.core.jackson-annotations"/>
-      <requirement
-          name="com.fasterxml.jackson.core.jackson-core"/>
-      <requirement
-          name="com.fasterxml.jackson.core.jackson-databind"/>
-      <requirement
-          name="com.fasterxml.jackson.datatype.jackson-datatype-guava"/>
-      <requirement
-          name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base"/>
-      <requirement
-          name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider"/>
-      <requirement
-          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
-      <requirement
-          name="javassist"/>
-      <requirement
-          name="javax.annotation"/>
-      <requirement
-          name="javax.inject"/>
-      <requirement
-          name="javax.persistence"/>
-      <requirement
-          name="javax.validation"/>
-      <requirement
-          name="javax.ws.rs"
-          versionRange="[2.0.1,2.1.0)"/>
-      <requirement
-          name="org.aopalliance"/>
-      <requirement
-          name="org.apache.httpcomponents.httpclient.source"/>
-      <requirement
-          name="org.apache.httpcomponents.httpcore.source"/>
-      <requirement
-          name="org.eclipse.core.runtime.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.core.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.provider.jaxrs.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.provider.jaxrs.client.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.equinox.http.jetty"/>
-      <requirement
-          name="org.eclipse.equinox.http.servlet"/>
-      <requirement
-          name="org.eclipse.equinox.sdk.feature.group"/>
-      <requirement
-          name="org.eclipse.equinox.util"/>
-      <requirement
-          name="org.eclipse.jetty.continuation"/>
-      <requirement
-          name="org.eclipse.jetty.http"/>
-      <requirement
-          name="org.eclipse.jetty.io"/>
-      <requirement
-          name="org.eclipse.jetty.security"/>
-      <requirement
-          name="org.eclipse.jetty.server"/>
-      <requirement
-          name="org.eclipse.jetty.servlet"/>
-      <requirement
-          name="org.eclipse.jetty.util"/>
-      <requirement
-          name="org.eclipse.jetty.websocket.api"/>
-      <requirement
-          name="org.eclipse.jetty.websocket.client"/>
-      <requirement
-          name="org.eclipse.jetty.websocket.common"/>
-      <requirement
-          name="org.eclipse.jetty.websocket.server"/>
-      <requirement
-          name="org.eclipse.jetty.websocket.servlet"/>
-      <requirement
-          name="org.eclipse.sdk.feature.group"/>
-      <requirement
-          name="org.eclipse.swt.dummyfragments.feature.group"/>
-      <requirement
-          name="org.glassfish.hk2.api"/>
-      <requirement
-          name="org.glassfish.hk2.locator"/>
-      <requirement
-          name="org.glassfish.hk2.osgi-resource-locator"/>
-      <requirement
-          name="org.glassfish.hk2.utils"/>
-      <requirement
-          name="org.glassfish.jersey.containers.jersey-container-servlet"/>
-      <requirement
-          name="org.glassfish.jersey.containers.jersey-container-servlet-core"/>
-      <requirement
-          name="org.glassfish.jersey.core.jersey-client"/>
-      <requirement
-          name="org.glassfish.jersey.core.jersey-common"/>
-      <requirement
-          name="org.glassfish.jersey.core.jersey-server"/>
-      <requirement
-          name="org.glassfish.jersey.media.jersey-media-jaxb"/>
-      <requirement
-          name="org.glassfish.jersey.media.jersey-media-json-jackson"/>
-      <requirement
-          name="org.junit"/>
-      <requirement
-          name="org.objectweb.asm"/>
-      <requirement
-          name="org.slf4j.api"/>
-      <requirement
-          name="org.slf4j.ext"/>
-      <requirement
-          name="org.slf4j.jcl"/>
-      <requirement
-          name="org.slf4j.jul"/>
-      <requirement
-          name="org.slf4j.log4j"/>
-      <requirement
           name="*"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}">
@@ -231,27 +102,6 @@
               filePattern="prototype.txt"/>
         </predicate>
       </sourceLocator>
-      <repositoryList
-          name="Neon">
-        <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6"/>
-        <repository
-            url="http://download.eclipse.org/releases/neon/"/>
-        <repository
-            url="http://agentlab.ru/p2/orbit/missing-swt-fragments/"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
-        <repository
-            url="http://download.eclipse.org/rt/ecf/latest/site.p2"/>
-        <repository
-            url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.3.10.v20160621"/>
-        <repository
-            url="http://agentlab.ru/pd/p2/che/"/>
-        <repository
-            url="http://agentlab.ru/pd/p2/cloud-jaxrsproviders"/>
-      </repositoryList>
     </targlet>
   </setupTask>
   <setupTask
@@ -276,7 +126,7 @@
   <stream name="master"
       label="master"/>
   <logicalProjectContainer
-      xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='ru.agentlab']"/>
+      xsi:type="setup:Project"
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='ru.agentlab']/@projects[name='osgi']/@projects[name='web']/@projects[name='jaxrs']"/>
   <description>User Storage Service provides cool stuff.</description>
 </setup:Project>
