@@ -93,6 +93,8 @@
       </annotation>
       <requirement
           name="*"/>
+      <requirement
+          name="org.eclipse.rcp.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}">
         <predicate
@@ -119,7 +121,6 @@
   </setupTask>
   <setupTask
       xsi:type="projects:ProjectsBuildTask"
-      id=""
       refresh="true">
     <description></description>
   </setupTask>

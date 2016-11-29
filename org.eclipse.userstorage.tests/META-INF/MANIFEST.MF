@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.jetty.io;bundle-version="[9.0.0,10.0.0)";visibility:=reexport,
  org.eclipse.jetty.util;bundle-version="[9.0.0,10.0.0)";visibility:=reexport,
  javax.servlet;bundle-version="[3.0.0,4.0.0)";visibility:=reexport,
- org.junit;bundle-version="[4.11.0,5.0.0)";visibility:=reexport
+ org.junit;bundle-version="[4.11.0,5.0.0)";visibility:=reexport,
+ org.hamcrest.core;bundle-version="1.3.0"
 Export-Package: org.eclipse.userstorage.tests;version="1.0.0";x-internal:=true,
  org.eclipse.userstorage.tests.util;version="1.0.0";x-internal:=true
 Eclipse-RegisterBuddy: org.eclipse.userstorage
