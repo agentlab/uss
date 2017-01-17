@@ -95,6 +95,11 @@
           name="*"/>
       <requirement
           name="org.eclipse.rcp.feature.group"/>
+      <requirement
+          name="epp.package.java"/>
+      <requirement
+          name="org.apache.httpcomponents.httpclient"
+          versionRange="4.3.6"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}">
         <predicate
@@ -104,6 +109,11 @@
               filePattern="prototype.txt"/>
         </predicate>
       </sourceLocator>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://download.eclipse.org/releases/neon"/>
+      </repositoryList>
     </targlet>
   </setupTask>
   <setupTask
