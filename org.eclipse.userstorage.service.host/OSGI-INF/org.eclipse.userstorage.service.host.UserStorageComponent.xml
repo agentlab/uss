@@ -3,7 +3,7 @@
    <implementation class="org.eclipse.userstorage.service.host.UserStorageComponent"/>
    <service>
       <provide interface="org.osgi.service.cm.ManagedService"/>
-      <provide interface="org.eclipse.userstorage.service.IUserStorageService"/>
+      <provide interface="org.eclipse.userstorage.service.IApiBlobService"/>
    </service>
    <property name="service.exported.interfaces" type="String" value="*"/>
    <property name="service.exported.configs" type="String" value="ecf.jaxrs.jersey.server"/>
