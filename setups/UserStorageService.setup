@@ -98,8 +98,9 @@
       <requirement
           name="epp.package.java"/>
       <requirement
-          name="org.apache.httpcomponents.httpclient"
-          versionRange="4.3.6"/>
+          name="org.apache.httpcomponents.httpclient"/>
+      <requirement
+          name="org.apache.httpcomponents.httpcore"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}">
         <predicate
@@ -113,6 +114,8 @@
           name="Neon">
         <repository
             url="http://download.eclipse.org/releases/neon"/>
+        <repository
+            url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
       </repositoryList>
     </targlet>
   </setupTask>
