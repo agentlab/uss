@@ -69,7 +69,7 @@ public class UserStorageComponent
 
     @Override
     public Response put(String urltoken, String urlfilename, InputStream blob, String headerIfMatch,
-        String headerxCsrfToken) throws IOException
+        String headerxCsrfToken, String cookieSESSION) throws IOException
     {
         if (!this.isExistAppToken(urltoken))
         {
@@ -112,7 +112,8 @@ public class UserStorageComponent
     }
 
     @Override
-    public Response delete(String token, String filename, String headerIfMatch, String headerxCsrfToken) {
+    public Response delete(String token, String filename, String headerIfMatch, String headerxCsrfToken,
+        String cookieSESSION) {
 
         File etagFile = getUserFile(userApp, token, filename, ServiceUtils.ETAG_EXTENSION);
 
@@ -138,7 +139,7 @@ public class UserStorageComponent
 
     @Override
     public Response get(String urltoken, String urlfilename, String headerIfMatch, String queryPageSize,
-        String queryPage, String headerxCsrfToken) throws IOException {
+        String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException {
 
         File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 

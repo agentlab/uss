@@ -136,16 +136,16 @@ public class UserStorageLoginComponent
         System.out.println("Login service modified"); //$NON-NLS-1$
     }
 
-    @Override
-    public boolean isAuth(String csrfToken, String sessionID) {
-        return getSession(csrfToken, sessionID) != null ? true : false;
-    }
-
-    @Override
-    public String getUserLogin(String sessionID) {
-        Session session = sessions.get(sessionID);
-        return session == null ? null : session.getUser().getUsername();
-    }
+//    @Override
+//    public boolean isAuth(String csrfToken, String sessionID) {
+//        return getSession(csrfToken, sessionID) != null ? true : false;
+//    }
+//
+//    @Override
+//    public String getUserLogin(String sessionID) {
+//        Session session = sessions.get(sessionID);
+//        return session == null ? null : session.getUser().getUsername();
+//    }
 
     private Session getSession(String csrfToken, String sessionID) {
         if (csrfToken != null)

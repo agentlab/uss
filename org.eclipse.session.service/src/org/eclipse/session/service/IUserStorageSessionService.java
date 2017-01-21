@@ -9,7 +9,7 @@ package org.eclipse.session.service;
  */
 public interface IUserStorageSessionService {
 
-    boolean isAuth(String csrfToken, String sessionID);
-
-    String getUserLogin(String sessionID);
+//    boolean isAuth(String csrfToken, String sessionID);
+//
+//    String getUserLogin(String sessionID);
 }

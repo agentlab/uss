@@ -10,14 +10,15 @@ import javax.ws.rs.core.Response;
 
 public interface IApiBlobService {
 
-    public Response delete(String urlToken, String urlFilename, String headerIfMatch, String headerxCsrfToken);
+    public Response delete(String urlToken, String urlFilename, String headerIfMatch, String headerxCsrfToken,
+        String cookieSESSION);
 
     public Response put(String urlToken, String urlFilename, InputStream blob, String headerIfMatch,
-        String headerxCsrfToken)
+        String headerxCsrfToken, String cookieSESSION)
         throws IOException;
 
     public Response get(String urlToken, String urlFilename, String headerIfMatch, String queryPageSize,
-        String queryPage, String headerxCsrfToken) throws IOException;
+        String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException;
 
 }
 
