@@ -27,7 +27,7 @@ import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.service.IApiBlobService;
-import org.eclipse.userstorage.tests.util.USSServer;
+import org.eclipse.userstorage.service.host.utils.ServiceUtils;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
@@ -76,7 +76,7 @@ public class UserStorageComponent
             return Response.status(404).build();
         }
 
-        File etagFile = getUserFile(userApp, urltoken, urlfilename, USSServer.ETAG_EXTENSION);
+        File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
         if (etagFile.exists())
         {
@@ -90,7 +90,7 @@ public class UserStorageComponent
 
         String etag = UUID.randomUUID().toString();
 
-        File blobFile = getUserFile(userApp, urltoken, urlfilename, USSServer.BLOB_EXTENSION);
+        File blobFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
         IOUtil.mkdirs(blobFile.getParentFile());
         FileOutputStream out = new FileOutputStream(blobFile);
         Map<String, Object> value = JSONUtil.parse(blob, "value"); //$NON-NLS-1$
@@ -114,7 +114,7 @@ public class UserStorageComponent
     @Override
     public Response delete(String token, String filename, String headerIfMatch, String headerxCsrfToken) {
 
-        File etagFile = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
+        File etagFile = getUserFile(userApp, token, filename, ServiceUtils.ETAG_EXTENSION);
 
         if (!this.isExistAppToken(token) || !etagFile.exists())
         {
@@ -128,7 +128,7 @@ public class UserStorageComponent
             return Response.status(494).build();
         }
 
-        File blobFile = getUserFile(userApp, token, filename, USSServer.BLOB_EXTENSION);
+        File blobFile = getUserFile(userApp, token, filename, ServiceUtils.BLOB_EXTENSION);
 
         IOUtil.delete(blobFile);
         IOUtil.delete(etagFile);
@@ -140,7 +140,7 @@ public class UserStorageComponent
     public Response get(String urltoken, String urlfilename, String headerIfMatch, String queryPageSize,
         String queryPage, String headerxCsrfToken) throws IOException {
 
-        File etagFile = getUserFile(userApp, urltoken, urlfilename, USSServer.ETAG_EXTENSION);
+        File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
         if (!this.isExistAppToken(urltoken) || !etagFile.exists())
         {
@@ -159,7 +159,7 @@ public class UserStorageComponent
             return retrieveProperties(applicationFolder, queryPageSize, queryPage);
         }
 
-        File blobFile = getUserFile(userApp, urltoken, urlfilename, USSServer.BLOB_EXTENSION);
+        File blobFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
 
         InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile))); //$NON-NLS-1$
 
@@ -207,11 +207,11 @@ public class UserStorageComponent
             for (File file : files)
             {
                 String name = file.getName();
-                if (name.endsWith(USSServer.ETAG_EXTENSION))
+                if (name.endsWith(ServiceUtils.ETAG_EXTENSION))
                 {
                     if (++i >= first)
                     {
-                        String key = name.substring(0, name.length() - USSServer.ETAG_EXTENSION.length());
+                        String key = name.substring(0, name.length() - ServiceUtils.ETAG_EXTENSION.length());
                         System.out.println("##### " + key); //$NON-NLS-1$
                         String etag = IOUtil.readUTF(file);
 
