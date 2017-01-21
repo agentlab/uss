@@ -21,6 +21,7 @@ import javax.ws.rs.core.StreamingOutput;
 import org.eclipse.login.service.IUserStorageLoginService;
 import org.eclipse.login.session.Session;
 import org.eclipse.login.user.User;
+import org.eclipse.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.spi.Credentials;
@@ -39,13 +40,15 @@ import org.osgi.service.component.annotations.Modified;
  */
 
 @Component(enabled = true, immediate = true,
-    property = { "service.exported.interfaces=*", "service.exported.configs=ecf.jaxrs.jersey.server",
+    property = {
+        "service.exported.interfaces=*",
+        "service.exported.configs=ecf.jaxrs.jersey.server",
         "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.alias=/api",
         "ecf.jaxrs.jersey.server.service.alias=/user",
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
 public class UserStorageLoginComponent
-    implements IUserStorageLoginService, ManagedService {
+    implements IUserStorageLoginService, ManagedService, IUserStorageSessionService {
 
     private final Map<String, User> users = new HashMap<>();
 
@@ -53,8 +56,6 @@ public class UserStorageLoginComponent
 
     @Override
     public Response postLogin(InputStream creditianals) {
-        // TODO Auto-generated method stub
-
 
         Map<String, Object> requestObject = null;
         try
@@ -76,15 +77,8 @@ public class UserStorageLoginComponent
             return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
         }
 
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        response.setContentType("application/json"); //$NON-NLS-1$
-
         Session session = addSession(user);
-//        Cookie cookie = new Cookie("SESSION", session.getID()); //$NON-NLS-1$
-//        cookie.setPath("/"); //$NON-NLS-1$
-//        response.addCookie(cookie);
-
-        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100, false);
+        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         Map<String, Object> responseObject = new LinkedHashMap<>();
         responseObject.put("sessid", session.getID()); //$NON-NLS-1$
@@ -140,6 +134,25 @@ public class UserStorageLoginComponent
     @Modified
     public void modify() {
         System.out.println("Login service modified"); //$NON-NLS-1$
+    }
+
+    @Override
+    public boolean isAuth(String csrfToken, String sessionID) {
+        return getSession(csrfToken, sessionID) != null ? true : false;
+    }
+
+    private Session getSession(String csrfToken, String sessionID) {
+        if (csrfToken != null)
+        {
+            Session session = sessions.get(sessionID);
+
+            if (session != null && session.getCSRFToken().equals(csrfToken))
+            {
+                return session;
+            }
+        }
+
+        return null;
     }
 
 }

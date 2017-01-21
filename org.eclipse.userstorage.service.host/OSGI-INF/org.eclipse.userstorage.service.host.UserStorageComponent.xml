@@ -5,6 +5,7 @@
       <provide interface="org.osgi.service.cm.ManagedService"/>
       <provide interface="org.eclipse.userstorage.service.IApiBlobService"/>
    </service>
+   <reference bind="bindSessionService" cardinality="1..1" interface="org.eclipse.session.service.IUserStorageSessionService" name="SessionService" policy="static" unbind="unbindSessionService"/>
    <property name="service.exported.interfaces" type="String" value="*"/>
    <property name="service.exported.configs" type="String" value="ecf.jaxrs.jersey.server"/>
    <property name="ecf.jaxrs.jersey.server.urlContext" type="String" value="http://localhost:8080"/>

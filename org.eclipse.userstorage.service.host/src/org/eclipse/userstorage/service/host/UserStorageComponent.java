@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.eclipse.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
@@ -34,6 +35,7 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author admin
@@ -54,37 +56,35 @@ public class UserStorageComponent
     private String user;
     private String password;
     private String create;
+
     private final Set<String> applicationTokens = new HashSet<>();
 
     private final File applicationFolder =
-        new File(System.getProperty("java.io.tmpdir"), "uss-server");
-    private final static String userApp = "eclipse_test_123456789";
+        new File(System.getProperty("java.io.tmpdir"), "uss-server"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static String userApp = "eclipse_test_123456789"; //$NON-NLS-1$
 
-//    @PUT
-//    @Path("/{token}/{filename}")
-//    @Override
+//    @Reference(name = "IUserStorageSessionService", referenceInterface = IUserStorageSessionService.class,
+//        cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC)
+    private IUserStorageSessionService ussSessionsService;
+
     @Override
-    public Response put(/*@PathParam("token")*/ String urltoken,
-        /*@PathParam("filename")*/ String urlfilename,
-        InputStream blob, /*@Context*/ String headerIf_Match) throws IOException
-
+    public Response put(String urltoken, String urlfilename, InputStream blob, String headerIfMatch,
+        String headerxCsrfToken) throws IOException
     {
-
         if (!this.isExistAppToken(urltoken))
         {
             return Response.status(404).build();
         }
 
         File etagFile = getUserFile(userApp, urltoken, urlfilename, USSServer.ETAG_EXTENSION);
-//        String ifMatch = getEtag(headers, "If-Match");
 
         if (etagFile.exists())
         {
             String etag = IOUtil.readUTF(etagFile);
 
-            if (StringUtil.isEmpty(headerIf_Match) || !headerIf_Match.equals(etag))
+            if (StringUtil.isEmpty(headerIfMatch) || !headerIfMatch.equals(etag))
             {
-                return Response.status(409).header("ETag", "\"" + etag + "\"").build();
+                return Response.status(409).header("ETag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
         }
 
@@ -93,29 +93,26 @@ public class UserStorageComponent
         File blobFile = getUserFile(userApp, urltoken, urlfilename, USSServer.BLOB_EXTENSION);
         IOUtil.mkdirs(blobFile.getParentFile());
         FileOutputStream out = new FileOutputStream(blobFile);
-        Map<String, Object> value = JSONUtil.parse(blob, "value");
+        Map<String, Object> value = JSONUtil.parse(blob, "value"); //$NON-NLS-1$
 
         try
         {
-            IOUtil.copy((InputStream)value.get("value"), out);
+            IOUtil.copy((InputStream)value.get("value"), out); //$NON-NLS-1$
         }
         finally
         {
-            IOUtil.closeSilent((InputStream)value.get("value"));
+            IOUtil.closeSilent((InputStream)value.get("value")); //$NON-NLS-1$
             IOUtil.close(out);
         }
 
         IOUtil.writeUTF(etagFile, etag);
 
-        return Response.status(etagFile.exists() ? 200 : 201).header("Etag", "\"" + etag + "\"").build();
+        return Response.status(etagFile.exists() ? 200 : 201).header("Etag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     }
 
-//    @DELETE
-//    @Path("/{token}/{filename}")
     @Override
-    public Response delete(/*(@PathParam("token")*/ String token, /*@PathParam("filename")*/ String filename,
-        /*@Context HttpHeaders*/ String headerIfMatch) {
+    public Response delete(String token, String filename, String headerIfMatch, String headerxCsrfToken) {
 
         File etagFile = getUserFile(userApp, token, filename, USSServer.ETAG_EXTENSION);
 
@@ -139,12 +136,9 @@ public class UserStorageComponent
         return Response.noContent().build();
     }
 
-//    @GET
-//    @Produces("application/json")
-//    @Path("/{token}/{filename}")
     @Override
-    public Response get(/*@PathParam("token")*/ String urltoken, /*@PathParam("filename")*/ String urlfilename,
-        /*@Context*/ String headerIfMatch, String queryPageSize, String queryPage) throws IOException {
+    public Response get(String urltoken, String urlfilename, String headerIfMatch, String queryPageSize,
+        String queryPage, String headerxCsrfToken) throws IOException {
 
         File etagFile = getUserFile(userApp, urltoken, urlfilename, USSServer.ETAG_EXTENSION);
 
@@ -154,7 +148,6 @@ public class UserStorageComponent
         }
 
         String etag = IOUtil.readUTF(etagFile);
-//        String ifNoneMatch = getEtag(headers, "If-None-Match");
         if (headerIfMatch != null && headerIfMatch.equals(etag))
         {
             return Response.status(304).build();
@@ -168,7 +161,7 @@ public class UserStorageComponent
 
         File blobFile = getUserFile(userApp, urltoken, urlfilename, USSServer.BLOB_EXTENSION);
 
-        InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile)));
+        InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile))); //$NON-NLS-1$
 
         StreamingOutput stream = new StreamingOutput()
         {
@@ -180,7 +173,7 @@ public class UserStorageComponent
             }
         };
 
-        return Response.ok().header("Etag", "\"" + etag + "\"").entity(stream).type(MediaType.APPLICATION_JSON).build();
+        return Response.ok().header("Etag", "\"" + etag + "\"").entity(stream).type(MediaType.APPLICATION_JSON).build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     protected Response retrieveProperties(File applicationFolder, String queryPageSize, String queryPage) {
@@ -191,16 +184,12 @@ public class UserStorageComponent
         if (pageSize < 1 || pageSize > 100)
         {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
-//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page size");
-//            return;
         }
 
         int page = getIntParameter(queryPage, 20);
         if (page < 1)
         {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
-//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page");
-//            return;
         }
 
         boolean empty = true;
@@ -212,7 +201,7 @@ public class UserStorageComponent
         if (files != null)
         {
             int first = (page - 1) * pageSize + 1;
-            System.out.println("##### " + first);
+            System.out.println("##### " + first); //$NON-NLS-1$
             int i = 0;
 
             for (File file : files)
@@ -223,7 +212,7 @@ public class UserStorageComponent
                     if (++i >= first)
                     {
                         String key = name.substring(0, name.length() - USSServer.ETAG_EXTENSION.length());
-                        System.out.println("##### " + key);
+                        System.out.println("##### " + key); //$NON-NLS-1$
                         String etag = IOUtil.readUTF(file);
 
                         if (empty)
@@ -232,16 +221,16 @@ public class UserStorageComponent
                         }
                         else
                         {
-                            builder.append(",");
+                            builder.append(","); //$NON-NLS-1$
                         }
 
-                        builder.append("{\"application_token\":\"");
+                        builder.append("{\"application_token\":\""); //$NON-NLS-1$
                         builder.append(applicationToken);
-                        builder.append("\",\"key\":\"");
+                        builder.append("\",\"key\":\""); //$NON-NLS-1$
                         builder.append(key);
-                        builder.append("\",\"etag\":\"");
+                        builder.append("\",\"etag\":\""); //$NON-NLS-1$
                         builder.append(etag);
-                        builder.append("\"}");
+                        builder.append("\"}"); //$NON-NLS-1$
 
                         if (--pageSize == 0)
                         {
@@ -255,9 +244,6 @@ public class UserStorageComponent
         builder.append(']');
         System.out.println(builder);
 
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        response.setContentType("application/json");
-
         InputStream body = IOUtil.streamUTF(builder.toString());
 
         StreamingOutput stream = new StreamingOutput()
@@ -269,17 +255,6 @@ public class UserStorageComponent
                 IOUtil.closeSilent(body);
             }
         };
-
-//        try
-//        {
-//            ServletOutputStream out = response.getOutputStream();
-//            IOUtil.copy(body, out);
-//            out.flush();
-//        }
-//        finally
-//        {
-//            IOUtil.closeSilent(body);
-//        }
 
         return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).build();
     }
@@ -333,24 +308,37 @@ public class UserStorageComponent
     @Activate
     public void activate(ComponentContext context) throws IOException {
         Dictionary<String, Object> properties = context.getProperties();
-        id = (String)properties.get("database.id");
-        database = (String)properties.get("database");
-        user = (String)properties.get("user");
-        password = (String)properties.get("password");
-        create = (String)properties.get("create");
-        this.getApplicationTokens().add("pDKTqBfDuNxlAKydhEwxBZPxa4q");
-        System.out.println("USS service started");
+        id = (String)properties.get("database.id"); //$NON-NLS-1$
+        database = (String)properties.get("database"); //$NON-NLS-1$
+        user = (String)properties.get("user"); //$NON-NLS-1$
+        password = (String)properties.get("password"); //$NON-NLS-1$
+        create = (String)properties.get("create"); //$NON-NLS-1$
+        this.getApplicationTokens().add("pDKTqBfDuNxlAKydhEwxBZPxa4q"); //$NON-NLS-1$
+        System.out.println("USS service started"); //$NON-NLS-1$
 
     }
 
     @Deactivate
     public void deactivate(ComponentContext context) {
-        System.out.println("USS service stopped");
+        System.out.println("USS service stopped"); //$NON-NLS-1$
     }
 
     @Modified
     public void modify() {
-        System.out.println("USS service modified");
+        System.out.println("USS service modified"); //$NON-NLS-1$
+    }
+
+    @Reference
+    public synchronized void bindSessionService(IUserStorageSessionService ussSessionsService) {
+        this.ussSessionsService = ussSessionsService;
+    }
+
+    public synchronized void unbindSessionService(IUserStorageSessionService ussSessionsService) {
+        if (this.ussSessionsService == ussSessionsService)
+        {
+            this.ussSessionsService = null;
+        }
+
     }
 
 }
