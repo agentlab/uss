@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" enabled="true" immediate="true" modified="modify" name="org.eclipse.login.component.UserStorageLoginComponent">
-   <property name="service.exported.interfaces" value="*"/>
+   <property name="service.exported.interfaces" value="org.eclipse.login.service.IUserStorageLoginService"/>
    <property name="service.exported.configs" value="ecf.jaxrs.jersey.server"/>
    <property name="ecf.jaxrs.jersey.server.urlContext" value="http://localhost:8080"/>
    <property name="ecf.jaxrs.jersey.server.alias" value="/api"/>
    <property name="ecf.jaxrs.jersey.server.service.alias" value="/user"/>
+   <property name="ecf.jaxrs.jersey.server.exported.interfaces" value="org.eclipse.login.service.IUserStorageLoginService,org.osgi.service.cm.ManagedService"/>
    <property name="service.pid" value="org.eclipse.userstorage.service.host.UserStorageComponent"/>
    <service>
       <provide interface="org.eclipse.login.service.IUserStorageLoginService"/>

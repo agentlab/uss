@@ -17,7 +17,7 @@ public interface IApiBlobService {
         String headerxCsrfToken, String cookieSESSION)
         throws IOException;
 
-    public Response get(String urlToken, String urlFilename, String headerIfMatch, String queryPageSize,
+    public Response get(String urlToken, String urlFilename, String headerIfNoneMatch, String queryPageSize,
         String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException;
 
 }

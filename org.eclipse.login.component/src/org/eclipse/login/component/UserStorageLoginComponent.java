@@ -41,10 +41,11 @@ import org.osgi.service.component.annotations.Modified;
 
 @Component(enabled = true, immediate = true,
     property = {
-        "service.exported.interfaces=*",
+        "service.exported.interfaces=org.eclipse.login.service.IUserStorageLoginService",
         "service.exported.configs=ecf.jaxrs.jersey.server",
         "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.alias=/api",
         "ecf.jaxrs.jersey.server.service.alias=/user",
+        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.login.service.IUserStorageLoginService,org.osgi.service.cm.ManagedService",
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
 public class UserStorageLoginComponent
@@ -136,16 +137,16 @@ public class UserStorageLoginComponent
         System.out.println("Login service modified"); //$NON-NLS-1$
     }
 
-//    @Override
-//    public boolean isAuth(String csrfToken, String sessionID) {
-//        return getSession(csrfToken, sessionID) != null ? true : false;
-//    }
-//
-//    @Override
-//    public String getUserLogin(String sessionID) {
-//        Session session = sessions.get(sessionID);
-//        return session == null ? null : session.getUser().getUsername();
-//    }
+    @Override
+    public boolean isAuth(String csrfToken, String sessionID) {
+        return getSession(csrfToken, sessionID) != null ? true : false;
+    }
+
+    @Override
+    public String getUserLogin(String sessionID) {
+        Session session = sessions.get(sessionID);
+        return session == null ? null : session.getUser().getUsername();
+    }
 
     private Session getSession(String csrfToken, String sessionID) {
         if (csrfToken != null)

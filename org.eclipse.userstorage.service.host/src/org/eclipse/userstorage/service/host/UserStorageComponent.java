@@ -46,6 +46,7 @@ import org.osgi.service.component.annotations.Reference;
     property = { "service.exported.interfaces=*", "service.exported.configs=ecf.jaxrs.jersey.server",
         "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.alias=/api",
         "ecf.jaxrs.jersey.server.service.alias=/blob",
+        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.service.IApiBlobService,org.osgi.service.cm.ManagedService",
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
 public class UserStorageComponent
@@ -138,7 +139,7 @@ public class UserStorageComponent
     }
 
     @Override
-    public Response get(String urltoken, String urlfilename, String headerIfMatch, String queryPageSize,
+    public Response get(String urltoken, String urlfilename, String headerIfNoneMatch, String queryPageSize,
         String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException {
 
         File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
@@ -149,7 +150,7 @@ public class UserStorageComponent
         }
 
         String etag = IOUtil.readUTF(etagFile);
-        if (headerIfMatch != null && headerIfMatch.equals(etag))
+        if (headerIfNoneMatch != null && headerIfNoneMatch.equals(etag))
         {
             return Response.status(304).build();
         }
@@ -315,6 +316,7 @@ public class UserStorageComponent
         password = (String)properties.get("password"); //$NON-NLS-1$
         create = (String)properties.get("create"); //$NON-NLS-1$
         this.getApplicationTokens().add("pDKTqBfDuNxlAKydhEwxBZPxa4q"); //$NON-NLS-1$
+        this.getApplicationTokens().add("cNhDr0INs8T109P8h6E1r_GvU3I"); //$NON-NLS-1$
         System.out.println("USS service started"); //$NON-NLS-1$
 
     }
