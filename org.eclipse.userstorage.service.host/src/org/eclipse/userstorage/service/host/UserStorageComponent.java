@@ -64,8 +64,6 @@ public class UserStorageComponent
         new File(System.getProperty("java.io.tmpdir"), "uss-server"); //$NON-NLS-1$ //$NON-NLS-2$
     private final static String userApp = "eclipse_test_123456789"; //$NON-NLS-1$
 
-//    @Reference(name = "IUserStorageSessionService", referenceInterface = IUserStorageSessionService.class,
-//        cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC)
     private IUserStorageSessionService ussSessionsService;
 
     @Override
@@ -83,7 +81,8 @@ public class UserStorageComponent
             return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
         }
 
-        File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
+        File etagFile =
+            getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
         if (etagFile.exists())
         {
@@ -97,7 +96,8 @@ public class UserStorageComponent
 
         String etag = UUID.randomUUID().toString();
 
-        File blobFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
+        File blobFile =
+            getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
         IOUtil.mkdirs(blobFile.getParentFile());
         FileOutputStream out = new FileOutputStream(blobFile);
         Map<String, Object> value = JSONUtil.parse(blob, "value"); //$NON-NLS-1$
@@ -128,7 +128,7 @@ public class UserStorageComponent
             return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
         }
 
-        File etagFile = getUserFile(userApp, token, filename, ServiceUtils.ETAG_EXTENSION);
+        File etagFile = getUserFile(this.getUserFolder(cookieSESSION), token, filename, ServiceUtils.ETAG_EXTENSION);
 
         if (!this.isExistAppToken(token) || !etagFile.exists())
         {
@@ -142,7 +142,7 @@ public class UserStorageComponent
             return Response.status(494).build();
         }
 
-        File blobFile = getUserFile(userApp, token, filename, ServiceUtils.BLOB_EXTENSION);
+        File blobFile = getUserFile(this.getUserFolder(cookieSESSION), token, filename, ServiceUtils.BLOB_EXTENSION);
 
         IOUtil.delete(blobFile);
         IOUtil.delete(etagFile);
@@ -159,7 +159,8 @@ public class UserStorageComponent
             return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
         }
 
-        File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
+        File etagFile =
+            getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
         if (!this.isExistAppToken(urltoken) || !etagFile.exists())
         {
@@ -178,7 +179,8 @@ public class UserStorageComponent
             return retrieveProperties(applicationFolder, queryPageSize, queryPage);
         }
 
-        File blobFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
+        File blobFile =
+            getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
 
         InputStream body = JSONUtil.build(Collections.singletonMap("value", new FileInputStream(blobFile))); //$NON-NLS-1$
 
@@ -320,6 +322,10 @@ public class UserStorageComponent
 
     private boolean isAutorized(String csrfToken, String sessionID) {
         return this.ussSessionsService.isAuth(csrfToken, sessionID);
+    }
+
+    private String getUserFolder(String sessionID) {
+        return this.ussSessionsService.getUserLogin(sessionID);
     }
 
     @Override

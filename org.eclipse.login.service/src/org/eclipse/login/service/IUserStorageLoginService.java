@@ -12,5 +12,8 @@ import javax.ws.rs.core.Response;;
  *
  */
 public interface IUserStorageLoginService {
+
     public Response postLogin(InputStream creditianals);
+
+    public Response postCreate(InputStream creditianals);
 }

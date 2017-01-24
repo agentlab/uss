@@ -63,16 +63,7 @@ public class UserStorageLoginComponent
     @Override
     public Response postLogin(InputStream creditianals) {
 
-        Map<String, Object> requestObject = null;
-        try
-        {
-            requestObject = JSONUtil.parse(creditianals, null);
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Map<String, Object> requestObject = this.parseJson(creditianals);
 
         String username = (String)requestObject.get("username"); //$NON-NLS-1$
         String password = (String)requestObject.get("password"); //$NON-NLS-1$
@@ -84,25 +75,37 @@ public class UserStorageLoginComponent
         }
 
         Session session = addSession(user);
-        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 10, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         Map<String, Object> responseObject = new LinkedHashMap<>();
         responseObject.put("sessid", session.getID()); //$NON-NLS-1$
         responseObject.put("token", session.getCSRFToken()); //$NON-NLS-1$
-        InputStream body = JSONUtil.build(responseObject);
 
-        StreamingOutput stream = new StreamingOutput()
-        {
-            @Override
-            public void write(OutputStream os) throws IOException, WebApplicationException {
-                IOUtil.copy(body, os);
-                os.flush();
-                IOUtil.closeSilent(body);
-            }
-        };
+        StreamingOutput stream = buildResponseStream(responseObject);
 
         return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).cookie(cookie).build();
+    }
 
+    @Override
+    public Response postCreate(InputStream creditianals) {
+
+        Map<String, Object> requestObject = this.parseJson(creditianals);
+
+        String username = (String)requestObject.get("username"); //$NON-NLS-1$
+        String password = (String)requestObject.get("password"); //$NON-NLS-1$
+        String confirmPassword = (String)requestObject.get("confirmPassword"); //$NON-NLS-1$
+
+        if (this.users.containsKey(username) || !password.equals(confirmPassword))
+        {
+            return Response.status(HttpServletResponse.SC_FORBIDDEN).build();
+        }
+
+        User user = addUser(new Credentials(username, password));
+
+        Session session = addSession(user);
+        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 10, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
+        return Response.status(HttpServletResponse.SC_CREATED).cookie(cookie).build();
     }
 
     public User addUser(Credentials credentials) {
@@ -176,6 +179,41 @@ public class UserStorageLoginComponent
         }
 
         return null;
+    }
+
+    private Map<String, Object> parseJson(InputStream json) {
+
+        Map<String, Object> requestObject = null;
+
+        try
+        {
+            requestObject = JSONUtil.parse(json, null);
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+
+        return requestObject;
+    }
+
+    private StreamingOutput buildResponseStream(Map<String, Object> responseObject) {
+
+        InputStream body = JSONUtil.build(responseObject);
+
+        StreamingOutput stream = new StreamingOutput()
+        {
+            @Override
+            public void write(OutputStream os) throws IOException, WebApplicationException {
+                IOUtil.copy(body, os);
+                os.flush();
+                IOUtil.closeSilent(body);
+            }
+        };
+
+        return stream;
     }
 
 }
