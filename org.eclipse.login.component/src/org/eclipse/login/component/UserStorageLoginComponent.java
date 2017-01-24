@@ -10,6 +10,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -34,6 +35,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 /**
  * @author Zagrebaev_D
  *
@@ -53,7 +58,7 @@ public class UserStorageLoginComponent
 
     private final Map<String, User> users = new HashMap<>();
 
-    private final Map<String, Session> sessions = new HashMap<>();
+    private LoadingCache<String, Session> sessions;
 
     @Override
     public Response postLogin(InputStream creditianals) {
@@ -125,6 +130,17 @@ public class UserStorageLoginComponent
     @Activate
     public void activate(ComponentContext context) throws IOException {
         addUser(FixedCredentialsProvider.DEFAULT_CREDENTIALS);
+
+        this.sessions =
+            CacheBuilder.newBuilder().concurrencyLevel(4).expireAfterWrite(10, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, Session>()
+                {
+                    @Override
+                    public Session load(String key) throws Exception {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+                });
     }
 
     @Deactivate
@@ -144,14 +160,14 @@ public class UserStorageLoginComponent
 
     @Override
     public String getUserLogin(String sessionID) {
-        Session session = sessions.get(sessionID);
+        Session session = sessions.getIfPresent(sessionID);
         return session == null ? null : session.getUser().getUsername();
     }
 
     private Session getSession(String csrfToken, String sessionID) {
         if (csrfToken != null)
         {
-            Session session = sessions.get(sessionID);
+            Session session = sessions.getIfPresent(sessionID);
 
             if (session != null && session.getCSRFToken().equals(csrfToken))
             {

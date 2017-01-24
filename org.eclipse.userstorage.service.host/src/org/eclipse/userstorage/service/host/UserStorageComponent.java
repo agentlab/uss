@@ -72,9 +72,15 @@ public class UserStorageComponent
     public Response put(String urltoken, String urlfilename, InputStream blob, String headerIfMatch,
         String headerxCsrfToken, String cookieSESSION) throws IOException
     {
+
+        if (!this.isAutorized(headerxCsrfToken, cookieSESSION))
+        {
+            return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+        }
+
         if (!this.isExistAppToken(urltoken))
         {
-            return Response.status(404).build();
+            return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
         }
 
         File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
@@ -85,7 +91,7 @@ public class UserStorageComponent
 
             if (StringUtil.isEmpty(headerIfMatch) || !headerIfMatch.equals(etag))
             {
-                return Response.status(409).header("ETag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                return Response.status(HttpServletResponse.SC_CONFLICT).header("ETag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
         }
 
@@ -108,7 +114,8 @@ public class UserStorageComponent
 
         IOUtil.writeUTF(etagFile, etag);
 
-        return Response.status(etagFile.exists() ? 200 : 201).header("Etag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return Response.status(etagFile.exists() ? HttpServletResponse.SC_OK : HttpServletResponse.SC_CREATED).header(
+            "Etag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     }
 
@@ -116,11 +123,16 @@ public class UserStorageComponent
     public Response delete(String token, String filename, String headerIfMatch, String headerxCsrfToken,
         String cookieSESSION) {
 
+        if (!this.isAutorized(headerxCsrfToken, cookieSESSION))
+        {
+            return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+        }
+
         File etagFile = getUserFile(userApp, token, filename, ServiceUtils.ETAG_EXTENSION);
 
         if (!this.isExistAppToken(token) || !etagFile.exists())
         {
-            return Response.status(404).build();
+            return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
         }
 
         String etag = IOUtil.readUTF(etagFile);
@@ -142,17 +154,22 @@ public class UserStorageComponent
     public Response get(String urltoken, String urlfilename, String headerIfNoneMatch, String queryPageSize,
         String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException {
 
+        if (!this.isAutorized(headerxCsrfToken, cookieSESSION))
+        {
+            return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+        }
+
         File etagFile = getUserFile(userApp, urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
         if (!this.isExistAppToken(urltoken) || !etagFile.exists())
         {
-            return Response.status(404).build();
+            return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
         }
 
         String etag = IOUtil.readUTF(etagFile);
         if (headerIfNoneMatch != null && headerIfNoneMatch.equals(etag))
         {
-            return Response.status(304).build();
+            return Response.status(HttpServletResponse.SC_NOT_MODIFIED).build();
         }
 
         if (urlfilename == null)
@@ -301,6 +318,10 @@ public class UserStorageComponent
         return defValue;
     }
 
+    private boolean isAutorized(String csrfToken, String sessionID) {
+        return this.ussSessionsService.isAuth(csrfToken, sessionID);
+    }
+
     @Override
     public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
         // TODO Auto-generated method stub
@@ -317,6 +338,7 @@ public class UserStorageComponent
         create = (String)properties.get("create"); //$NON-NLS-1$
         this.getApplicationTokens().add("pDKTqBfDuNxlAKydhEwxBZPxa4q"); //$NON-NLS-1$
         this.getApplicationTokens().add("cNhDr0INs8T109P8h6E1r_GvU3I"); //$NON-NLS-1$
+        System.out.println(applicationFolder);
         System.out.println("USS service started"); //$NON-NLS-1$
 
     }
