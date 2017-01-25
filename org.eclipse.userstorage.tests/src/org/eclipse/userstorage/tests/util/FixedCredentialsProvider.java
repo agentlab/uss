@@ -19,7 +19,7 @@ import org.eclipse.userstorage.spi.ICredentialsProvider;
  */
 public class FixedCredentialsProvider implements ICredentialsProvider
 {
-  public static final Credentials DEFAULT_CREDENTIALS = new Credentials("eclipse_test_123456789", "plaintext123456789");
+  public static final Credentials DEFAULT_CREDENTIALS = new Credentials("1", "1");
 
   private static Credentials credentials = DEFAULT_CREDENTIALS;
 

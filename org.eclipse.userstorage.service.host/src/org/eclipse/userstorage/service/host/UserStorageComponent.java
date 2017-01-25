@@ -84,6 +84,8 @@ public class UserStorageComponent
         File etagFile =
             getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
+        headerIfMatch = removeQuotes(headerIfMatch);
+
         if (etagFile.exists())
         {
             String etag = IOUtil.readUTF(etagFile);
@@ -168,6 +170,9 @@ public class UserStorageComponent
         }
 
         String etag = IOUtil.readUTF(etagFile);
+
+        headerIfNoneMatch = removeQuotes(headerIfNoneMatch);
+
         if (headerIfNoneMatch != null && headerIfNoneMatch.equals(etag))
         {
             return Response.status(HttpServletResponse.SC_NOT_MODIFIED).build();
@@ -320,6 +325,18 @@ public class UserStorageComponent
         return defValue;
     }
 
+    private String removeQuotes(String stringWithQuotes) {
+        if (stringWithQuotes != null)
+        {
+            if (stringWithQuotes.charAt(0) == '"' && stringWithQuotes.charAt(stringWithQuotes.length() - 1) == '"')
+            {
+                stringWithQuotes = stringWithQuotes.substring(1, stringWithQuotes.length() - 1);
+            }
+        }
+
+        return stringWithQuotes;
+    }
+
     private boolean isAutorized(String csrfToken, String sessionID) {
         return this.ussSessionsService.isAuth(csrfToken, sessionID);
     }
@@ -345,7 +362,7 @@ public class UserStorageComponent
         this.getApplicationTokens().add("pDKTqBfDuNxlAKydhEwxBZPxa4q"); //$NON-NLS-1$
         this.getApplicationTokens().add("cNhDr0INs8T109P8h6E1r_GvU3I"); //$NON-NLS-1$
         System.out.println(applicationFolder);
-        System.out.println("USS service started"); //$NON-NLS-1$
+        System.err.println("USS service started"); //$NON-NLS-1$
 
     }
 

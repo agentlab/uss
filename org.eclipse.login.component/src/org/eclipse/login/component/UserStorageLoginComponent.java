@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -75,11 +76,15 @@ public class UserStorageLoginComponent
         }
 
         Session session = addSession(user);
-        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 10, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
+//        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100000000, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        NewCookie cookie = new NewCookie(new Cookie("SESSION", session.getID(), "/", null));
 
         Map<String, Object> responseObject = new LinkedHashMap<>();
         responseObject.put("sessid", session.getID()); //$NON-NLS-1$
         responseObject.put("token", session.getCSRFToken()); //$NON-NLS-1$
+
+        System.err.println(session.getID());
 
         StreamingOutput stream = buildResponseStream(responseObject);
 
@@ -168,7 +173,7 @@ public class UserStorageLoginComponent
     }
 
     private Session getSession(String csrfToken, String sessionID) {
-        if (csrfToken != null)
+        if (csrfToken != null && sessionID != null)
         {
             Session session = sessions.getIfPresent(sessionID);
 
