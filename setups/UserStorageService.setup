@@ -101,8 +101,23 @@
           name="org.apache.httpcomponents.httpclient"/>
       <requirement
           name="org.apache.httpcomponents.httpcore"/>
+      <requirement
+          name="com.fasterxml.jackson.core.jackson-core"/>
+      <requirement
+          name="com.fasterxml.jackson.core.jackson-annotations"/>
+      <requirement
+          name="com.fasterxml.jackson.core.jackson-databind"/>
+      <requirement
+          name="com.fasterxml.jackson.datatype.jackson-datatype-guava"/>
+      <requirement
+          name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base"/>
+      <requirement
+          name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider"/>
+      <requirement
+          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
       <sourceLocator
-          rootFolder="${git.clone.uss.location}">
+          rootFolder="${git.clone.uss.location}"
+          locateNestedProjects="true">
         <predicate
             xsi:type="predicates:NotPredicate">
           <operand
@@ -116,6 +131,8 @@
             url="http://download.eclipse.org/releases/neon"/>
         <repository
             url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
+        <repository
+            url="http://agentlab.ru/pd/p2/che/"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -137,8 +154,53 @@
       refresh="true">
     <description></description>
   </setupTask>
-  <stream name="master"
-      label="master"/>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Xmx"
+      value="2048m"
+      vm="true">
+    <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Dorg.eclipse.userstorage.ui.showServices="
+      value="true"
+      vm="true">
+    <description></description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Dorg.eclipse.userstorage.serviceURI="
+      value="http://10.70.2.235:8080/"
+      vm="true"/>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Dorg.eclipse.userstorage.serviceLabel="
+      value="uss"
+      vm="true"/>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Dorg.eclipse.userstorage.createAccountURI="
+      value="http://10.70.2.235:8080/api/user/create"
+      vm="true"/>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Dorg.eclipse.userstorage.ui.showTestButton="
+      value="true"
+      vm="true"/>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Dorg.eclipse.userstorage.session.debug="
+      value="true"
+      vm="true"/>
+  <setupTask
+      xsi:type="setup:PreferenceTask"
+      key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.codegen.methodParameters"
+      value="generate">
+    <description></description>
+  </setupTask>
+  <stream name="develop"
+      label="develop"/>
   <logicalProjectContainer
       xsi:type="setup:Project"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='ru.agentlab']/@projects[name='osgi']/@projects[name='web']/@projects[name='jaxrs']"/>
