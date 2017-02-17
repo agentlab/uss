@@ -94,6 +94,10 @@
       <requirement
           name="*"/>
       <requirement
+          name="org.glassfish.jersey.feature.feature.group"/>
+      <requirement
+          name="org.glassfish.jersey.feature.source.feature.group"/>
+      <requirement
           name="org.eclipse.rcp.feature.group"/>
       <requirement
           name="epp.package.java"/>
@@ -133,6 +137,8 @@
             url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
         <repository
             url="http://agentlab.ru/pd/p2/che/"/>
+        <repository
+            url="http://agentlab.ru/p2/org.glassfish.jersey/2.14.1.201702171632/"/>
       </repositoryList>
     </targlet>
   </setupTask>
