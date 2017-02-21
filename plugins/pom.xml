@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 
 	<parent>
-		<groupId>prg.eclipse.userstorage</groupId>
+		<groupId>org.eclipse.userstorage</groupId>
 		<artifactId>org.eclipse.userstorage.parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

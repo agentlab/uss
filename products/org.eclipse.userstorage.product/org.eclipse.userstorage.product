@@ -136,7 +136,7 @@
       <plugin id="org.eclipse.userstorage.service.host"/>
       <plugin id="org.eclipse.userstorage.service.model"/>
       <plugin id="org.eclipse.userstorage.session.service"/>
-      <plugin id="org.eclipse.userstorage.tests"/>
+      <plugin id="org.eclipse.userstorage.test"/>
       <plugin id="org.glassfish.hk2.api"/>
       <plugin id="org.glassfish.hk2.locator"/>
       <plugin id="org.glassfish.hk2.osgi-resource-locator"/>

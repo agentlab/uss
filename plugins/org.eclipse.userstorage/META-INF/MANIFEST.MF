@@ -16,8 +16,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.0.0,4.0.0)",
  org.apache.commons.logging;bundle-version="[1.0.0,2.0.0)",
  org.apache.commons.codec;bundle-version="[1.6.0,2.0.0)"
 Export-Package: org.eclipse.userstorage;version="1.0.0",
- org.eclipse.userstorage.internal;version="1.0.0";x-friends:="org.eclipse.userstorage.tests,org.eclipse.userstorage.ui",
- org.eclipse.userstorage.internal.util;version="1.0.0";x-friends:="org.eclipse.userstorage.tests,org.eclipse.userstorage.ui",
+ org.eclipse.userstorage.internal;version="1.0.0";x-friends:="org.eclipse.userstorage.ui,org.eclipse.userstorage.test",
+ org.eclipse.userstorage.internal.util;version="1.0.0";x-friends:="org.eclipse.userstorage.ui,org.eclipse.userstorage.test",
  org.eclipse.userstorage.spi;version="1.0.0",
  org.eclipse.userstorage.util;version="1.0.0"
-Eclipse-BuddyPolicy: registered
+lipse-BuddyPolicy: registered

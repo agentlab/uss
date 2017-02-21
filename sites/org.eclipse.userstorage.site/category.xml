@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="OSGi UserStorageService Update Site" url="">
+      UserStorageService
+   </description>
+
+   <feature id="org.eclipse.userstorage.feature"><category name="org.eclipse.userstorage.category"/></feature>
+   <feature id="org.eclipse.userstorage.feature.source"> <category name="org.eclipse.userstorage.category"/></feature>
+</site>

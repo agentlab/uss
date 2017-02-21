@@ -17,11 +17,11 @@
 
 
     <modules>
-        <module>releng/net.sf.extjwnl.releng</module>
+        <module>releng/org.eclipse.userstorage.releng</module>
         <module>plugins</module>
-        <module>tests</module>
+       <module>tests</module>
 		<module>features</module>
-        <module>sites/net.sf.extjwnl.site</module>
+      <module>sites/org.eclipse.userstorage.site</module> 
     </modules>
 
     <build>

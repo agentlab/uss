@@ -76,7 +76,7 @@
           source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
         <detail
             key="location">
-          <value>${git.clone.uss.location/org.eclipse.userstorage.releng/org.eclipse.userstorage.releng.target}</value>
+          <value>${git.clone.uss.location/releng/org.eclipse.userstorage.releng/org.eclipse.userstorage.releng.target}</value>
         </detail>
         <detail
             key="preferredRepositories">
@@ -150,7 +150,7 @@
           xsi:type="predicates:AndPredicate">
         <operand
             xsi:type="predicates:RepositoryPredicate"
-            project="org.eclipse.userstorage-feature"/>
+            project="org.eclipse.userstorage.feature"/>
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
