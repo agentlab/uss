@@ -14,7 +14,6 @@ Import-Package: com.google.common.cache;version="15.0.0",
  org.eclipse.session.service,
  org.eclipse.userstorage.internal.util;version="1.0.0",
  org.eclipse.userstorage.spi;version="1.0.0",
- org.eclipse.userstorage.tests.util;version="1.0.0",
  org.osgi.service.cm;version="1.5.0",
  org.osgi.service.component;version="1.2.2",
  org.osgi.service.component.annotations;version="1.2.0"

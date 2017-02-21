@@ -27,7 +27,6 @@ import org.eclipse.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.spi.Credentials;
-import org.eclipse.userstorage.tests.util.FixedCredentialsProvider;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
@@ -78,7 +77,7 @@ public class UserStorageLoginComponent
         Session session = addSession(user);
 
 //        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100000000, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        NewCookie cookie = new NewCookie(new Cookie("SESSION", session.getID(), "/", null));
+        NewCookie cookie = new NewCookie(new Cookie("SESSION", session.getID(), "/", null)); //$NON-NLS-1$ //$NON-NLS-2$
 
         Map<String, Object> responseObject = new LinkedHashMap<>();
         responseObject.put("sessid", session.getID()); //$NON-NLS-1$
@@ -137,7 +136,7 @@ public class UserStorageLoginComponent
 
     @Activate
     public void activate(ComponentContext context) throws IOException {
-        addUser(FixedCredentialsProvider.DEFAULT_CREDENTIALS);
+        addUser(new Credentials("1", "1")); //$NON-NLS-1$ //$NON-NLS-2$
 
         this.sessions =
             CacheBuilder.newBuilder().concurrencyLevel(4).expireAfterWrite(10, TimeUnit.MINUTES)
