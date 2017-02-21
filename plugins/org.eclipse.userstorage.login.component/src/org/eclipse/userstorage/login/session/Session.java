@@ -1,11 +1,11 @@
 /**
  *
  */
-package org.eclipse.login.session;
+package org.eclipse.userstorage.login.session;
 
 import java.util.UUID;
 
-import org.eclipse.login.user.User;
+import org.eclipse.userstorage.login.user.User;
 
 /**
  * @author Zagrebaev_D

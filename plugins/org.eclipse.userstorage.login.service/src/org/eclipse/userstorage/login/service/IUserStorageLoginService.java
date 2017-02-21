@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.eclipse.login.service;
+package org.eclipse.userstorage.login.service;
 
 import java.io.InputStream;
 

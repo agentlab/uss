@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.eclipse.session.service;
+package org.eclipse.userstorage.session.service;
 
 /**
  * @author Zagrebaev_D

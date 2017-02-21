@@ -10,12 +10,12 @@ Import-Package: com.google.common.cache;version="15.0.0",
  javax.servlet.http;version="3.1.0",
  javax.ws.rs;version="2.0.1",
  javax.ws.rs.core;version="2.0.1",
- org.eclipse.login.service,
- org.eclipse.session.service,
  org.eclipse.userstorage.internal.util;version="1.0.0",
+ org.eclipse.userstorage.login.service,
+ org.eclipse.userstorage.session.service,
  org.eclipse.userstorage.spi;version="1.0.0",
  org.osgi.service.cm;version="1.5.0",
  org.osgi.service.component;version="1.2.2",
  org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.login.component.UserStorageLoginComponent.xml,
- OSGI-INF/org.eclipse.login.component.UserStorageLoginConfigurer.xml
+Service-Component: OSGI-INF/org.eclipse.userstorage.login.component.UserStorageLoginConfigurer.xml,
+ OSGI-INF/org.eclipse.userstorage.login.component.UserStorageLoginComponent.xml

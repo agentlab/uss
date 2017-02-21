@@ -5,5 +5,5 @@ Bundle-SymbolicName: org.eclipse.userstorage.login.service
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.login.service
+Export-Package: org.eclipse.userstorage.login.service
 Import-Package: javax.ws.rs.core;version="2.0.1"

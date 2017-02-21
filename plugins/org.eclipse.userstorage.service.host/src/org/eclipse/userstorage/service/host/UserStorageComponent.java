@@ -22,12 +22,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.eclipse.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.internal.util.StringUtil;
 import org.eclipse.userstorage.service.IApiBlobService;
 import org.eclipse.userstorage.service.host.utils.ServiceUtils;
+import org.eclipse.userstorage.session.service.IUserStorageSessionService;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;

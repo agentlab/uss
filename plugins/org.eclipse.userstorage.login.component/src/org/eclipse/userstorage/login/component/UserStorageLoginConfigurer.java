@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.eclipse.login.component;
+package org.eclipse.userstorage.login.component;
 
 /**
  * @author Zagrebaev_D
@@ -36,7 +36,7 @@ public class UserStorageLoginConfigurer
         if (configAdmin != null)
         {
             Configuration config =
-                configAdmin.getConfiguration("org.eclipse.login.component.UserStorageLoginComponent", null); //$NON-NLS-1$
+                configAdmin.getConfiguration("org.eclipse.userstorage.login.component.UserStorageLoginComponent", null); //$NON-NLS-1$
 
             Dictionary<String, Object> props = config.getProperties();
             if (props == null)

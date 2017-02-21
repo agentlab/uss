@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.eclipse.login.user;
+package org.eclipse.userstorage.login.user;
 
 import org.eclipse.userstorage.internal.util.StringUtil;
 

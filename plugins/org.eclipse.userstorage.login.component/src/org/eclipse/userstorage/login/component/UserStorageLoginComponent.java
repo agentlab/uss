@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.eclipse.login.component;
+package org.eclipse.userstorage.login.component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +20,12 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.eclipse.login.service.IUserStorageLoginService;
-import org.eclipse.login.session.Session;
-import org.eclipse.login.user.User;
-import org.eclipse.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
+import org.eclipse.userstorage.login.service.IUserStorageLoginService;
+import org.eclipse.userstorage.login.session.Session;
+import org.eclipse.userstorage.login.user.User;
+import org.eclipse.userstorage.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.spi.Credentials;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
@@ -46,11 +46,11 @@ import com.google.common.cache.LoadingCache;
 
 @Component(enabled = true, immediate = true,
     property = {
-        "service.exported.interfaces=org.eclipse.login.service.IUserStorageLoginService",
+        "service.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService",
         "service.exported.configs=ecf.jaxrs.jersey.server",
         "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.alias=/api",
         "ecf.jaxrs.jersey.server.service.alias=/user",
-        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.login.service.IUserStorageLoginService,org.osgi.service.cm.ManagedService",
+        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService,org.osgi.service.cm.ManagedService",
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
 public class UserStorageLoginComponent

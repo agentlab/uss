@@ -3,7 +3,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>org.eclipse.userstorage.plugins</artifactId>
+	<artifactId>org.eclipse.userstorage.tests</artifactId>
 
 	<packaging>pom</packaging>
 
@@ -15,13 +15,7 @@
 	</parent>
 
 	<modules>
-		<module>org.eclipse.userstorage</module>
-		<module>org.eclipse.userstorage.login.component</module>
-        <module>org.eclipse.userstorage.login.service</module>
-        <module>org.eclipse.userstorage.service</module>
-		<module>org.eclipse.userstorage.service.host</module>
-		<module>org.eclipse.userstorage.service.model</module>
-		<module>org.eclipse.userstorage.session.service</module>
+		<module>org.eclipse.userstorage.tests</module>
 	</modules>
 
 	<build>
