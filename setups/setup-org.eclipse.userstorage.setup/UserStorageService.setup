@@ -79,10 +79,6 @@
           <value>${git.clone.uss.location/releng/org.eclipse.userstorage.releng/org.eclipse.userstorage.releng.target}</value>
         </detail>
         <detail
-            key="preferredRepositories">
-          <value>http://download.eclipse.org/eclipse/updates/</value>
-        </detail>
-        <detail
             key="includeAllPlatforms">
           <value>false</value>
         </detail>
@@ -205,10 +201,7 @@
       value="generate">
     <description></description>
   </setupTask>
-  <stream name="develop"
-      label="develop"/>
-  <logicalProjectContainer
-      xsi:type="setup:Project"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='ru.agentlab']/@projects[name='osgi']/@projects[name='web']/@projects[name='jaxrs']"/>
+  <stream name="dmaven"
+      label="dmaven"/>
   <description>User Storage Service provides cool stuff.</description>
 </setup:Project>

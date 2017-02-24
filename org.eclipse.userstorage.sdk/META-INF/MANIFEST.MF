@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.eclipse.userstorage.sdk;singleton:=true
-Bundle-Version: 1.0.0.qualifier
-Bundle-Name: %pluginName
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
-Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
