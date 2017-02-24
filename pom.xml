@@ -22,6 +22,7 @@
        <module>tests</module>
 		<module>features</module>
       <module>sites/org.eclipse.userstorage.site</module> 
+	  <module>products/org.eclipse.userstorage.product</module> 
     </modules>
 
     <build>
