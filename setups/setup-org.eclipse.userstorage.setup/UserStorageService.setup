@@ -102,6 +102,8 @@
       <requirement
           name="org.apache.httpcomponents.httpcore"/>
       <requirement
+          name="org.aopalliance"/>
+      <requirement
           name="com.fasterxml.jackson.core.jackson-core"/>
       <requirement
           name="com.fasterxml.jackson.core.jackson-annotations"/>
@@ -115,6 +117,94 @@
           name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider"/>
       <requirement
           name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
+      <requirement
+          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
+      <requirement
+          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations.source"/>
+      <requirement
+          name="ch.qos.logback.classic"/>
+      <requirement
+          name="ch.qos.logback.core"/>
+      <requirement
+          name="ch.qos.logback.slf4j"/>
+      <requirement
+          name="org.eclipse.ecf.discovery"/>
+      <requirement
+          name="org.slf4j.jcl"/>
+      <requirement
+          name="org.json"/>
+      <requirement
+          name="org.eclipse.ecf.osgi.services.distribution"/>
+      <requirement
+          name="org.eclipse.ecf.osgi.services.distribution.source"/>
+      <requirement
+          name="org.eclipse.ecf.osgi.services.remoteserviceadmin"/>
+      <requirement
+          name="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy"/>
+      <requirement
+          name="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy.source"/>
+      <requirement
+          name="org.eclipse.ecf.osgi.services.remoteserviceadmin.source"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64"
+          filter="(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.aix.ppc"
+          filter="(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.aix.ppc64"
+          filter="(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.hpux.ia64"
+          filter="(&amp;(osgi.arch=ia64)(osgi.os=hpux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.ppc"
+          filter="(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.ppc64"
+          filter="(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.ppc64le"
+          filter="(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.s390"
+          filter="(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.s390x"
+          filter="(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.x86"
+          filter="(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.linux.x86_64"
+          filter="(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.solaris.sparcv9"
+          filter="(&amp;(osgi.arch=sparcv9)(osgi.os=solaris)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.gtk.solaris.x86_64"
+          filter="(&amp;(osgi.arch=x86_64)(osgi.os=solaris)(osgi.ws=gtk))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.win32.win32.x86"
+          filter="(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))"/>
+      <requirement
+          name="org.eclipse.equinox.launcher.win32.win32.x86_64"
+          filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32))"/>
+      <requirement
+          name="org.eclipse.equinox.security.macosx"
+          filter="(&amp;(osgi.os=macosx)(|(osgi.arch=ppc)(osgi.arch=x86)(osgi.arch=x86_64)))"/>
+      <requirement
+          name="org.eclipse.equinox.security.macosx.source"/>
+      <requirement
+          name="org.eclipse.equinox.security.win32.x86"
+          filter="(&amp;(osgi.arch=x86)(osgi.os=win32))"/>
+      <requirement
+          name="org.eclipse.equinox.security.win32.x86.source"/>
+      <requirement
+          name="org.eclipse.equinox.security.win32.x86_64"
+          filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32))"/>
+      <requirement
+          name="org.eclipse.equinox.security.win32.x86_64.source"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}"
           locateNestedProjects="true">
