@@ -1,1 +1,8 @@
 !*.class
+/.gitignore
+/ArtifactRepositoryAdjuster$Properties.class
+/ArtifactRepositoryAdjuster.class
+/RepositoryComposer$1.class
+/RepositoryComposer$2.class
+/RepositoryComposer.class
+/Version.class
