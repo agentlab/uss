@@ -224,7 +224,7 @@
         <repository
             url="http://agentlab.ru/pd/p2/che/"/>
         <repository
-            url="http://agentlab.ru/p2/org.glassfish.jersey/2.14.1.201702171632/"/>
+            url="http://agentlab.ru/p2/org.glassfish.jersey/2.14.1.201703151945/"/>
       </repositoryList>
     </targlet>
   </setupTask>

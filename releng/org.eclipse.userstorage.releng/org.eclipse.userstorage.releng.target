@@ -8,27 +8,32 @@
       <repository location="http://download.eclipse.org/releases/neon"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+      <unit id="slf4j.api" version="0.0.0"/>
+      <repository location="http://agentlab.ru/pd/p2/eclipseorbit/"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="com.fasterxml.jackson.datatype.jackson-datatype-guava" version="0.0.0"/>
       <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" version="0.0.0"/>
+      <unit id="javassist" version="0.0.0"/>
       <unit id="javax.validation.api" version="0.0.0"/>
       <unit id="org.apache.commons.lang3" version="0.0.0"/>
-      <unit id="org.glassfish.hk2.locator" version="0.0.0"/>
       <unit id="org.objectweb.asm.all.debug" version="0.0.0"/>
       <repository location="http://agentlab.ru/pd/p2/che/"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.glassfish.jersey.feature.feature.group" version="0.0.0"/>
-      <repository location="http://agentlab.ru/p2/org.glassfish.jersey/2.14.1.201702171632/"/>
+      <repository location="http://agentlab.ru/p2/org.glassfish.jersey/2.14.1.201703151945/"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+      <unit id="com.google.gson" version="0.0.0"/>
       <unit id="javax.validation" version="0.0.0"/>
+      <unit id="org.glassfish.hk2.locator" version="0.0.0"/>
       <unit id="org.hamcrest.generator" version="0.0.0"/>
       <unit id="org.hamcrest.integration" version="0.0.0"/>
+      <unit id="org.objectweb.asm" version="0.0.0"/>
       <unit id="org.objenesis" version="0.0.0"/>
-      <unit id="org.slf4j.ext" version="0.0.0"/>
       <unit id="org.slf4j.jul" version="0.0.0"/>
-      <unit id="org.slf4j.log4j" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
+      <repository location="http://download.eclipse.org/tools/orbit/R-builds/R20170307180635/repository"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="com.google.jsr305.feature.feature.group" version="0.0.0"/>

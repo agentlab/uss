@@ -91,28 +91,11 @@
       <plugin id="org.eclipse.equinox.http.jetty"/>
       <plugin id="org.eclipse.equinox.http.servlet"/>
       <plugin id="org.eclipse.equinox.launcher"/>
-      <plugin id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.aix.ppc" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.aix.ppc64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.hpux.ia64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.ppc" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.ppc64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.ppc64le" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.s390" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.s390x" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true"/>
       <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.solaris.sparcv9" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.gtk.solaris.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.region" fragment="true"/>
       <plugin id="org.eclipse.equinox.registry"/>
       <plugin id="org.eclipse.equinox.security"/>
-      <plugin id="org.eclipse.equinox.security.macosx" fragment="true"/>
-      <plugin id="org.eclipse.equinox.security.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.equinox.security.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.transforms.hook" fragment="true"/>
       <plugin id="org.eclipse.equinox.useradmin"/>
@@ -136,7 +119,6 @@
       <plugin id="org.eclipse.userstorage.service.host"/>
       <plugin id="org.eclipse.userstorage.service.model"/>
       <plugin id="org.eclipse.userstorage.session.service"/>
-      <plugin id="org.eclipse.userstorage.test"/>
       <plugin id="org.glassfish.hk2.api"/>
       <plugin id="org.glassfish.hk2.locator"/>
       <plugin id="org.glassfish.hk2.osgi-resource-locator"/>
@@ -147,13 +129,9 @@
       <plugin id="org.glassfish.jersey.container.servlet.core"/>
       <plugin id="org.glassfish.jersey.media.json.jackson"/>
       <plugin id="org.glassfish.jersey.server"/>
-      <plugin id="org.hamcrest.core"/>
       <plugin id="org.json"/>
-      <plugin id="org.junit"/>
       <plugin id="org.objectweb.asm"/>
-      <plugin id="org.objectweb.asm.all.debug"/>
       <plugin id="org.slf4j.api"/>
-      <plugin id="org.slf4j.ext"/>
       <plugin id="org.slf4j.jcl"/>
       <plugin id="org.slf4j.jul"/>
       <plugin id="org.slf4j.log4j"/>
