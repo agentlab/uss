@@ -56,10 +56,10 @@
       <plugin id="javax.xml"/>
       <plugin id="org.aopalliance"/>
       <plugin id="org.apache.commons.codec"/>
-      <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.commons.compress"/>
       <plugin id="org.apache.commons.fileupload"/>
       <plugin id="org.apache.commons.io"/>
+      <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.felix.gogo.command"/>
       <plugin id="org.apache.felix.gogo.runtime"/>
       <plugin id="org.apache.felix.gogo.shell"/>
@@ -110,6 +110,7 @@
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.region" fragment="true"/>
       <plugin id="org.eclipse.equinox.registry"/>
+      <plugin id="org.eclipse.equinox.security"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.transforms.hook" fragment="true"/>
       <plugin id="org.eclipse.equinox.useradmin"/>
@@ -127,6 +128,11 @@
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin"/>
       <plugin id="org.eclipse.osgi.util"/>
+      <plugin id="org.eclipse.userstorage"/>
+      <plugin id="org.eclipse.userstorage.service"/>
+      <plugin id="org.eclipse.userstorage.service.host"/>
+      <plugin id="org.eclipse.userstorage.service.model"/>
+      <plugin id="org.eclipse.userstorage.tests"/>
       <plugin id="org.glassfish.hk2.api"/>
       <plugin id="org.glassfish.hk2.external.aopalliance-repackaged"/>
       <plugin id="org.glassfish.hk2.external.javax.inject"/>
@@ -142,23 +148,18 @@
       <plugin id="org.glassfish.jersey.ext.jersey-entity-filtering"/>
       <plugin id="org.glassfish.jersey.media.jersey-media-jaxb"/>
       <plugin id="org.glassfish.jersey.media.jersey-media-json-jackson"/>
+      <plugin id="org.hamcrest.core"/>
       <plugin id="org.jdom"/>
       <plugin id="org.json"/>
-      <plugin id="org.objectweb.asm"/>
-      <plugin id="org.eclipse.userstorage"/>
-      <plugin id="org.eclipse.userstorage.service"/>
-      <plugin id="org.eclipse.userstorage.service.host"/>
-      <plugin id="org.eclipse.userstorage.service.model"/>
-      <plugin id="org.eclipse.userstorage.tests"/>
-      <plugin id="org.hamcrest.core"/>
       <plugin id="org.junit"/>
+      <plugin id="org.objectweb.asm"/>
       <plugin id="org.slf4j.api"/>
       <plugin id="org.slf4j.jcl"/>
       <plugin id="org.slf4j.log4j"/>
    </plugins>
 
    <configurations>
-     <plugin id="org.eclipse.core.commands" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.core.commands" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.ecf" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.ecf.osgi.services.distribution" autoStart="true" startLevel="5" />
