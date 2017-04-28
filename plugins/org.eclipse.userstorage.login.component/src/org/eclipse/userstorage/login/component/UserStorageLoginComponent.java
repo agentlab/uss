@@ -6,7 +6,6 @@ package org.eclipse.userstorage.login.component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,8 +26,6 @@ import org.eclipse.userstorage.login.session.Session;
 import org.eclipse.userstorage.login.user.User;
 import org.eclipse.userstorage.session.service.IUserStorageSessionService;
 import org.eclipse.userstorage.spi.Credentials;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +51,7 @@ import com.google.common.cache.LoadingCache;
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
 public class UserStorageLoginComponent
-    implements IUserStorageLoginService, ManagedService, IUserStorageSessionService {
+    implements IUserStorageLoginService, IUserStorageSessionService {
 
     private final Map<String, User> users = new HashMap<>();
 
@@ -128,11 +125,6 @@ public class UserStorageLoginComponent
         return session;
     }
 
-    @Override
-    public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
-        // TODO Auto-generated method stub
-
-    }
 
     @Activate
     public void activate(ComponentContext context) throws IOException {

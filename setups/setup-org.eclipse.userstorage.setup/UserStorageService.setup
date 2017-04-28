@@ -90,10 +90,6 @@
       <requirement
           name="*"/>
       <requirement
-          name="org.glassfish.jersey.feature.feature.group"/>
-      <requirement
-          name="org.glassfish.jersey.feature.source.feature.group"/>
-      <requirement
           name="org.eclipse.rcp.feature.group"/>
       <requirement
           name="epp.package.java"/>
@@ -205,6 +201,61 @@
           filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32))"/>
       <requirement
           name="org.eclipse.equinox.security.win32.x86_64.source"/>
+      <requirement
+          name="org.eclipse.ecf.provider.jersey.client.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.ecf.provider.jersey.client.feature.source.feature.group"/>
+      <requirement
+          name="org.eclipse.ecf.provider.jersey.server.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.ecf.provider.jersey.server.feature.source.feature.group"/>
+      <requirement
+          name="org.aspectj.feature.group"/>
+      <requirement
+          name="org.aspectj.source.feature.group"/>
+      <requirement
+          name="org.eclipse.ajdt.feature.group"/>
+      <requirement
+          name="org.eclipse.ajdt.source.feature.group"/>
+      <requirement
+          name="org.eclipse.equinox.weaving.sdk.feature.group"/>
+      <requirement
+          name="org.glassfish.jersey.containers.jersey-container-servlet"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="org.glassfish.jersey.containers.jersey-container-servlet"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="org.glassfish.jersey.containers.jersey-container-servlet-core"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="org.glassfish.jersey.core.jersey-server"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="org.glassfish.jersey.media.jersey-media-json-jackson"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="org.glassfish.jersey.ext.jersey-entity-filtering"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="org.glassfish.jersey.media.jersey-media-jaxb"
+          versionRange="[2.25.1,2.25.1]"/>
+      <requirement
+          name="javax.validation"/>
+      <requirement
+          name="javax.validation.source"/>
+      <requirement
+          name="org.glassfish.hk2.api"
+          versionRange="[2.5.0.b32,2.5.0.b32]"/>
+      <requirement
+          name="org.glassfish.hk2.osgi-resource-locator"
+          versionRange="[1.0.1,1.0.1]"/>
+      <requirement
+          name="org.glassfish.hk2.locator"
+          versionRange="[2.5.0.b32,2.5.0.b32]"/>
+      <requirement
+          name="org.glassfish.hk2.utils"
+          versionRange="[2.5.0.b32,2.5.0.b32]"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}"
           locateNestedProjects="true">
@@ -222,9 +273,11 @@
         <repository
             url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
         <repository
-            url="http://agentlab.ru/pd/p2/che/"/>
+            url="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201704281837/"/>
         <repository
-            url="http://agentlab.ru/p2/org.glassfish.jersey/2.14.1.201703151945/"/>
+            url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
+        <repository
+            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
       </repositoryList>
     </targlet>
   </setupTask>

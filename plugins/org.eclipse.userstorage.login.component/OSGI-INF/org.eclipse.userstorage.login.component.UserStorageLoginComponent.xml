@@ -9,7 +9,6 @@
    <property name="service.pid" value="org.eclipse.userstorage.service.host.UserStorageComponent"/>
    <service>
       <provide interface="org.eclipse.userstorage.login.service.IUserStorageLoginService"/>
-      <provide interface="org.osgi.service.cm.ManagedService"/>
       <provide interface="org.eclipse.userstorage.session.service.IUserStorageSessionService"/>
    </service>
    <implementation class="org.eclipse.userstorage.login.component.UserStorageLoginComponent"/>

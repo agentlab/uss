@@ -3,6 +3,7 @@
 
 <product name="User Storage Service" uid="org.eclipse.userstorage.product" version="1.0.0.0" useFeatures="false" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -12,17 +13,22 @@
       <vmArgs>-Xms40m -Xmx384m
  -Declipse.ignoreApp=true
  -Dosgi.noShutdown=true 
- -Dorg.eclipse.equinox.http.jetty.http.port=8080 
+ -Dorg.eclipse.equinox.http.jetty.http.port=8081
  -Declipse.log.level=ALL 
  -Dlogback.configurationFile=logback.xml 
  -Dosgi.noShutdown=true 
  -Declipse.ignoreApp=true
+ -Dosgi.framework.extensions=org.eclipse.equinox.weaving.hook
+ -Daj.weaving.verbose=true
+ -Dorg.aspectj.weaver.showWeaveInfo=true
+ -Dorg.aspectj.osgi.verbose=true
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread
       </vmArgsMac>
    </launcherArgs>
 
    <windowImages/>
+
 
    <launcher>
       <solaris/>
@@ -31,8 +37,10 @@
       </win>
    </launcher>
 
+
    <vm>
    </vm>
+
 
    <plugins>
       <plugin id="ch.qos.logback.classic"/>
@@ -64,6 +72,8 @@
       <plugin id="org.apache.felix.gogo.shell"/>
       <plugin id="org.apache.httpcomponents.httpclient"/>
       <plugin id="org.apache.httpcomponents.httpcore"/>
+      <plugin id="org.aspectj.runtime"/>
+      <plugin id="org.aspectj.weaver"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.jobs"/>
       <plugin id="org.eclipse.core.net"/>
@@ -77,6 +87,7 @@
       <plugin id="org.eclipse.ecf.provider.jaxrs"/>
       <plugin id="org.eclipse.ecf.provider.jaxrs.server"/>
       <plugin id="org.eclipse.ecf.provider.jersey.server"/>
+      <plugin id="org.eclipse.ecf.provider.jersey.server.aspectj"/>
       <plugin id="org.eclipse.ecf.provider.jmdns"/>
       <plugin id="org.eclipse.ecf.remoteservice"/>
       <plugin id="org.eclipse.ecf.remoteservice.asyncproxy"/>
@@ -100,6 +111,7 @@
       <plugin id="org.eclipse.equinox.transforms.hook" fragment="true"/>
       <plugin id="org.eclipse.equinox.useradmin"/>
       <plugin id="org.eclipse.equinox.util"/>
+      <plugin id="org.eclipse.equinox.weaving.aspectj"/>
       <plugin id="org.eclipse.equinox.weaving.hook" fragment="true"/>
       <plugin id="org.eclipse.jetty.http"/>
       <plugin id="org.eclipse.jetty.io"/>
@@ -123,10 +135,18 @@
       <plugin id="org.glassfish.hk2.locator"/>
       <plugin id="org.glassfish.hk2.osgi-resource-locator"/>
       <plugin id="org.glassfish.hk2.utils"/>
+      <plugin id="org.glassfish.jersey.bundles.repackaged.jersey-guava"/>
       <plugin id="org.glassfish.jersey.client"/>
       <plugin id="org.glassfish.jersey.common"/>
       <plugin id="org.glassfish.jersey.container.servlet"/>
       <plugin id="org.glassfish.jersey.container.servlet.core"/>
+      <plugin id="org.glassfish.jersey.containers.jersey-container-servlet"/>
+      <plugin id="org.glassfish.jersey.containers.jersey-container-servlet-core"/>
+      <plugin id="org.glassfish.jersey.core.jersey-client"/>
+      <plugin id="org.glassfish.jersey.core.jersey-common"/>
+      <plugin id="org.glassfish.jersey.core.jersey-server"/>
+      <plugin id="org.glassfish.jersey.ext.jersey-entity-filtering"/>
+      <plugin id="org.glassfish.jersey.media.jersey-media-json-jackson"/>
       <plugin id="org.glassfish.jersey.media.json.jackson"/>
       <plugin id="org.glassfish.jersey.server"/>
       <plugin id="org.json"/>
@@ -140,13 +160,14 @@
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.ecf.osgi.services.distribution" autoStart="true" startLevel="5" />
-      <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin" autoStart="true" startLevel="5" />
+      <plugin id="org.eclipse.ecf.osgi.services.distribution" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.app" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
-      <plugin id="org.eclipse.equinox.http.jetty" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.http.jetty" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.weaving.aspectj" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
       <property name="org.eclipse.equinox.simpleconfigurator.configUrl" value="file\:./configuration/org.eclipse.equinox.simpleconfigurator/bundles.info" />
       <property name="osgi.configuration.cascaded" value="false" />

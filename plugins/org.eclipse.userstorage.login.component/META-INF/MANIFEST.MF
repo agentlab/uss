@@ -17,5 +17,4 @@ Import-Package: com.google.common.cache;version="15.0.0",
  org.osgi.service.cm;version="1.5.0",
  org.osgi.service.component;version="1.2.2",
  org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.userstorage.login.component.UserStorageLoginConfigurer.xml,
- OSGI-INF/org.eclipse.userstorage.login.component.UserStorageLoginComponent.xml
+Service-Component: OSGI-INF/org.eclipse.userstorage.login.component.UserStorageLoginComponent.xml
