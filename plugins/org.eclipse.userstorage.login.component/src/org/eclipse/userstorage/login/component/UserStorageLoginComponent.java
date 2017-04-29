@@ -45,9 +45,9 @@ import com.google.common.cache.LoadingCache;
     property = {
         "service.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService",
         "service.exported.configs=ecf.jaxrs.jersey.server",
-        "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.alias=/api",
+        "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api",
         "ecf.jaxrs.jersey.server.service.alias=/user",
-        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService,org.osgi.service.cm.ManagedService",
+        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService",
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
 public class UserStorageLoginComponent

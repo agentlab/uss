@@ -3,7 +3,6 @@
 
 <product name="User Storage Service" uid="org.eclipse.userstorage.product" version="1.0.0.0" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -29,7 +28,6 @@
 
    <windowImages/>
 
-
    <launcher>
       <solaris/>
       <win useIco="false">
@@ -37,10 +35,8 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="ch.qos.logback.classic"/>
@@ -136,10 +132,6 @@
       <plugin id="org.glassfish.hk2.osgi-resource-locator"/>
       <plugin id="org.glassfish.hk2.utils"/>
       <plugin id="org.glassfish.jersey.bundles.repackaged.jersey-guava"/>
-      <plugin id="org.glassfish.jersey.client"/>
-      <plugin id="org.glassfish.jersey.common"/>
-      <plugin id="org.glassfish.jersey.container.servlet"/>
-      <plugin id="org.glassfish.jersey.container.servlet.core"/>
       <plugin id="org.glassfish.jersey.containers.jersey-container-servlet"/>
       <plugin id="org.glassfish.jersey.containers.jersey-container-servlet-core"/>
       <plugin id="org.glassfish.jersey.core.jersey-client"/>
@@ -147,8 +139,6 @@
       <plugin id="org.glassfish.jersey.core.jersey-server"/>
       <plugin id="org.glassfish.jersey.ext.jersey-entity-filtering"/>
       <plugin id="org.glassfish.jersey.media.jersey-media-json-jackson"/>
-      <plugin id="org.glassfish.jersey.media.json.jackson"/>
-      <plugin id="org.glassfish.jersey.server"/>
       <plugin id="org.json"/>
       <plugin id="org.objectweb.asm"/>
       <plugin id="org.slf4j.api"/>
