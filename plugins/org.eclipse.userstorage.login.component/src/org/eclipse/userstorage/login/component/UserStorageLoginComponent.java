@@ -42,174 +42,164 @@ import com.google.common.cache.LoadingCache;
  */
 
 @Component(enabled = true, immediate = true,
-    property = {
-        "service.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService",
-        "service.exported.configs=ecf.jaxrs.jersey.server",
-        "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api",
-        "ecf.jaxrs.jersey.server.service.alias=/user",
-        "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService",
-        "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
+	property = { "service.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService", "service.exported.configs=ecf.jaxrs.jersey.server", "ecf.jaxrs.jersey.server.uri=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api", "ecf.jaxrs.jersey.server.service.alias=/user", "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService", "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
 
-public class UserStorageLoginComponent
-    implements IUserStorageLoginService, IUserStorageSessionService {
+public class UserStorageLoginComponent implements IUserStorageLoginService, IUserStorageSessionService {
 
-    private final Map<String, User> users = new HashMap<>();
+	private final Map<String, User> users = new HashMap<>();
 
-    private LoadingCache<String, Session> sessions;
+	private LoadingCache<String, Session> sessions;
 
-    @Override
-    public Response postLogin(InputStream creditianals) {
+	@Override
+	public Response postLogin(InputStream creditianals) {
 
-        Map<String, Object> requestObject = this.parseJson(creditianals);
+		Map<String, Object> requestObject = this.parseJson(creditianals);
 
-        String username = (String)requestObject.get("username"); //$NON-NLS-1$
-        String password = (String)requestObject.get("password"); //$NON-NLS-1$
+		if (requestObject == null) {
+			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+		}
 
-        User user = users.get(username);
-        if (user == null || password == null || !password.equals(user.getPassword()))
-        {
-            return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
-        }
+		String username = (String)requestObject.get("username"); //$NON-NLS-1$
+		String password = (String)requestObject.get("password"); //$NON-NLS-1$
 
-        Session session = addSession(user);
+		User user = users.get(username);
+		if (user == null || password == null || !password.equals(user.getPassword())) {
+			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+		}
+
+		Session session = addSession(user);
 
 //        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100000000, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        NewCookie cookie = new NewCookie(new Cookie("SESSION", session.getID(), "/", null)); //$NON-NLS-1$ //$NON-NLS-2$
+		NewCookie cookie = new NewCookie(new Cookie("SESSION", session.getID(), "/", null)); //$NON-NLS-1$ //$NON-NLS-2$
 
-        Map<String, Object> responseObject = new LinkedHashMap<>();
-        responseObject.put("sessid", session.getID()); //$NON-NLS-1$
-        responseObject.put("token", session.getCSRFToken()); //$NON-NLS-1$
+		Map<String, Object> responseObject = new LinkedHashMap<>();
+		responseObject.put("sessid", session.getID()); //$NON-NLS-1$
+		responseObject.put("token", session.getCSRFToken()); //$NON-NLS-1$
 
-        System.err.println(session.getID());
+		System.err.println(session.getID());
 
-        StreamingOutput stream = buildResponseStream(responseObject);
+		StreamingOutput stream = buildResponseStream(responseObject);
 
-        return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).cookie(cookie).build();
-    }
+		return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).cookie(cookie).build();
+	}
 
-    @Override
-    public Response postCreate(InputStream creditianals) {
+	@Override
+	public Response postCreate(InputStream creditianals) {
 
-        Map<String, Object> requestObject = this.parseJson(creditianals);
+		Map<String, Object> requestObject = this.parseJson(creditianals);
 
-        String username = (String)requestObject.get("username"); //$NON-NLS-1$
-        String password = (String)requestObject.get("password"); //$NON-NLS-1$
-        String confirmPassword = (String)requestObject.get("confirmPassword"); //$NON-NLS-1$
+		if (requestObject == null) {
+			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
+		}
 
-        if (this.users.containsKey(username) || !password.equals(confirmPassword))
-        {
-            return Response.status(HttpServletResponse.SC_FORBIDDEN).build();
-        }
+		String username = (String)requestObject.get("username"); //$NON-NLS-1$
+		String password = (String)requestObject.get("password"); //$NON-NLS-1$
+		String confirmPassword = (String)requestObject.get("confirmPassword"); //$NON-NLS-1$
 
-        User user = addUser(new Credentials(username, password));
+		if (this.users.containsKey(username) || !password.equals(confirmPassword)) {
+			return Response.status(HttpServletResponse.SC_FORBIDDEN).build();
+		}
 
-        Session session = addSession(user);
-        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 10, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		User user = addUser(new Credentials(username, password));
 
-        return Response.status(HttpServletResponse.SC_CREATED).cookie(cookie).build();
-    }
+		Session session = addSession(user);
+		NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 10, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-    public User addUser(Credentials credentials) {
-        return addUser(credentials.getUsername(), credentials.getPassword());
-    }
+		return Response.status(HttpServletResponse.SC_CREATED).cookie(cookie).build();
+	}
 
-    public User addUser(String username, String password) {
-        User user = new User(username, password);
-        users.put(user.getUsername(), user);
-        return user;
-    }
+	public User addUser(Credentials credentials) {
+		return addUser(credentials.getUsername(), credentials.getPassword());
+	}
 
-    private Session addSession(User user) {
-        Session session = new Session(user);
-        sessions.put(session.getID(), session);
-        return session;
-    }
+	public User addUser(String username, String password) {
+		User user = new User(username, password);
+		users.put(user.getUsername(), user);
+		return user;
+	}
 
+	private Session addSession(User user) {
+		Session session = new Session(user);
+		sessions.put(session.getID(), session);
+		return session;
+	}
 
-    @Activate
-    public void activate(ComponentContext context) throws IOException {
-        addUser(new Credentials("1", "1")); //$NON-NLS-1$ //$NON-NLS-2$
+	@Activate
+	public void activate(ComponentContext context) throws IOException {
+		addUser(new Credentials("1", "1")); //$NON-NLS-1$ //$NON-NLS-2$
 
-        this.sessions =
-            CacheBuilder.newBuilder().concurrencyLevel(4).expireAfterWrite(10, TimeUnit.MINUTES)
-            .build(new CacheLoader<String, Session>()
-                {
-                    @Override
-                    public Session load(String key) throws Exception {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-                });
-    }
+		this.sessions = CacheBuilder.newBuilder().concurrencyLevel(4).expireAfterWrite(10, TimeUnit.MINUTES).build(new CacheLoader<String, Session>() {
+			@Override
+			public Session load(String key) throws Exception {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+	}
 
-    @Deactivate
-    public void deactivate(ComponentContext context) {
-        System.out.println("Login service stopped"); //$NON-NLS-1$
-    }
+	@Deactivate
+	public void deactivate(ComponentContext context) {
+		System.out.println("Login service stopped"); //$NON-NLS-1$
+	}
 
-    @Modified
-    public void modify() {
-        System.out.println("Login service modified"); //$NON-NLS-1$
-    }
+	@Modified
+	public void modify() {
+		System.out.println("Login service modified"); //$NON-NLS-1$
+	}
 
-    @Override
-    public boolean isAuth(String csrfToken, String sessionID) {
-        return getSession(csrfToken, sessionID) != null ? true : false;
-    }
+	@Override
+	public boolean isAuth(String csrfToken, String sessionID) {
+		return getSession(csrfToken, sessionID) != null ? true : false;
+	}
 
-    @Override
-    public String getUserLogin(String sessionID) {
-        Session session = sessions.getIfPresent(sessionID);
-        return session == null ? null : session.getUser().getUsername();
-    }
+	@Override
+	public String getUserLogin(String sessionID) {
+		Session session = sessions.getIfPresent(sessionID);
+		return session == null ? null : session.getUser().getUsername();
+	}
 
-    private Session getSession(String csrfToken, String sessionID) {
-        if (csrfToken != null && sessionID != null)
-        {
-            Session session = sessions.getIfPresent(sessionID);
+	private Session getSession(String csrfToken, String sessionID) {
+		if (csrfToken != null && sessionID != null) {
+			Session session = sessions.getIfPresent(sessionID);
 
-            if (session != null && session.getCSRFToken().equals(csrfToken))
-            {
-                return session;
-            }
-        }
+			if (session != null && session.getCSRFToken().equals(csrfToken)) {
+				return session;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private Map<String, Object> parseJson(InputStream json) {
+	private Map<String, Object> parseJson(InputStream json) {
 
-        Map<String, Object> requestObject = null;
+		Map<String, Object> requestObject = null;
 
-        try
-        {
-            requestObject = JSONUtil.parse(json, null);
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
+		try {
+			requestObject = JSONUtil.parse(json, null);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 
-        return requestObject;
-    }
+		return requestObject;
+	}
 
-    private StreamingOutput buildResponseStream(Map<String, Object> responseObject) {
+	private StreamingOutput buildResponseStream(Map<String, Object> responseObject) {
 
-        InputStream body = JSONUtil.build(responseObject);
+		InputStream body = JSONUtil.build(responseObject);
 
-        StreamingOutput stream = new StreamingOutput()
-        {
-            @Override
-            public void write(OutputStream os) throws IOException, WebApplicationException {
-                IOUtil.copy(body, os);
-                os.flush();
-                IOUtil.closeSilent(body);
-            }
-        };
+		StreamingOutput stream = new StreamingOutput() {
+			@Override
+			public void write(OutputStream os) throws IOException, WebApplicationException {
+				IOUtil.copy(body, os);
+				os.flush();
+				IOUtil.closeSilent(body);
+			}
+		};
 
-        return stream;
-    }
+		return stream;
+	}
 
 }

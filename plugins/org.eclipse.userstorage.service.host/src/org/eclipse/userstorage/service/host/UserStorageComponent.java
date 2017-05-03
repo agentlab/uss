@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Reference;
 
 @Component(enabled = true, immediate = true,
     property = { "service.exported.interfaces=*", "service.exported.configs=ecf.jaxrs.jersey.server",
-        "ecf.jaxrs.jersey.server.urlContext=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api",
+        "ecf.jaxrs.jersey.server.uri=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api",
         "ecf.jaxrs.jersey.server.service.alias=/blob",
         "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.service.IApiBlobService",
         "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
