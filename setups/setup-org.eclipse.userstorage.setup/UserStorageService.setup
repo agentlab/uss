@@ -71,7 +71,8 @@
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="${scope.project.label}"
-        activeRepositoryList="${eclipse.target.platform}">
+        activeRepositoryList="${eclipse.target.platform}"
+        includeAllPlatforms="true">
       <annotation
           source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
         <detail
@@ -80,11 +81,23 @@
         </detail>
         <detail
             key="includeAllPlatforms">
-          <value>false</value>
+          <value>true</value>
         </detail>
         <detail
             key="includeSource">
+          <value>true</value>
+        </detail>
+        <detail
+            key="generateVersions">
           <value>false</value>
+        </detail>
+        <detail
+            key="generateImplicitUnits">
+          <value>true</value>
+        </detail>
+        <detail
+            key="includeMode">
+          <value>slicer</value>
         </detail>
       </annotation>
       <requirement
@@ -94,7 +107,8 @@
       <requirement
           name="epp.package.java"/>
       <requirement
-          name="org.apache.httpcomponents.httpclient"/>
+          name="org.apache.httpcomponents.httpclient"
+          versionRange="[4.3.6.v201511171540,4.3.6.v201511171540]"/>
       <requirement
           name="org.apache.httpcomponents.httpcore"/>
       <requirement
@@ -114,36 +128,28 @@
       <requirement
           name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
       <requirement
-          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
-      <requirement
-          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations.source"/>
-      <requirement
           name="ch.qos.logback.classic"/>
       <requirement
           name="ch.qos.logback.core"/>
       <requirement
-          name="ch.qos.logback.slf4j"/>
+          name="ch.qos.logback.slf4j"
+          versionRange="[1.0.7.v201505121915,1.0.7.v201505121915]"/>
       <requirement
           name="org.eclipse.ecf.discovery"/>
       <requirement
+          name="org.slf4j.api"/>
+      <requirement
+          name="org.slf4j.jul"/>
+      <requirement
+          name="org.slf4j.log4j"/>
+      <requirement
           name="org.slf4j.jcl"/>
       <requirement
-          name="org.json"/>
-      <requirement
           name="org.eclipse.ecf.osgi.services.distribution"/>
-      <requirement
-          name="org.eclipse.ecf.osgi.services.distribution.source"/>
       <requirement
           name="org.eclipse.ecf.osgi.services.remoteserviceadmin"/>
       <requirement
           name="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy"/>
-      <requirement
-          name="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy.source"/>
-      <requirement
-          name="org.eclipse.ecf.osgi.services.remoteserviceadmin.source"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64"
-          filter="(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))"/>
       <requirement
           name="org.eclipse.equinox.launcher.gtk.aix.ppc"
           filter="(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))"/>
@@ -187,41 +193,21 @@
           name="org.eclipse.equinox.launcher.win32.win32.x86_64"
           filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32))"/>
       <requirement
-          name="org.eclipse.equinox.security.macosx"
-          filter="(&amp;(osgi.os=macosx)(|(osgi.arch=ppc)(osgi.arch=x86)(osgi.arch=x86_64)))"/>
-      <requirement
-          name="org.eclipse.equinox.security.macosx.source"/>
-      <requirement
           name="org.eclipse.equinox.security.win32.x86"
           filter="(&amp;(osgi.arch=x86)(osgi.os=win32))"/>
-      <requirement
-          name="org.eclipse.equinox.security.win32.x86.source"/>
       <requirement
           name="org.eclipse.equinox.security.win32.x86_64"
           filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32))"/>
       <requirement
-          name="org.eclipse.equinox.security.win32.x86_64.source"/>
-      <requirement
           name="org.eclipse.ecf.provider.jersey.client.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.provider.jersey.client.feature.source.feature.group"/>
       <requirement
           name="org.eclipse.ecf.provider.jersey.server.feature.feature.group"/>
       <requirement
-          name="org.eclipse.ecf.provider.jersey.server.feature.source.feature.group"/>
-      <requirement
           name="org.aspectj.feature.group"/>
-      <requirement
-          name="org.aspectj.source.feature.group"/>
       <requirement
           name="org.eclipse.ajdt.feature.group"/>
       <requirement
-          name="org.eclipse.ajdt.source.feature.group"/>
-      <requirement
           name="org.eclipse.equinox.weaving.sdk.feature.group"/>
-      <requirement
-          name="org.glassfish.jersey.containers.jersey-container-servlet"
-          versionRange="[2.25.1,2.25.1]"/>
       <requirement
           name="org.glassfish.jersey.containers.jersey-container-servlet"
           versionRange="[2.25.1,2.25.1]"/>
@@ -243,7 +229,8 @@
       <requirement
           name="javax.validation"/>
       <requirement
-          name="javax.validation.source"/>
+          name="javax.ws.rs"
+          versionRange="[2.0.1,2.0.2)"/>
       <requirement
           name="org.glassfish.hk2.api"
           versionRange="[2.5.0.b32,2.5.0.b32]"/>
@@ -256,6 +243,8 @@
       <requirement
           name="org.glassfish.hk2.utils"
           versionRange="[2.5.0.b32,2.5.0.b32]"/>
+      <requirement
+          name="org.eclipse.equinox.executable.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}"
           locateNestedProjects="true">
@@ -278,6 +267,19 @@
             url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
         <repository
             url="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
+      </repositoryList>
+    </targlet>
+    <targlet
+        name="swt.missing.fragments"
+        activeRepositoryList="${eclipse.target.platform}"
+        includeAllPlatforms="true">
+      <requirement
+          name="org.eclipse.swt.dummyfragments.feature.group"
+          optional="true"/>
+      <repositoryList
+          name="Neon">
+        <repository
+            url="http://agentlab.ru/p2/orbit/missing-swt-fragments/updates/nightly/"/>
       </repositoryList>
     </targlet>
   </setupTask>

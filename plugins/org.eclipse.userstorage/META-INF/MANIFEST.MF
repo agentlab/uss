@@ -7,17 +7,23 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.userstorage.internal.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.0.0,4.0.0)",
- org.eclipse.core.net;bundle-version="[1.2.0,2.0.0)",
- org.eclipse.equinox.security;bundle-version="[1.0.0,2.0.0)",
- org.apache.httpcomponents.httpclient;bundle-version="[4.0.0, 5.0.0)",
- org.apache.httpcomponents.httpcore;bundle-version="[4.0.0,5.0.0)",
- org.apache.commons.logging;bundle-version="[1.0.0,2.0.0)",
- org.apache.commons.codec;bundle-version="[1.6.0,2.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.userstorage;version="1.0.0",
  org.eclipse.userstorage.internal;version="1.0.0";x-friends:="org.eclipse.userstorage.ui,org.eclipse.userstorage.test",
  org.eclipse.userstorage.internal.util;version="1.0.0";x-friends:="org.eclipse.userstorage.ui,org.eclipse.userstorage.test",
  org.eclipse.userstorage.spi;version="1.0.0",
  org.eclipse.userstorage.util;version="1.0.0"
 lipse-BuddyPolicy: registered
+Import-Package: org.apache.commons.codec.binary;version="1.6.0",
+ org.apache.http;version="4.3.3",
+ org.apache.http.auth;version="4.3.6",
+ org.apache.http.client;version="4.3.6",
+ org.apache.http.client.fluent;version="4.3.6",
+ org.apache.http.impl.client;version="4.3.6",
+ org.eclipse.core.internal.net,
+ org.eclipse.core.net.proxy,
+ org.eclipse.core.runtime.preferences;version="3.3.0",
+ org.eclipse.equinox.security.storage;version="1.0.0",
+ org.osgi.framework;version="1.8.0",
+ org.osgi.service.prefs;version="1.1.1"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"
