@@ -12,7 +12,7 @@
       <vmArgs>-Xms40m -Xmx384m
  -Declipse.ignoreApp=true
  -Dosgi.noShutdown=true 
- -Dorg.eclipse.equinox.http.jetty.http.port=8085
+ -Dorg.eclipse.equinox.http.jetty.http.port=8080
  -Declipse.log.level=ALL 
  -Dlogback.configurationFile=logback.xml 
  -Dosgi.noShutdown=true 

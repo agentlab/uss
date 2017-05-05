@@ -1,682 +1,683 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Generated from Eclipse User Storage Service" sequenceNumber="3">
-<locations>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="a.jre.javase" version="0.0.0"/>
-<unit id="ch.qos.logback.classic" version="0.0.0"/>
-<unit id="ch.qos.logback.core" version="0.0.0"/>
-<unit id="ch.qos.logback.slf4j" version="0.0.0"/>
-<unit id="com.fasterxml.jackson.datatype.jackson-datatype-guava" version="0.0.0"/>
-<unit id="com.google.gson" version="0.0.0"/>
-<unit id="com.google.guava" version="0.0.0"/>
-<unit id="com.ibm.icu" version="0.0.0"/>
-<unit id="com.jcraft.jsch" version="0.0.0"/>
-<unit id="com.sun.el" version="0.0.0"/>
-<unit id="config.a.jre.javase" version="0.0.0"/>
-<unit id="epp.package.java" version="0.0.0"/>
-<unit id="epp.package.java.executable.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="epp.package.java.executable.cocoa.macosx.x86_64.eclipse" version="0.0.0"/>
-<unit id="epp.package.java.executable.gtk.linux.x86" version="0.0.0"/>
-<unit id="epp.package.java.executable.gtk.linux.x86.eclipse" version="0.0.0"/>
-<unit id="epp.package.java.executable.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="epp.package.java.executable.gtk.linux.x86_64.eclipse" version="0.0.0"/>
-<unit id="epp.package.java.executable.win32.win32.x86" version="0.0.0"/>
-<unit id="epp.package.java.executable.win32.win32.x86.eclipse" version="0.0.0"/>
-<unit id="epp.package.java.executable.win32.win32.x86_64" version="0.0.0"/>
-<unit id="epp.package.java.executable.win32.win32.x86_64.eclipse" version="0.0.0"/>
-<unit id="javax.annotation" version="0.0.0"/>
-<unit id="javax.el" version="0.0.0"/>
-<unit id="javax.inject" version="0.0.0"/>
-<unit id="javax.servlet" version="0.0.0"/>
-<unit id="javax.servlet.jsp" version="0.0.0"/>
-<unit id="javax.ws.rs" version="0.0.0"/>
-<unit id="javax.xml" version="0.0.0"/>
-<unit id="org.aopalliance" version="0.0.0"/>
-<unit id="org.apache.ant" version="0.0.0"/>
-<unit id="org.apache.batik.css" version="0.0.0"/>
-<unit id="org.apache.batik.util" version="0.0.0"/>
-<unit id="org.apache.batik.util.gui" version="0.0.0"/>
-<unit id="org.apache.commons.codec" version="0.0.0"/>
-<unit id="org.apache.commons.io" version="0.0.0"/>
-<unit id="org.apache.commons.jxpath" version="0.0.0"/>
-<unit id="org.apache.commons.lang" version="0.0.0"/>
-<unit id="org.apache.commons.logging" version="0.0.0"/>
-<unit id="org.apache.felix.gogo.command" version="0.0.0"/>
-<unit id="org.apache.felix.gogo.runtime" version="0.0.0"/>
-<unit id="org.apache.felix.gogo.shell" version="0.0.0"/>
-<unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
-<unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
-<unit id="org.apache.jasper.glassfish" version="0.0.0"/>
-<unit id="org.apache.lucene.analysis" version="0.0.0"/>
-<unit id="org.apache.lucene.core" version="0.0.0"/>
-<unit id="org.eclipse.ant.core" version="0.0.0"/>
-<unit id="org.eclipse.compare" version="0.0.0"/>
-<unit id="org.eclipse.compare.core" version="0.0.0"/>
-<unit id="org.eclipse.compare.win32" version="0.0.0"/>
-<unit id="org.eclipse.core.commands" version="0.0.0"/>
-<unit id="org.eclipse.core.contenttype" version="0.0.0"/>
-<unit id="org.eclipse.core.databinding" version="0.0.0"/>
-<unit id="org.eclipse.core.databinding.beans" version="0.0.0"/>
-<unit id="org.eclipse.core.databinding.observable" version="0.0.0"/>
-<unit id="org.eclipse.core.databinding.property" version="0.0.0"/>
-<unit id="org.eclipse.core.expressions" version="0.0.0"/>
-<unit id="org.eclipse.core.externaltools" version="0.0.0"/>
-<unit id="org.eclipse.core.filebuffers" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.aix.ppc" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.aix.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.hpux.ia64" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.linux.ppc" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.linux.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.linux.ppc64le" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.linux.x86" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.linux.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.macosx" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.core.filesystem.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.core.jobs" version="0.0.0"/>
-<unit id="org.eclipse.core.net" version="0.0.0"/>
-<unit id="org.eclipse.core.net.linux.x86" version="0.0.0"/>
-<unit id="org.eclipse.core.net.linux.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.core.net.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.core.net.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.core.resources" version="0.0.0"/>
-<unit id="org.eclipse.core.resources.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.core.resources.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="org.eclipse.core.variables" version="0.0.0"/>
-<unit id="org.eclipse.debug.core" version="0.0.0"/>
-<unit id="org.eclipse.debug.ui" version="0.0.0"/>
-<unit id="org.eclipse.e4.core.commands" version="0.0.0"/>
-<unit id="org.eclipse.e4.core.contexts" version="0.0.0"/>
-<unit id="org.eclipse.e4.core.di" version="0.0.0"/>
-<unit id="org.eclipse.e4.core.di.annotations" version="0.0.0"/>
-<unit id="org.eclipse.e4.core.di.extensions" version="0.0.0"/>
-<unit id="org.eclipse.e4.core.services" version="0.0.0"/>
-<unit id="org.eclipse.e4.emf.xpath" version="0.0.0"/>
-<unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.bindings" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.css.core" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.css.swt" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.css.swt.theme" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.di" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.dialogs" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.model.workbench" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.services" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.swt.gtk" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.widgets" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.workbench" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.workbench.addons.swt" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.workbench.renderers.swt" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.workbench.renderers.swt.cocoa" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.workbench.swt" version="0.0.0"/>
-<unit id="org.eclipse.e4.ui.workbench3" version="0.0.0"/>
-<unit id="org.eclipse.ecf" version="0.0.0"/>
-<unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.discovery" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.identity" version="0.0.0"/>
-<unit id="org.eclipse.ecf.osgi.services.distribution" version="0.0.0"/>
-<unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin" version="0.0.0"/>
-<unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.filetransfer" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.filetransfer.httpclient4" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.filetransfer.ssl" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jmdns" version="0.0.0"/>
-<unit id="org.eclipse.ecf.remoteservice" version="0.0.0"/>
-<unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="0.0.0"/>
-<unit id="org.eclipse.ecf.ssl" version="0.0.0"/>
-<unit id="org.eclipse.emf.common" version="0.0.0"/>
-<unit id="org.eclipse.emf.common.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.common.ui" version="0.0.0"/>
-<unit id="org.eclipse.emf.databinding" version="0.0.0"/>
-<unit id="org.eclipse.emf.ecore" version="0.0.0"/>
-<unit id="org.eclipse.emf.ecore.change" version="0.0.0"/>
-<unit id="org.eclipse.emf.ecore.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.ecore.xmi" version="0.0.0"/>
-<unit id="org.eclipse.emf.edit" version="0.0.0"/>
-<unit id="org.eclipse.emf.edit.ui" version="0.0.0"/>
-<unit id="org.eclipse.epp.logging.aeri.core" version="0.0.0"/>
-<unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.epp.logging.aeri.ide" version="0.0.0"/>
-<unit id="org.eclipse.epp.mpc.core" version="0.0.0"/>
-<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.epp.mpc.help.ui" version="0.0.0"/>
-<unit id="org.eclipse.epp.mpc.ui" version="0.0.0"/>
-<unit id="org.eclipse.epp.package.common.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.epp.package.java" version="0.0.0"/>
-<unit id="org.eclipse.epp.package.java.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.app" version="0.0.0"/>
-<unit id="org.eclipse.equinox.bidi" version="0.0.0"/>
-<unit id="org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="org.eclipse.equinox.concurrent" version="0.0.0"/>
-<unit id="org.eclipse.equinox.console" version="0.0.0"/>
-<unit id="org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.aix.ppc" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.s390" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.s390x" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.x86" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.win32.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.equinox.executable_root.win32.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.frameworkadmin" version="0.0.0"/>
-<unit id="org.eclipse.equinox.frameworkadmin.equinox" version="0.0.0"/>
-<unit id="org.eclipse.equinox.http.jetty" version="0.0.0"/>
-<unit id="org.eclipse.equinox.http.registry" version="0.0.0"/>
-<unit id="org.eclipse.equinox.http.servlet" version="0.0.0"/>
-<unit id="org.eclipse.equinox.jsp.jasper" version="0.0.0"/>
-<unit id="org.eclipse.equinox.jsp.jasper.registry" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.aix.ppc" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.ppc" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.s390" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.s390x" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.x86" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.win32.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.equinox.launcher.win32.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.artifact.repository" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.console" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.core" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.core.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.director" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.director.app" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.directorywatcher" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.discovery" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.discovery.compatibility" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.discovery.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.engine" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.extensionlocation" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.extras.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.garbagecollector" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.jarprocessor" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.metadata" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.metadata.repository" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.operations" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.publisher" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.publisher.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.repository" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.repository.tools" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.touchpoint.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.transport.ecf" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.ui" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.ui.discovery" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.ui.importexport" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.ui.sdk" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.ui.sdk.scheduler" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.updatechecker" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.updatesite" version="0.0.0"/>
-<unit id="org.eclipse.equinox.p2.user.ui.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.preferences" version="0.0.0"/>
-<unit id="org.eclipse.equinox.registry" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security.macosx" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security.ui" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="org.eclipse.equinox.simpleconfigurator.manipulator" version="0.0.0"/>
-<unit id="org.eclipse.equinox.useradmin" version="0.0.0"/>
-<unit id="org.eclipse.equinox.util" version="0.0.0"/>
-<unit id="org.eclipse.equinox.weaving.caching" version="0.0.0"/>
-<unit id="org.eclipse.equinox.weaving.hook" version="0.0.0"/>
-<unit id="org.eclipse.help" version="0.0.0"/>
-<unit id="org.eclipse.help.base" version="0.0.0"/>
-<unit id="org.eclipse.help.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.help.ui" version="0.0.0"/>
-<unit id="org.eclipse.help.webapp" version="0.0.0"/>
-<unit id="org.eclipse.jdt.apt.core" version="0.0.0"/>
-<unit id="org.eclipse.jdt.core" version="0.0.0"/>
-<unit id="org.eclipse.jdt.core.manipulation" version="0.0.0"/>
-<unit id="org.eclipse.jdt.debug" version="0.0.0"/>
-<unit id="org.eclipse.jdt.debug.ui" version="0.0.0"/>
-<unit id="org.eclipse.jdt.junit.core" version="0.0.0"/>
-<unit id="org.eclipse.jdt.junit.runtime" version="0.0.0"/>
-<unit id="org.eclipse.jdt.launching" version="0.0.0"/>
-<unit id="org.eclipse.jdt.ui" version="0.0.0"/>
-<unit id="org.eclipse.jetty.continuation" version="0.0.0"/>
-<unit id="org.eclipse.jetty.http" version="0.0.0"/>
-<unit id="org.eclipse.jetty.io" version="0.0.0"/>
-<unit id="org.eclipse.jetty.security" version="0.0.0"/>
-<unit id="org.eclipse.jetty.server" version="0.0.0"/>
-<unit id="org.eclipse.jetty.servlet" version="0.0.0"/>
-<unit id="org.eclipse.jetty.util" version="0.0.0"/>
-<unit id="org.eclipse.jface" version="0.0.0"/>
-<unit id="org.eclipse.jface.databinding" version="0.0.0"/>
-<unit id="org.eclipse.jface.text" version="0.0.0"/>
-<unit id="org.eclipse.jsch.core" version="0.0.0"/>
-<unit id="org.eclipse.jsch.ui" version="0.0.0"/>
-<unit id="org.eclipse.ltk.core.refactoring" version="0.0.0"/>
-<unit id="org.eclipse.ltk.ui.refactoring" version="0.0.0"/>
-<unit id="org.eclipse.mylyn.commons.core" version="0.0.0"/>
-<unit id="org.eclipse.mylyn.commons.notifications.core" version="0.0.0"/>
-<unit id="org.eclipse.mylyn.commons.notifications.ui" version="0.0.0"/>
-<unit id="org.eclipse.mylyn.commons.screenshots" version="0.0.0"/>
-<unit id="org.eclipse.mylyn.commons.ui" version="0.0.0"/>
-<unit id="org.eclipse.mylyn.commons.workbench" version="0.0.0"/>
-<unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
-<unit id="org.eclipse.oomph.base" version="0.0.0"/>
-<unit id="org.eclipse.oomph.base.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.extractor.lib" version="0.0.0"/>
-<unit id="org.eclipse.oomph.jreinfo" version="0.0.0"/>
-<unit id="org.eclipse.oomph.jreinfo.ui" version="0.0.0"/>
-<unit id="org.eclipse.oomph.jreinfo.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.oomph.jreinfo.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.oomph.p2" version="0.0.0"/>
-<unit id="org.eclipse.oomph.p2.core" version="0.0.0"/>
-<unit id="org.eclipse.oomph.p2.doc" version="0.0.0"/>
-<unit id="org.eclipse.oomph.p2.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.p2.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.oomph.p2.ui" version="0.0.0"/>
-<unit id="org.eclipse.oomph.predicates" version="0.0.0"/>
-<unit id="org.eclipse.oomph.predicates.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.preferences" version="0.0.0"/>
-<unit id="org.eclipse.oomph.resources" version="0.0.0"/>
-<unit id="org.eclipse.oomph.resources.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.core" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.core.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.doc" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.editor" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.p2" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.p2.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.sync" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.ui" version="0.0.0"/>
-<unit id="org.eclipse.oomph.setup.ui.questionnaire" version="0.0.0"/>
-<unit id="org.eclipse.oomph.ui" version="0.0.0"/>
-<unit id="org.eclipse.oomph.util" version="0.0.0"/>
-<unit id="org.eclipse.oomph.workingsets" version="0.0.0"/>
-<unit id="org.eclipse.oomph.workingsets.edit" version="0.0.0"/>
-<unit id="org.eclipse.oomph.workingsets.editor" version="0.0.0"/>
-<unit id="org.eclipse.osgi" version="0.0.0"/>
-<unit id="org.eclipse.osgi.compatibility.state" version="0.0.0"/>
-<unit id="org.eclipse.osgi.services" version="0.0.0"/>
-<unit id="org.eclipse.osgi.services.remoteserviceadmin" version="0.0.0"/>
-<unit id="org.eclipse.osgi.util" version="0.0.0"/>
-<unit id="org.eclipse.platform" version="0.0.0"/>
-<unit id="org.eclipse.platform.doc.user" version="0.0.0"/>
-<unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.cocoa.macosx.x86_64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.hpux.ia64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64le.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.s390" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.s390.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.s390x" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.s390x.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.x86" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.x86.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.linux.x86_64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.solaris.sparcv9.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.gtk.solaris.x86_64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.win32.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.win32.win32.x86.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.win32.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.platform.ide.executable.win32.win32.x86_64.eclipse" version="0.0.0"/>
-<unit id="org.eclipse.platform_root" version="0.0.0"/>
-<unit id="org.eclipse.rcp" version="0.0.0"/>
-<unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.rcp_root" version="0.0.0"/>
-<unit id="org.eclipse.search" version="0.0.0"/>
-<unit id="org.eclipse.swt" version="0.0.0"/>
-<unit id="org.eclipse.swt.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.aix.ppc" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.ppc" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.s390" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.s390x" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.x86" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.swt.win32.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.swt.win32.win32.x86_64" version="0.0.0"/>
-<unit id="org.eclipse.team.core" version="0.0.0"/>
-<unit id="org.eclipse.team.ui" version="0.0.0"/>
-<unit id="org.eclipse.text" version="0.0.0"/>
-<unit id="org.eclipse.ui" version="0.0.0"/>
-<unit id="org.eclipse.ui.browser" version="0.0.0"/>
-<unit id="org.eclipse.ui.cheatsheets" version="0.0.0"/>
-<unit id="org.eclipse.ui.cocoa" version="0.0.0"/>
-<unit id="org.eclipse.ui.console" version="0.0.0"/>
-<unit id="org.eclipse.ui.editors" version="0.0.0"/>
-<unit id="org.eclipse.ui.externaltools" version="0.0.0"/>
-<unit id="org.eclipse.ui.forms" version="0.0.0"/>
-<unit id="org.eclipse.ui.ide" version="0.0.0"/>
-<unit id="org.eclipse.ui.ide.application" version="0.0.0"/>
-<unit id="org.eclipse.ui.intro" version="0.0.0"/>
-<unit id="org.eclipse.ui.intro.quicklinks" version="0.0.0"/>
-<unit id="org.eclipse.ui.intro.universal" version="0.0.0"/>
-<unit id="org.eclipse.ui.monitoring" version="0.0.0"/>
-<unit id="org.eclipse.ui.navigator" version="0.0.0"/>
-<unit id="org.eclipse.ui.navigator.resources" version="0.0.0"/>
-<unit id="org.eclipse.ui.net" version="0.0.0"/>
-<unit id="org.eclipse.ui.themes" version="0.0.0"/>
-<unit id="org.eclipse.ui.views" version="0.0.0"/>
-<unit id="org.eclipse.ui.views.properties.tabbed" version="0.0.0"/>
-<unit id="org.eclipse.ui.win32" version="0.0.0"/>
-<unit id="org.eclipse.ui.workbench" version="0.0.0"/>
-<unit id="org.eclipse.ui.workbench.texteditor" version="0.0.0"/>
-<unit id="org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="org.eclipse.userstorage.ui" version="0.0.0"/>
-<unit id="org.hamcrest.core" version="0.0.0"/>
-<unit id="org.junit" version="0.0.0"/>
-<unit id="org.sat4j.core" version="0.0.0"/>
-<unit id="org.sat4j.pb" version="0.0.0"/>
-<unit id="org.slf4j.api" version="0.0.0"/>
-<unit id="org.slf4j.jcl" version="0.0.0"/>
-<unit id="org.tukaani.xz" version="0.0.0"/>
-<unit id="org.w3c.css.sac" version="0.0.0"/>
-<unit id="org.w3c.dom.events" version="0.0.0"/>
-<unit id="org.w3c.dom.smil" version="0.0.0"/>
-<unit id="org.w3c.dom.svg" version="0.0.0"/>
-<unit id="tooling.org.eclipse.update.feature.default" version="0.0.0"/>
-<unit id="tooling.osgi.bundle.default" version="0.0.0"/>
-<unit id="tooling.source.default" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolingcocoa.macosx.x86_64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolingepp.package.java.application" version="0.0.0"/>
-<unit id="toolingepp.package.java.config.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.config.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingepp.package.java.config.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.config.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingepp.package.java.config.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.configuration" version="0.0.0"/>
-<unit id="toolingepp.package.java.executable.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.executable.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingepp.package.java.executable.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.executable.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingepp.package.java.executable.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.ini.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.ini.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingepp.package.java.ini.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingepp.package.java.ini.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingepp.package.java.ini.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppc64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.aix.ppcorg.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.hpux.ia64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64leorg.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppc64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.ppcorg.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.s390xorg.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86_64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.linux.x86org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.solaris.sparcv9org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolinggtk.solaris.x86_64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.aix.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.s390" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.s390x" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.equinox.launcher.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.configuration" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.configuration.macosx" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.application" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.aix.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.s390" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.s390x" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.config.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.configuration" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.aix.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.s390" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.s390x" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.executable.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.cocoa.macosx.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.aix.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.aix.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.hpux.ia64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.ppc" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.ppc64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.ppc64le" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.s390" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.s390x" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.solaris.sparcv9" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.gtk.solaris.x86_64" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.win32.win32.x86" version="0.0.0"/>
-<unit id="toolingorg.eclipse.platform.ide.ini.win32.win32.x86_64" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86_64org.eclipse.update.configurator" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.equinox.event" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
-<unit id="toolingwin32.win32.x86org.eclipse.update.configurator" version="0.0.0"/>
-<repository location="http://download.eclipse.org/releases/neon"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.fasterxml.jackson.core.jackson-annotations" version="0.0.0"/>
-<unit id="com.fasterxml.jackson.core.jackson-core" version="0.0.0"/>
-<unit id="com.fasterxml.jackson.core.jackson-databind" version="0.0.0"/>
-<unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base" version="0.0.0"/>
-<unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" version="0.0.0"/>
-<unit id="com.fasterxml.jackson.module.jackson-module-jaxb-annotations" version="0.0.0"/>
-<unit id="com.google.guava" version="0.0.0"/>
-<unit id="javassist" version="0.0.0"/>
-<unit id="javax.validation.api" version="0.0.0"/>
-<unit id="org.apache.commons.lang3" version="0.0.0"/>
-<unit id="org.glassfish.hk2.api" version="0.0.0"/>
-<unit id="org.glassfish.hk2.locator" version="0.0.0"/>
-<unit id="org.glassfish.hk2.osgi-resource-locator" version="0.0.0"/>
-<unit id="org.glassfish.hk2.utils" version="0.0.0"/>
-<unit id="org.glassfish.jersey.bundles.repackaged.jersey-guava" version="0.0.0"/>
-<unit id="org.glassfish.jersey.containers.jersey-container-servlet" version="0.0.0"/>
-<unit id="org.glassfish.jersey.containers.jersey-container-servlet-core" version="0.0.0"/>
-<unit id="org.glassfish.jersey.core.jersey-client" version="0.0.0"/>
-<unit id="org.glassfish.jersey.core.jersey-common" version="0.0.0"/>
-<unit id="org.glassfish.jersey.core.jersey-server" version="0.0.0"/>
-<unit id="org.glassfish.jersey.ext.jersey-entity-filtering" version="0.0.0"/>
-<unit id="org.glassfish.jersey.media.jersey-media-jaxb" version="0.0.0"/>
-<unit id="org.glassfish.jersey.media.jersey-media-json-jackson" version="0.0.0"/>
-<repository location="http://agentlab.ru/pd/p2/eclipseorbit/"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ecf.provider.jaxrs" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jaxrs.client" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jaxrs.server" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jersey.client" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jersey.client.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jersey.server" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jersey.server.aspectj" version="0.0.0"/>
-<unit id="org.eclipse.ecf.provider.jersey.server.feature.feature.group" version="0.0.0"/>
-<repository location="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201704281837/"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.aspectj.ajde" version="0.0.0"/>
-<unit id="org.aspectj.feature.group" version="0.0.0"/>
-<unit id="org.aspectj.runtime" version="0.0.0"/>
-<unit id="org.aspectj.weaver" version="0.0.0"/>
-<unit id="org.eclipse.ajdt.core" version="0.0.0"/>
-<unit id="org.eclipse.ajdt.doc.user" version="0.0.0"/>
-<unit id="org.eclipse.ajdt.examples" version="0.0.0"/>
-<unit id="org.eclipse.ajdt.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ajdt.mylyn.ui" version="0.0.0"/>
-<unit id="org.eclipse.ajdt.ui" version="0.0.0"/>
-<unit id="org.eclipse.aspectj" version="0.0.0"/>
-<unit id="org.eclipse.contribution.visualiser" version="0.0.0"/>
-<unit id="org.eclipse.contribution.weaving.jdt" version="0.0.0"/>
-<unit id="org.eclipse.contribution.xref.core" version="0.0.0"/>
-<unit id="org.eclipse.contribution.xref.ui" version="0.0.0"/>
-<unit id="org.eclipse.equinox.weaving.aspectj" version="0.0.0"/>
-<unit id="org.eclipse.equinox.weaving.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="javax.validation" version="0.0.0"/>
-<unit id="org.slf4j.jul" version="0.0.0"/>
-<unit id="org.slf4j.log4j" version="0.0.0"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.swt.dummyfragments.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.aarch64" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.linux.arm" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.solaris.sparc" version="0.0.0"/>
-<unit id="org.eclipse.swt.gtk.solaris.x86" version="0.0.0"/>
-<repository location="http://agentlab.ru/p2/orbit/missing-swt-fragments/updates/nightly/"/>
-</location>
-</locations>
+<?pde version="3.8"?>
+<target name="Generated from Eclipse User Storage Service" sequenceNumber="4">
+  <locations>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="a.jre.javase" version="0.0.0"/>
+      <unit id="ch.qos.logback.classic" version="0.0.0"/>
+      <unit id="ch.qos.logback.core" version="0.0.0"/>
+      <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
+      <unit id="com.fasterxml.jackson.datatype.jackson-datatype-guava" version="0.0.0"/>
+      <unit id="com.google.gson" version="0.0.0"/>
+      <unit id="com.google.guava" version="0.0.0"/>
+      <unit id="com.ibm.icu" version="0.0.0"/>
+      <unit id="com.jcraft.jsch" version="0.0.0"/>
+      <unit id="com.sun.el" version="0.0.0"/>
+      <unit id="config.a.jre.javase" version="0.0.0"/>
+      <unit id="epp.package.java" version="0.0.0"/>
+      <unit id="epp.package.java.executable.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="epp.package.java.executable.cocoa.macosx.x86_64.eclipse" version="0.0.0"/>
+      <unit id="epp.package.java.executable.gtk.linux.x86" version="0.0.0"/>
+      <unit id="epp.package.java.executable.gtk.linux.x86.eclipse" version="0.0.0"/>
+      <unit id="epp.package.java.executable.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="epp.package.java.executable.gtk.linux.x86_64.eclipse" version="0.0.0"/>
+      <unit id="epp.package.java.executable.win32.win32.x86" version="0.0.0"/>
+      <unit id="epp.package.java.executable.win32.win32.x86.eclipse" version="0.0.0"/>
+      <unit id="epp.package.java.executable.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="epp.package.java.executable.win32.win32.x86_64.eclipse" version="0.0.0"/>
+      <unit id="javax.annotation" version="0.0.0"/>
+      <unit id="javax.el" version="0.0.0"/>
+      <unit id="javax.inject" version="0.0.0"/>
+      <unit id="javax.servlet" version="0.0.0"/>
+      <unit id="javax.servlet.jsp" version="0.0.0"/>
+      <unit id="javax.ws.rs" version="0.0.0"/>
+      <unit id="javax.xml" version="0.0.0"/>
+      <unit id="org.aopalliance" version="0.0.0"/>
+      <unit id="org.apache.ant" version="0.0.0"/>
+      <unit id="org.apache.batik.css" version="0.0.0"/>
+      <unit id="org.apache.batik.util" version="0.0.0"/>
+      <unit id="org.apache.batik.util.gui" version="0.0.0"/>
+      <unit id="org.apache.commons.codec" version="0.0.0"/>
+      <unit id="org.apache.commons.io" version="0.0.0"/>
+      <unit id="org.apache.commons.jxpath" version="0.0.0"/>
+      <unit id="org.apache.commons.lang" version="0.0.0"/>
+      <unit id="org.apache.commons.logging" version="0.0.0"/>
+      <unit id="org.apache.felix.gogo.command" version="0.0.0"/>
+      <unit id="org.apache.felix.gogo.runtime" version="0.0.0"/>
+      <unit id="org.apache.felix.gogo.shell" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
+      <unit id="org.apache.jasper.glassfish" version="0.0.0"/>
+      <unit id="org.apache.lucene.analysis" version="0.0.0"/>
+      <unit id="org.apache.lucene.core" version="0.0.0"/>
+      <unit id="org.eclipse.ant.core" version="0.0.0"/>
+      <unit id="org.eclipse.compare" version="0.0.0"/>
+      <unit id="org.eclipse.compare.core" version="0.0.0"/>
+      <unit id="org.eclipse.compare.win32" version="0.0.0"/>
+      <unit id="org.eclipse.core.commands" version="0.0.0"/>
+      <unit id="org.eclipse.core.contenttype" version="0.0.0"/>
+      <unit id="org.eclipse.core.databinding" version="0.0.0"/>
+      <unit id="org.eclipse.core.databinding.beans" version="0.0.0"/>
+      <unit id="org.eclipse.core.databinding.observable" version="0.0.0"/>
+      <unit id="org.eclipse.core.databinding.property" version="0.0.0"/>
+      <unit id="org.eclipse.core.expressions" version="0.0.0"/>
+      <unit id="org.eclipse.core.externaltools" version="0.0.0"/>
+      <unit id="org.eclipse.core.filebuffers" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.aix.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.aix.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.hpux.ia64" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.linux.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.linux.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.linux.ppc64le" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.linux.x86" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.linux.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.macosx" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.core.filesystem.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.core.jobs" version="0.0.0"/>
+      <unit id="org.eclipse.core.net" version="0.0.0"/>
+      <unit id="org.eclipse.core.net.linux.x86" version="0.0.0"/>
+      <unit id="org.eclipse.core.net.linux.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.core.net.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.core.net.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.core.resources" version="0.0.0"/>
+      <unit id="org.eclipse.core.resources.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.core.resources.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="org.eclipse.core.variables" version="0.0.0"/>
+      <unit id="org.eclipse.debug.core" version="0.0.0"/>
+      <unit id="org.eclipse.debug.ui" version="0.0.0"/>
+      <unit id="org.eclipse.e4.core.commands" version="0.0.0"/>
+      <unit id="org.eclipse.e4.core.contexts" version="0.0.0"/>
+      <unit id="org.eclipse.e4.core.di" version="0.0.0"/>
+      <unit id="org.eclipse.e4.core.di.annotations" version="0.0.0"/>
+      <unit id="org.eclipse.e4.core.di.extensions" version="0.0.0"/>
+      <unit id="org.eclipse.e4.core.services" version="0.0.0"/>
+      <unit id="org.eclipse.e4.emf.xpath" version="0.0.0"/>
+      <unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.bindings" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.css.core" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.css.swt" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.css.swt.theme" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.di" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.dialogs" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.model.workbench" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.services" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.swt.gtk" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.widgets" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.workbench" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.workbench.addons.swt" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.workbench.renderers.swt" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.workbench.renderers.swt.cocoa" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.workbench.swt" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.workbench3" version="0.0.0"/>
+      <unit id="org.eclipse.ecf" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.discovery" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.identity" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.osgi.services.distribution" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer.ssl" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jmdns" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.remoteservice" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.ssl" version="0.0.0"/>
+      <unit id="org.eclipse.emf.common" version="0.0.0"/>
+      <unit id="org.eclipse.emf.common.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.emf.common.ui" version="0.0.0"/>
+      <unit id="org.eclipse.emf.databinding" version="0.0.0"/>
+      <unit id="org.eclipse.emf.ecore" version="0.0.0"/>
+      <unit id="org.eclipse.emf.ecore.change" version="0.0.0"/>
+      <unit id="org.eclipse.emf.ecore.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.emf.ecore.xmi" version="0.0.0"/>
+      <unit id="org.eclipse.emf.edit" version="0.0.0"/>
+      <unit id="org.eclipse.emf.edit.ui" version="0.0.0"/>
+      <unit id="org.eclipse.epp.logging.aeri.core" version="0.0.0"/>
+      <unit id="org.eclipse.epp.logging.aeri.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.epp.logging.aeri.ide" version="0.0.0"/>
+      <unit id="org.eclipse.epp.mpc.core" version="0.0.0"/>
+      <unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.epp.mpc.help.ui" version="0.0.0"/>
+      <unit id="org.eclipse.epp.mpc.ui" version="0.0.0"/>
+      <unit id="org.eclipse.epp.package.common.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.epp.package.java" version="0.0.0"/>
+      <unit id="org.eclipse.epp.package.java.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.app" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.bidi" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.concurrent" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.console" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.s390" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.x86" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.win32.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable_root.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.frameworkadmin" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.frameworkadmin.equinox" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.http.jetty" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.http.registry" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.http.servlet" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.jsp.jasper" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.jsp.jasper.registry" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.s390" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.x86" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.win32.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.launcher.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.artifact.repository" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.console" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.core" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.core.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.director" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.director.app" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.directorywatcher" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.discovery" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.discovery.compatibility" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.discovery.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.engine" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.extensionlocation" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.extras.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.garbagecollector" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.jarprocessor" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.metadata" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.metadata.repository" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.operations" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.publisher" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.publisher.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.repository" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.repository.tools" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.touchpoint.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.transport.ecf" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.ui" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.ui.discovery" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.ui.importexport" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.ui.sdk" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.ui.sdk.scheduler" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.updatechecker" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.updatesite" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.user.ui.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.preferences" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.registry" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.security" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.security.macosx" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.security.ui" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.security.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.security.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.simpleconfigurator.manipulator" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.useradmin" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.util" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.weaving.caching" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.weaving.hook" version="0.0.0"/>
+      <unit id="org.eclipse.help" version="0.0.0"/>
+      <unit id="org.eclipse.help.base" version="0.0.0"/>
+      <unit id="org.eclipse.help.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.help.ui" version="0.0.0"/>
+      <unit id="org.eclipse.help.webapp" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.apt.core" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.core" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.core.manipulation" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.debug" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.debug.ui" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.junit.core" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.junit.runtime" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.launching" version="0.0.0"/>
+      <unit id="org.eclipse.jdt.ui" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.continuation" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.http" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.io" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.security" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.server" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.servlet" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.util" version="0.0.0"/>
+      <unit id="org.eclipse.jface" version="0.0.0"/>
+      <unit id="org.eclipse.jface.databinding" version="0.0.0"/>
+      <unit id="org.eclipse.jface.text" version="0.0.0"/>
+      <unit id="org.eclipse.jsch.core" version="0.0.0"/>
+      <unit id="org.eclipse.jsch.ui" version="0.0.0"/>
+      <unit id="org.eclipse.ltk.core.refactoring" version="0.0.0"/>
+      <unit id="org.eclipse.ltk.ui.refactoring" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.core" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.notifications.core" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.notifications.ui" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.screenshots" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.ui" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.workbench" version="0.0.0"/>
+      <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.base" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.base.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.extractor.lib" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.jreinfo" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.jreinfo.ui" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.jreinfo.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.jreinfo.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.p2" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.p2.core" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.p2.doc" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.p2.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.p2.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.p2.ui" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.predicates" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.predicates.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.preferences" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.resources" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.resources.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.core" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.core.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.doc" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.editor" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.p2" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.p2.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.sync" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.ui" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.setup.ui.questionnaire" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.ui" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.util" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.workingsets" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.workingsets.edit" version="0.0.0"/>
+      <unit id="org.eclipse.oomph.workingsets.editor" version="0.0.0"/>
+      <unit id="org.eclipse.osgi" version="0.0.0"/>
+      <unit id="org.eclipse.osgi.compatibility.state" version="0.0.0"/>
+      <unit id="org.eclipse.osgi.services" version="0.0.0"/>
+      <unit id="org.eclipse.osgi.services.remoteserviceadmin" version="0.0.0"/>
+      <unit id="org.eclipse.osgi.util" version="0.0.0"/>
+      <unit id="org.eclipse.platform" version="0.0.0"/>
+      <unit id="org.eclipse.platform.doc.user" version="0.0.0"/>
+      <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.cocoa.macosx.x86_64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.aix.ppc64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.hpux.ia64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.ppc64le.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.s390" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.s390.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.s390x.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.x86" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.x86.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.linux.x86_64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.solaris.sparcv9.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.gtk.solaris.x86_64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.win32.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.win32.win32.x86.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.platform.ide.executable.win32.win32.x86_64.eclipse" version="0.0.0"/>
+      <unit id="org.eclipse.platform_root" version="0.0.0"/>
+      <unit id="org.eclipse.rcp" version="0.0.0"/>
+      <unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.rcp_root" version="0.0.0"/>
+      <unit id="org.eclipse.search" version="0.0.0"/>
+      <unit id="org.eclipse.swt" version="0.0.0"/>
+      <unit id="org.eclipse.swt.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.s390" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.x86" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.win32.win32.x86" version="0.0.0"/>
+      <unit id="org.eclipse.swt.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="org.eclipse.team.core" version="0.0.0"/>
+      <unit id="org.eclipse.team.ui" version="0.0.0"/>
+      <unit id="org.eclipse.text" version="0.0.0"/>
+      <unit id="org.eclipse.ui" version="0.0.0"/>
+      <unit id="org.eclipse.ui.browser" version="0.0.0"/>
+      <unit id="org.eclipse.ui.cheatsheets" version="0.0.0"/>
+      <unit id="org.eclipse.ui.cocoa" version="0.0.0"/>
+      <unit id="org.eclipse.ui.console" version="0.0.0"/>
+      <unit id="org.eclipse.ui.editors" version="0.0.0"/>
+      <unit id="org.eclipse.ui.externaltools" version="0.0.0"/>
+      <unit id="org.eclipse.ui.forms" version="0.0.0"/>
+      <unit id="org.eclipse.ui.ide" version="0.0.0"/>
+      <unit id="org.eclipse.ui.ide.application" version="0.0.0"/>
+      <unit id="org.eclipse.ui.intro" version="0.0.0"/>
+      <unit id="org.eclipse.ui.intro.quicklinks" version="0.0.0"/>
+      <unit id="org.eclipse.ui.intro.universal" version="0.0.0"/>
+      <unit id="org.eclipse.ui.monitoring" version="0.0.0"/>
+      <unit id="org.eclipse.ui.navigator" version="0.0.0"/>
+      <unit id="org.eclipse.ui.navigator.resources" version="0.0.0"/>
+      <unit id="org.eclipse.ui.net" version="0.0.0"/>
+      <unit id="org.eclipse.ui.themes" version="0.0.0"/>
+      <unit id="org.eclipse.ui.views" version="0.0.0"/>
+      <unit id="org.eclipse.ui.views.properties.tabbed" version="0.0.0"/>
+      <unit id="org.eclipse.ui.win32" version="0.0.0"/>
+      <unit id="org.eclipse.ui.workbench" version="0.0.0"/>
+      <unit id="org.eclipse.ui.workbench.texteditor" version="0.0.0"/>
+      <unit id="org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="org.eclipse.userstorage.ui" version="0.0.0"/>
+      <unit id="org.hamcrest.core" version="0.0.0"/>
+      <unit id="org.junit" version="0.0.0"/>
+      <unit id="org.sat4j.core" version="0.0.0"/>
+      <unit id="org.sat4j.pb" version="0.0.0"/>
+      <unit id="org.slf4j.api" version="0.0.0"/>
+      <unit id="org.slf4j.jcl" version="0.0.0"/>
+      <unit id="org.tukaani.xz" version="0.0.0"/>
+      <unit id="org.w3c.css.sac" version="0.0.0"/>
+      <unit id="org.w3c.dom.events" version="0.0.0"/>
+      <unit id="org.w3c.dom.smil" version="0.0.0"/>
+      <unit id="org.w3c.dom.svg" version="0.0.0"/>
+      <unit id="tooling.org.eclipse.update.feature.default" version="0.0.0"/>
+      <unit id="tooling.osgi.bundle.default" version="0.0.0"/>
+      <unit id="tooling.source.default" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolingcocoa.macosx.x86_64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolingepp.package.java.application" version="0.0.0"/>
+      <unit id="toolingepp.package.java.config.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.config.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingepp.package.java.config.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.config.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingepp.package.java.config.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.configuration" version="0.0.0"/>
+      <unit id="toolingepp.package.java.executable.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.executable.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingepp.package.java.executable.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.executable.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingepp.package.java.executable.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.ini.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.ini.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingepp.package.java.ini.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingepp.package.java.ini.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingepp.package.java.ini.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppc64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.aix.ppcorg.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.hpux.ia64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64leorg.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppc64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.ppcorg.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.s390xorg.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86_64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.linux.x86org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.sparcv9org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolinggtk.solaris.x86_64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.s390" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.equinox.launcher.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.configuration" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.configuration.macosx" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.application" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.s390" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.config.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.configuration" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.s390" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.executable.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.cocoa.macosx.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.aix.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.aix.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.hpux.ia64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.ppc" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.ppc64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.ppc64le" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.s390" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.s390x" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.linux.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.solaris.sparcv9" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.gtk.solaris.x86_64" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.win32.win32.x86" version="0.0.0"/>
+      <unit id="toolingorg.eclipse.platform.ide.ini.win32.win32.x86_64" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86_64org.eclipse.update.configurator" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.core.runtime" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.equinox.common" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.equinox.ds" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.equinox.event" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.equinox.p2.reconciler.dropins" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.equinox.simpleconfigurator" version="0.0.0"/>
+      <unit id="toolingwin32.win32.x86org.eclipse.update.configurator" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/releases/neon"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="com.fasterxml.jackson.core.jackson-annotations" version="0.0.0"/>
+      <unit id="com.fasterxml.jackson.core.jackson-core" version="0.0.0"/>
+      <unit id="com.fasterxml.jackson.core.jackson-databind" version="0.0.0"/>
+      <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base" version="0.0.0"/>
+      <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" version="0.0.0"/>
+      <unit id="com.fasterxml.jackson.module.jackson-module-jaxb-annotations" version="0.0.0"/>
+      <unit id="com.google.guava" version="0.0.0"/>
+      <unit id="javassist" version="0.0.0"/>
+      <unit id="javax.validation.api" version="0.0.0"/>
+      <unit id="org.apache.commons.lang3" version="0.0.0"/>
+      <unit id="org.glassfish.hk2.api" version="0.0.0"/>
+      <unit id="org.glassfish.hk2.locator" version="0.0.0"/>
+      <unit id="org.glassfish.hk2.osgi-resource-locator" version="0.0.0"/>
+      <unit id="org.glassfish.hk2.utils" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.bundles.repackaged.jersey-guava" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.containers.jersey-container-servlet" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.containers.jersey-container-servlet-core" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.core.jersey-client" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.core.jersey-common" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.core.jersey-server" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.ext.jersey-entity-filtering" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.media.jersey-media-jaxb" version="0.0.0"/>
+      <unit id="org.glassfish.jersey.media.jersey-media-json-jackson" version="0.0.0"/>
+      <repository location="http://agentlab.ru/pd/p2/eclipseorbit/"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.ecf.provider.jaxrs" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jaxrs.client" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jaxrs.server" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jersey.client" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jersey.client.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jersey.server" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jersey.server.aspectj" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jersey.server.feature.feature.group" version="0.0.0"/>
+      <repository location="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201705040812/"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.aspectj.ajde" version="0.0.0"/>
+      <unit id="org.aspectj.feature.group" version="0.0.0"/>
+      <unit id="org.aspectj.runtime" version="0.0.0"/>
+      <unit id="org.aspectj.weaver" version="0.0.0"/>
+      <unit id="org.eclipse.ajdt.core" version="0.0.0"/>
+      <unit id="org.eclipse.ajdt.doc.user" version="0.0.0"/>
+      <unit id="org.eclipse.ajdt.examples" version="0.0.0"/>
+      <unit id="org.eclipse.ajdt.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ajdt.mylyn.ui" version="0.0.0"/>
+      <unit id="org.eclipse.ajdt.ui" version="0.0.0"/>
+      <unit id="org.eclipse.aspectj" version="0.0.0"/>
+      <unit id="org.eclipse.contribution.visualiser" version="0.0.0"/>
+      <unit id="org.eclipse.contribution.weaving.jdt" version="0.0.0"/>
+      <unit id="org.eclipse.contribution.xref.core" version="0.0.0"/>
+      <unit id="org.eclipse.contribution.xref.ui" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.weaving.aspectj" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.weaving.sdk.feature.group" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="javax.validation" version="0.0.0"/>
+      <unit id="org.slf4j.jul" version="0.0.0"/>
+      <unit id="org.slf4j.log4j" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.swt.dummyfragments.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.aarch64" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.linux.arm" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.solaris.sparc" version="0.0.0"/>
+      <unit id="org.eclipse.swt.gtk.solaris.x86" version="0.0.0"/>
+      <repository location="http://agentlab.ru/p2/orbit/missing-swt-fragments/updates/nightly/"/>
+    </location>
+  </locations>
 </target>

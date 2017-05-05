@@ -262,7 +262,7 @@
         <repository
             url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
         <repository
-            url="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201704281837/"/>
+            url="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201705040812/"/>
         <repository
             url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
         <repository
