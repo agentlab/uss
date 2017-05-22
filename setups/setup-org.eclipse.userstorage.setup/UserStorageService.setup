@@ -318,7 +318,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Dorg.eclipse.userstorage.serviceURI="
-      value="http://10.70.2.235:8080/"
+      value="http://zagrebaev-dk:80/"
       vm="true"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -328,7 +328,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Dorg.eclipse.userstorage.createAccountURI="
-      value="http://10.70.2.235:8080/api/user/create"
+      value="http://zagrebaev-dk:80/api/user/create"
       vm="true"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
