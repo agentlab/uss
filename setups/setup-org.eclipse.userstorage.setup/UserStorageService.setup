@@ -89,7 +89,7 @@
         </detail>
         <detail
             key="generateVersions">
-          <value>false</value>
+          <value>true</value>
         </detail>
         <detail
             key="generateImplicitUnits">
@@ -102,17 +102,6 @@
       </annotation>
       <requirement
           name="*"/>
-      <requirement
-          name="org.eclipse.rcp.feature.group"/>
-      <requirement
-          name="epp.package.java"/>
-      <requirement
-          name="org.apache.httpcomponents.httpclient"
-          versionRange="[4.3.6.v201511171540,4.3.6.v201511171540]"/>
-      <requirement
-          name="org.apache.httpcomponents.httpcore"/>
-      <requirement
-          name="org.aopalliance"/>
       <requirement
           name="com.fasterxml.jackson.core.jackson-core"/>
       <requirement
@@ -128,28 +117,28 @@
       <requirement
           name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
       <requirement
-          name="ch.qos.logback.classic"/>
+          name="javax.validation"/>
       <requirement
-          name="ch.qos.logback.core"/>
+          name="javax.ws.rs"
+          versionRange="[2.0.1,2.0.2)"/>
       <requirement
-          name="ch.qos.logback.slf4j"
-          versionRange="[1.0.7.v201505121915,1.0.7.v201505121915]"/>
+          name="org.aopalliance"/>
       <requirement
-          name="org.eclipse.ecf.discovery"/>
+          name="org.apache.httpcomponents.httpclient"
+          versionRange="[4.3.6,4.3.7)"/>
       <requirement
-          name="org.slf4j.api"/>
+          name="org.apache.httpcomponents.httpcore"
+          versionRange="[4.3.0,4.4.0)"/>
       <requirement
-          name="org.slf4j.jul"/>
+          name="org.aspectj.feature.group"/>
       <requirement
-          name="org.slf4j.log4j"/>
+          name="org.eclipse.ajdt.feature.group"/>
       <requirement
-          name="org.slf4j.jcl"/>
+          name="org.eclipse.ecf.remoteservice.feature.feature.group"/>
       <requirement
-          name="org.eclipse.ecf.osgi.services.distribution"/>
+          name="org.eclipse.ecf.provider.jersey.server.feature.feature.group"/>
       <requirement
-          name="org.eclipse.ecf.osgi.services.remoteserviceadmin"/>
-      <requirement
-          name="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy"/>
+          name="org.eclipse.equinox.executable.feature.group"/>
       <requirement
           name="org.eclipse.equinox.launcher.gtk.aix.ppc"
           filter="(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))"/>
@@ -199,14 +188,6 @@
           name="org.eclipse.equinox.security.win32.x86_64"
           filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32))"/>
       <requirement
-          name="org.eclipse.ecf.provider.jersey.client.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.provider.jersey.server.feature.feature.group"/>
-      <requirement
-          name="org.aspectj.feature.group"/>
-      <requirement
-          name="org.eclipse.ajdt.feature.group"/>
-      <requirement
           name="org.eclipse.equinox.weaving.sdk.feature.group"/>
       <requirement
           name="org.glassfish.jersey.containers.jersey-container-servlet"
@@ -227,11 +208,6 @@
           name="org.glassfish.jersey.media.jersey-media-jaxb"
           versionRange="[2.25.1,2.25.1]"/>
       <requirement
-          name="javax.validation"/>
-      <requirement
-          name="javax.ws.rs"
-          versionRange="[2.0.1,2.0.2)"/>
-      <requirement
           name="org.glassfish.hk2.api"
           versionRange="[2.5.0.b32,2.5.0.b32]"/>
       <requirement
@@ -243,8 +219,6 @@
       <requirement
           name="org.glassfish.hk2.utils"
           versionRange="[2.5.0.b32,2.5.0.b32]"/>
-      <requirement
-          name="org.eclipse.equinox.executable.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}"
           locateNestedProjects="true">
@@ -258,15 +232,15 @@
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
-        <repository
             url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
+        <repository
+            url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.3.10.v20160621"/>
+        <repository
+            url="http://download.eclipse.org/rt/ecf/latest/site.p2"/>
         <repository
             url="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201705040812/"/>
         <repository
             url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository"/>
       </repositoryList>
     </targlet>
     <targlet
