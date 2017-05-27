@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
@@ -58,6 +60,8 @@ public class UserStorageComponent
     private String password;
     private String create;
 
+    private final Pattern uuidPatern = Pattern.compile("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}");
+
     private final Set<String> applicationTokens = new HashSet<>();
 
     private final File applicationFolder =
@@ -84,7 +88,7 @@ public class UserStorageComponent
         File etagFile =
             getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
-        headerIfMatch = removeQuotes(headerIfMatch);
+        headerIfMatch = getEtag(headerIfMatch);
 
         if (etagFile.exists())
         {
@@ -92,7 +96,7 @@ public class UserStorageComponent
 
             if (StringUtil.isEmpty(headerIfMatch) || !headerIfMatch.equals(etag))
             {
-                return Response.status(HttpServletResponse.SC_CONFLICT).header("ETag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                return Response.status(HttpServletResponse.SC_CONFLICT).header("Etag", createEtagHeaderValue(etag)).build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
         }
 
@@ -101,23 +105,31 @@ public class UserStorageComponent
         File blobFile =
             getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
         IOUtil.mkdirs(blobFile.getParentFile());
+
+        Map<String, InputStream> value = null;
+
+        try {
+        	value = JSONUtil.parse(blob, "value"); //$NON-NLS-1$
+        } catch(IOException e) {
+        	return Response.status(HttpServletResponse.SC_EXPECTATION_FAILED).build();
+        }
+
         FileOutputStream out = new FileOutputStream(blobFile);
-        Map<String, Object> value = JSONUtil.parse(blob, "value"); //$NON-NLS-1$
 
         try
         {
-            IOUtil.copy((InputStream)value.get("value"), out); //$NON-NLS-1$
+            IOUtil.copy(value.get("value"), out); //$NON-NLS-1$
         }
         finally
         {
-            IOUtil.closeSilent((InputStream)value.get("value")); //$NON-NLS-1$
+            IOUtil.closeSilent(value.get("value")); //$NON-NLS-1$
             IOUtil.close(out);
         }
 
         IOUtil.writeUTF(etagFile, etag);
 
         return Response.status(etagFile.exists() ? HttpServletResponse.SC_OK : HttpServletResponse.SC_CREATED).header(
-            "Etag", "\"" + etag + "\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "Etag", createEtagHeaderValue(etag)).header("MY", "\"header\"").build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     }
 
@@ -156,6 +168,7 @@ public class UserStorageComponent
     public Response get(String urltoken, String urlfilename, String headerIfNoneMatch, String queryPageSize,
         String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException {
 
+
         if (!this.isAutorized(headerxCsrfToken, cookieSESSION))
         {
             return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
@@ -171,7 +184,7 @@ public class UserStorageComponent
 
         String etag = IOUtil.readUTF(etagFile);
 
-        headerIfNoneMatch = removeQuotes(headerIfNoneMatch);
+        headerIfNoneMatch = getEtag(headerIfNoneMatch);
 
         if (headerIfNoneMatch != null && headerIfNoneMatch.equals(etag))
         {
@@ -199,7 +212,19 @@ public class UserStorageComponent
             }
         };
 
-        return Response.ok().header("Etag", "\"" + etag + "\"").entity(stream).type(MediaType.APPLICATION_JSON).build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return Response.ok().header("Etag", createEtagHeaderValue(etag)).header("MY", "\"header\"").entity(stream).type(MediaType.APPLICATION_JSON).build(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+
+    private String createEtagHeaderValue(String etag) {
+
+    	int initCapacity = 128;
+    	StringBuilder etagHeaderBuilder = new StringBuilder(initCapacity);
+
+    	etagHeaderBuilder.append('"');
+    	etagHeaderBuilder.append(etag);
+    	etagHeaderBuilder.append('"');
+
+    	return etagHeaderBuilder.toString();
     }
 
     protected Response retrieveProperties(File applicationFolder, String queryPageSize, String queryPage) {
@@ -304,9 +329,14 @@ public class UserStorageComponent
     private String getEtag(String header) {
         if (header != null)
         {
-            header = header.substring(1, header.length() - 1);
+        	Matcher matcher = uuidPatern.matcher(header);
+        	if(matcher.find()) {
+        		return matcher.group(1);
+        	}
+//            header = header.substring(1, header.length() - 1);
         }
-        return header;
+//        return header;
+        return null;
     }
 
     private int getIntParameter(String queryParam, int defValue) {
@@ -325,17 +355,17 @@ public class UserStorageComponent
         return defValue;
     }
 
-    private String removeQuotes(String stringWithQuotes) {
-        if (stringWithQuotes != null)
-        {
-            if (stringWithQuotes.charAt(0) == '"' && stringWithQuotes.charAt(stringWithQuotes.length() - 1) == '"')
-            {
-                stringWithQuotes = stringWithQuotes.substring(1, stringWithQuotes.length() - 1);
-            }
-        }
-
-        return stringWithQuotes;
-    }
+//    private String removeQuotes(String stringWithQuotes) {
+//        if (stringWithQuotes != null)
+//        {
+//            if (stringWithQuotes.charAt(0) == '"' && stringWithQuotes.charAt(stringWithQuotes.length() - 1) == '"')
+//            {
+//                stringWithQuotes = stringWithQuotes.substring(1, stringWithQuotes.length() - 1);
+//            }
+//        }
+//
+//        return stringWithQuotes;
+//    }
 
     private boolean isAutorized(String csrfToken, String sessionID) {
         return this.ussSessionsService.isAuth(csrfToken, sessionID);
