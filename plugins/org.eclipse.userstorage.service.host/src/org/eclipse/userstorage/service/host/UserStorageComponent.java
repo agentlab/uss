@@ -331,11 +331,9 @@ public class UserStorageComponent
         {
         	Matcher matcher = uuidPatern.matcher(header);
         	if(matcher.find()) {
-        		return matcher.group(1);
+        		return matcher.group(0);
         	}
-//            header = header.substring(1, header.length() - 1);
         }
-//        return header;
         return null;
     }
 
@@ -348,24 +346,12 @@ public class UserStorageComponent
             }
             catch (NumberFormatException ex)
             {
-                //$FALL-THROUGH$
+            	return defValue;
             }
         }
 
         return defValue;
     }
-
-//    private String removeQuotes(String stringWithQuotes) {
-//        if (stringWithQuotes != null)
-//        {
-//            if (stringWithQuotes.charAt(0) == '"' && stringWithQuotes.charAt(stringWithQuotes.length() - 1) == '"')
-//            {
-//                stringWithQuotes = stringWithQuotes.substring(1, stringWithQuotes.length() - 1);
-//            }
-//        }
-//
-//        return stringWithQuotes;
-//    }
 
     private boolean isAutorized(String csrfToken, String sessionID) {
         return this.ussSessionsService.isAuth(csrfToken, sessionID);
