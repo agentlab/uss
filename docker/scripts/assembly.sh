@@ -80,7 +80,7 @@ key="$1"
 case $key in
     -n|--container-name)
         image_name="$2"
-        shift # past argument
+        shift 2# past argument
     ;;
     -bd|--bin-dir)
         bin_dir="$2"
@@ -98,7 +98,7 @@ case $key in
             exit
     ;;
 esac
-shift # past argument or value
+shift 2 # past argument or value
 done
 
 mkdir $build_dir
