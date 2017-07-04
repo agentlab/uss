@@ -18,7 +18,7 @@ WORKDIR $home_dir
 
 EXPOSE 8080 
 
-COPY ../.. $home_dir
+COPY . $home_dir
 
 #COPY . $HOME
 
