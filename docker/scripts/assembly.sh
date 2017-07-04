@@ -12,6 +12,7 @@ unzip_bin_dir=$build_dir/unzip_dir
 assembly_with_src=true
 bin_zip_template=*linux*64*.zip
 docker_file_name=Dockerfile
+image_name=uss
 
 critical_message()  # $1 - error message
 {
@@ -68,22 +69,41 @@ copy_docker_file_to_unzip_dir()
 
 create_docker_image()
 {
-    docker build -t name $unzip_bin_dir
+    docker build -t $image_name $unzip_bin_dir
 }
+
+
+while [[ $# -gt 1 ]]
+do
+key="$1"
+
+case $key in
+    -n|--container-name)
+        image_name="$2"
+        shift # past argument
+    ;;
+    -bd|--bin-dir)
+        bin_dir="$2"
+        cd $bin_dir
+        if [[ $? -eq 0 ]]; then
+            bin_dir=$(pwd) && cd $script_dir
+            assembly_with_src=false
+        else
+            critical_message "ERROR. $2 is not a dir"
+            exit
+        fi
+    ;;
+    *)
+            critical_message "ERROR. $2 unnoun argument"
+            exit
+    ;;
+esac
+shift # past argument or value
+done
 
 mkdir $build_dir
 
-if [[ ! -z $1 ]]; then
-    bin_dir=$1
-    cd $bin_dir
-    if [[ $? -eq 0 ]]; then
-        bin_dir=$(pwd) && cd $script_dir
-        assembly_with_src=false
-    else
-        critical_message "ERROR. $1 is not a dir"
-        exit
-    fi
-fi
+
 
 if [[ $assembly_with_src == true ]]; then
     assembly_project
