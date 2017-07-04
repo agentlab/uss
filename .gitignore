@@ -12,3 +12,4 @@ Corel Auto-Preserve/
 .DS_Store
 *.credentials
 /org.eclipse.userstorage.releng/*.target
+.bash_history
