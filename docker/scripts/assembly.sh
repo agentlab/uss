@@ -72,10 +72,17 @@ create_docker_image()
     docker build -t $image_name $unzip_bin_dir
 }
 
+help_info()
+{
+    echo "-n (--container-name) - docker-image name"
+    echo "-bd (--bin-dir) - dir with bin in zip"
+} 
 
-while [[ $# -gt 1 ]]
+while [[ $# -gt 0 ]]
 do
 key="$1"
+
+echo $key
 
 case $key in
     -n|--container-name)
@@ -93,8 +100,13 @@ case $key in
             exit
         fi
     ;;
+    -h|--help)
+        help_info
+        exit
+    ;;
     *)
-            critical_message "ERROR. $2 unnoun argument"
+            critical_message "ERROR. $1 unnoun argument"
+            echo "-h (--help) to view info"
             exit
     ;;
 esac
