@@ -22,4 +22,4 @@ COPY . $home_dir
 
 #COPY . $HOME
 
-#CMD ./eclipse
+CMD ./eclipse
