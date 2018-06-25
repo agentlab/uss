@@ -105,120 +105,18 @@
       <requirement
           name="com.fasterxml.jackson.core.jackson-core"/>
       <requirement
-          name="com.fasterxml.jackson.core.jackson-annotations"/>
+          name="org.apache.commons.beanutils"/>
       <requirement
-          name="com.fasterxml.jackson.core.jackson-databind"/>
+          name="org.eclipse.ecf.osgi.services.feature.feature.group"/>
       <requirement
-          name="com.fasterxml.jackson.datatype.jackson-datatype-guava"/>
+          name="org.eclipse.equinox.preferences"/>
       <requirement
-          name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base"/>
+          name="org.eclipse.equinox.server.jetty.feature.group"
+          versionRange="[1.4.1.v20170811-1407,1.4.1.v20170811-1407]"/>
       <requirement
-          name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider"/>
+          name="org.glassfish.jersey.ext.entityfiltering"/>
       <requirement
-          name="com.fasterxml.jackson.module.jackson-module-jaxb-annotations"/>
-      <requirement
-          name="javax.validation"/>
-      <requirement
-          name="javax.ws.rs"
-          versionRange="[2.0.1,2.0.2)"/>
-      <requirement
-          name="org.aopalliance"/>
-      <requirement
-          name="org.apache.httpcomponents.httpclient"
-          versionRange="[4.3.6,4.3.7)"/>
-      <requirement
-          name="org.apache.httpcomponents.httpcore"
-          versionRange="[4.3.0,4.4.0)"/>
-      <requirement
-          name="org.aspectj.feature.group"/>
-      <requirement
-          name="org.eclipse.ajdt.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.remoteservice.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.ecf.provider.jersey.server.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.equinox.executable.feature.group"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.aix.ppc"
-          filter="(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.aix.ppc64"
-          filter="(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.hpux.ia64"
-          filter="(&amp;(osgi.arch=ia64)(osgi.os=hpux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.ppc"
-          filter="(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.ppc64"
-          filter="(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.ppc64le"
-          filter="(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.s390"
-          filter="(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.s390x"
-          filter="(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.x86"
-          filter="(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.linux.x86_64"
-          filter="(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.solaris.sparcv9"
-          filter="(&amp;(osgi.arch=sparcv9)(osgi.os=solaris)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.gtk.solaris.x86_64"
-          filter="(&amp;(osgi.arch=x86_64)(osgi.os=solaris)(osgi.ws=gtk))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.win32.win32.x86"
-          filter="(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))"/>
-      <requirement
-          name="org.eclipse.equinox.launcher.win32.win32.x86_64"
-          filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32))"/>
-      <requirement
-          name="org.eclipse.equinox.security.win32.x86"
-          filter="(&amp;(osgi.arch=x86)(osgi.os=win32))"/>
-      <requirement
-          name="org.eclipse.equinox.security.win32.x86_64"
-          filter="(&amp;(osgi.arch=x86_64)(osgi.os=win32))"/>
-      <requirement
-          name="org.eclipse.equinox.weaving.sdk.feature.group"/>
-      <requirement
-          name="org.glassfish.jersey.containers.jersey-container-servlet"
-          versionRange="[2.25.1,2.25.1]"/>
-      <requirement
-          name="org.glassfish.jersey.containers.jersey-container-servlet-core"
-          versionRange="[2.25.1,2.25.1]"/>
-      <requirement
-          name="org.glassfish.jersey.core.jersey-server"
-          versionRange="[2.25.1,2.25.1]"/>
-      <requirement
-          name="org.glassfish.jersey.media.jersey-media-json-jackson"
-          versionRange="[2.25.1,2.25.1]"/>
-      <requirement
-          name="org.glassfish.jersey.ext.jersey-entity-filtering"
-          versionRange="[2.25.1,2.25.1]"/>
-      <requirement
-          name="org.glassfish.jersey.media.jersey-media-jaxb"
-          versionRange="[2.25.1,2.25.1]"/>
-      <requirement
-          name="org.glassfish.hk2.api"
-          versionRange="[2.5.0.b32,2.5.0.b32]"/>
-      <requirement
-          name="org.glassfish.hk2.osgi-resource-locator"
-          versionRange="[1.0.1,1.0.1]"/>
-      <requirement
-          name="org.glassfish.hk2.locator"
-          versionRange="[2.5.0.b32,2.5.0.b32]"/>
-      <requirement
-          name="org.glassfish.hk2.utils"
-          versionRange="[2.5.0.b32,2.5.0.b32]"/>
+          name="org.eclipse.core.net"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}"
           locateNestedProjects="true">
@@ -245,15 +143,9 @@
       <repositoryList
           name="Oxygen">
         <repository
+            url="http://boreas.dept07/storage/bamboo/p2/release/eclipse/oxygen"/>
+        <repository
             url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
-        <repository
-            url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.3.10.v20160621"/>
-        <repository
-            url="http://download.eclipse.org/rt/ecf/latest/site.p2"/>
-        <repository
-            url="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201705040812/"/>
-        <repository
-            url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
       </repositoryList>
     </targlet>
     <targlet

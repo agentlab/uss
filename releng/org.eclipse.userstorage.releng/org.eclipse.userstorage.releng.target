@@ -1,20 +1,222 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Eclipse User Storage Service" sequenceNumber="9">
+<target name="Generated from Eclipse User Storage Service" sequenceNumber="13">
   <locations>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="a.jre.javase" version="1.6.0"/>
+      <unit id="ch.ethz.iks.slp" version="1.1.100.v20170506-2012"/>
+      <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.6.2.v20161117-2150"/>
+      <unit id="com.fasterxml.jackson.core.jackson-core" version="2.6.2.v20161117-2150"/>
+      <unit id="com.fasterxml.jackson.core.jackson-databind" version="2.6.2.v20161117-2150"/>
+      <unit id="com.fasterxml.jackson.datatype.jackson-datatype-guava" version="2.6.2.v20161117-2150"/>
+      <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base" version="2.6.2.v20161117-2150"/>
+      <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" version="2.6.2.v20161117-2150"/>
+      <unit id="com.google.guava" version="21.0.0.v20170206-1425"/>
+      <unit id="com.google.inject.assistedinject" version="3.0.0.v201402270930"/>
+      <unit id="com.ibm.icu" version="58.2.0.v20170418-1837"/>
+      <unit id="javassist" version="3.13.0.GA_v201209210905"/>
+      <unit id="javax.annotation" version="1.2.0.v201602091430"/>
+      <unit id="javax.el" version="2.2.0.v201303151357"/>
+      <unit id="javax.inject" version="1.0.0.v20091030"/>
+      <unit id="javax.persistence" version="2.1.0.v201304241213"/>
+      <unit id="javax.servlet" version="3.1.0.v201410161800"/>
+      <unit id="javax.servlet.jsp" version="2.2.0.v201112011158"/>
+      <unit id="javax.ws.rs" version="2.0.1.v201504171603"/>
+      <unit id="javax.xml" version="1.3.4.v201005080400"/>
+      <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
+      <unit id="org.apache.ant" version="1.10.1.v20170504-0840"/>
+      <unit id="org.apache.batik.css" version="1.8.0.v20170214-1941"/>
+      <unit id="org.apache.batik.util" version="1.8.0.v20170214-1941"/>
+      <unit id="org.apache.commons.beanutils" version="1.8.0.v201205091237"/>
+      <unit id="org.apache.commons.codec" version="1.9.0.v20170208-1614"/>
+      <unit id="org.apache.commons.collections" version="3.2.2.v201511171945"/>
+      <unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
+      <unit id="org.apache.commons.jxpath" version="1.3.0.v200911051830"/>
+      <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
+      <unit id="org.apache.felix.gogo.command" version="0.10.0.v201209301215"/>
+      <unit id="org.apache.felix.gogo.runtime" version="0.10.0.v201209301036"/>
+      <unit id="org.apache.felix.gogo.shell" version="0.10.0.v201212101605"/>
+      <unit id="org.apache.felix.scr" version="2.0.10.v20170501-2007"/>
+      <unit id="org.apache.httpcomponents.httpclient" version="4.3.6.v201511171540"/>
+      <unit id="org.apache.httpcomponents.httpclient" version="4.5.2.v20170210-0925"/>
+      <unit id="org.apache.httpcomponents.httpcore" version="4.4.6.v20170210-0925"/>
+      <unit id="org.apache.jasper.glassfish" version="2.2.2.v201501141630"/>
+      <unit id="org.apache.mina.core" version="2.0.7.v201401071602"/>
+      <unit id="org.apache.sshd.core" version="0.7.0.v201303101611"/>
+      <unit id="org.eclipse.core.commands" version="3.9.0.v20170530-1048"/>
+      <unit id="org.eclipse.core.contenttype" version="3.6.0.v20170207-1037"/>
+      <unit id="org.eclipse.core.databinding" version="1.6.100.v20170515-1119"/>
+      <unit id="org.eclipse.core.databinding.observable" version="1.6.100.v20170515-1119"/>
+      <unit id="org.eclipse.core.databinding.property" version="1.6.100.v20170515-1119"/>
+      <unit id="org.eclipse.core.expressions" version="3.6.0.v20170207-1037"/>
+      <unit id="org.eclipse.core.jobs" version="3.9.1.v20170714-0547"/>
+      <unit id="org.eclipse.core.net" version="1.3.100.v20170516-0820"/>
+      <unit id="org.eclipse.core.net.linux.x86" version="1.2.0.v20160323-1650"/>
+      <unit id="org.eclipse.core.net.linux.x86_64" version="1.2.0.v20160323-1650"/>
+      <unit id="org.eclipse.core.net.win32.x86" version="1.1.0.v20160323-1650"/>
+      <unit id="org.eclipse.core.net.win32.x86_64" version="1.1.0.v20160323-1650"/>
+      <unit id="org.eclipse.core.runtime" version="3.13.0.v20170207-1030"/>
+      <unit id="org.eclipse.core.runtime.feature.feature.group" version="1.2.1.v20170928-1321"/>
+      <unit id="org.eclipse.core.variables" version="3.4.0.v20170113-2056"/>
+      <unit id="org.eclipse.e4.core.commands" version="0.12.100.v20170513-0428"/>
+      <unit id="org.eclipse.e4.core.contexts" version="1.6.0.v20170322-1144"/>
+      <unit id="org.eclipse.e4.core.di" version="1.6.100.v20170421-1418"/>
+      <unit id="org.eclipse.e4.core.di.annotations" version="1.6.0.v20170119-2002"/>
+      <unit id="org.eclipse.e4.core.di.extensions" version="0.15.0.v20170228-1728"/>
+      <unit id="org.eclipse.e4.core.di.extensions.supplier" version="0.15.0.v20170407-0928"/>
+      <unit id="org.eclipse.e4.core.services" version="2.1.0.v20170407-0928"/>
+      <unit id="org.eclipse.e4.emf.xpath" version="0.2.0.v20160630-0728"/>
+      <unit id="org.eclipse.e4.ui.bindings" version="0.12.1.v20170823-1632"/>
+      <unit id="org.eclipse.e4.ui.css.core" version="0.12.101.v20170712-1547"/>
+      <unit id="org.eclipse.e4.ui.css.swt" version="0.13.1.v20170808-1940"/>
+      <unit id="org.eclipse.e4.ui.css.swt.theme" version="0.11.0.v20170312-2302"/>
+      <unit id="org.eclipse.e4.ui.di" version="1.2.100.v20170414-1137"/>
+      <unit id="org.eclipse.e4.ui.model.workbench" version="2.0.1.v20170713-1800"/>
+      <unit id="org.eclipse.e4.ui.services" version="1.3.0.v20170307-2032"/>
+      <unit id="org.eclipse.e4.ui.widgets" version="1.2.0.v20160630-0736"/>
+      <unit id="org.eclipse.e4.ui.workbench" version="1.5.1.v20170815-1446"/>
+      <unit id="org.eclipse.e4.ui.workbench.addons.swt" version="1.3.1.v20170319-1442"/>
+      <unit id="org.eclipse.e4.ui.workbench.swt" version="0.14.101.v20170710-1119"/>
+      <unit id="org.eclipse.e4.ui.workbench3" version="0.14.0.v20160630-0740"/>
+      <unit id="org.eclipse.emf.common" version="2.13.0.v20170609-0707"/>
+      <unit id="org.eclipse.emf.ecore" version="2.13.0.v20170609-0707"/>
+      <unit id="org.eclipse.emf.ecore.change" version="2.11.0.v20170609-0707"/>
+      <unit id="org.eclipse.emf.ecore.xmi" version="2.13.0.v20170609-0707"/>
+      <unit id="org.eclipse.equinox.app" version="1.3.400.v20150715-1528"/>
+      <unit id="org.eclipse.equinox.bidi" version="1.1.0.v20160728-1031"/>
+      <unit id="org.eclipse.equinox.cm" version="1.2.0.v20170105-1446"/>
+      <unit id="org.eclipse.equinox.common" version="3.9.0.v20170207-1454"/>
+      <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="3.13.1.v20170811-1407"/>
+      <unit id="org.eclipse.equinox.concurrent" version="1.1.0.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.console" version="1.1.300.v20170512-2111"/>
+      <unit id="org.eclipse.equinox.console.jaas.fragment" version="1.0.0.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.console.ssh" version="1.0.200.v20170105-1446"/>
+      <unit id="org.eclipse.equinox.coordinator" version="1.3.300.v20170512-2111"/>
+      <unit id="org.eclipse.equinox.core.feature.feature.group" version="1.4.1.v20170928-1321"/>
+      <unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.13.1.v20170928-1321"/>
+      <unit id="org.eclipse.equinox.device" version="1.0.400.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.ds" version="1.5.0.v20170307-1429"/>
+      <unit id="org.eclipse.equinox.event" version="1.4.0.v20170105-1446"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.cocoa.macosx.x86_64" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64le" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.x86" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.gtk.linux.x86_64" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.win32.win32.x86" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.executable_root.win32.win32.x86_64" version="3.7.1.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.frameworkadmin" version="2.0.300.v20160504-1450"/>
+      <unit id="org.eclipse.equinox.frameworkadmin.equinox" version="1.0.800.v20170524-1345"/>
+      <unit id="org.eclipse.equinox.http.jetty" version="3.4.0.v20170503-2025"/>
+      <unit id="org.eclipse.equinox.http.registry" version="1.1.400.v20150715-1528"/>
+      <unit id="org.eclipse.equinox.http.servlet" version="1.4.0.v20170524-1452"/>
+      <unit id="org.eclipse.equinox.http.servletbridge" version="1.0.300.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.io" version="1.1.100.v20150430-1834"/>
+      <unit id="org.eclipse.equinox.ip" version="1.1.400.v20161007-1324"/>
+      <unit id="org.eclipse.equinox.jsp.jasper" version="1.0.500.v20150119-1358"/>
+      <unit id="org.eclipse.equinox.jsp.jasper.registry" version="1.0.300.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.launcher" version="1.4.0.v20161219-1356"/>
+      <unit id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64le" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.x86" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.launcher.gtk.linux.x86_64" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.launcher.win32.win32.x86" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.launcher.win32.win32.x86_64" version="1.1.550.v20170928-1359"/>
+      <unit id="org.eclipse.equinox.metatype" version="1.4.300.v20170105-1446"/>
+      <unit id="org.eclipse.equinox.p2.artifact.repository" version="1.1.650.v20170928-1405"/>
+      <unit id="org.eclipse.equinox.p2.console" version="1.0.600.v20170511-1106"/>
+      <unit id="org.eclipse.equinox.p2.core" version="2.4.101.v20170906-1259"/>
+      <unit id="org.eclipse.equinox.p2.director" version="2.3.300.v20160504-1450"/>
+      <unit id="org.eclipse.equinox.p2.engine" version="2.5.0.v20170319-2002"/>
+      <unit id="org.eclipse.equinox.p2.garbagecollector" version="1.0.300.v20160504-1450"/>
+      <unit id="org.eclipse.equinox.p2.jarprocessor" version="1.0.500.v20160504-1450"/>
+      <unit id="org.eclipse.equinox.p2.metadata" version="2.3.200.v20170511-1106"/>
+      <unit id="org.eclipse.equinox.p2.metadata.repository" version="1.2.401.v20170906-1259"/>
+      <unit id="org.eclipse.equinox.p2.repository" version="2.3.301.v20170906-1259"/>
+      <unit id="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.1.501.v20170906-1259"/>
+      <unit id="org.eclipse.equinox.p2.touchpoint.natives" version="1.2.200.v20170511-1216"/>
+      <unit id="org.eclipse.equinox.p2.transport.ecf" version="1.1.300.v20161004-0244"/>
+      <unit id="org.eclipse.equinox.preferences" version="3.7.0.v20170126-2132"/>
+      <unit id="org.eclipse.equinox.region" version="1.4.0.v20170117-1425"/>
+      <unit id="org.eclipse.equinox.registry" version="3.7.0.v20170222-1344"/>
+      <unit id="org.eclipse.equinox.sdk.feature.group" version="3.13.1.v20170928-1405"/>
+      <unit id="org.eclipse.equinox.security" version="1.2.300.v20170505-1235"/>
+      <unit id="org.eclipse.equinox.security.linux.x86_64" version="1.0.100.v20170504-1307"/>
+      <unit id="org.eclipse.equinox.security.macosx" version="1.100.200.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.security.ui" version="1.1.400.v20170505-1235"/>
+      <unit id="org.eclipse.equinox.security.win32.x86" version="1.0.300.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.security.win32.x86_64" version="1.0.100.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.server.core.feature.group" version="1.5.1.v20170928-1321"/>
+      <unit id="org.eclipse.equinox.server.jetty.feature.group" version="1.4.1.v20170811-1407"/>
+      <unit id="org.eclipse.equinox.server.p2.feature.group" version="1.3.1.v20170928-1405"/>
+      <unit id="org.eclipse.equinox.serverside.sdk.feature.group" version="3.13.1.v20170928-1405"/>
+      <unit id="org.eclipse.equinox.servletbridge" version="1.3.200.v20160128-1435"/>
+      <unit id="org.eclipse.equinox.simpleconfigurator" version="1.2.0.v20170110-1705"/>
+      <unit id="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.0.300.v20170515-0721"/>
+      <unit id="org.eclipse.equinox.supplement" version="1.7.0.v20170329-1416"/>
+      <unit id="org.eclipse.equinox.transforms.hook" version="1.2.0.v20170105-1446"/>
+      <unit id="org.eclipse.equinox.transforms.xslt" version="1.0.300.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.useradmin" version="1.1.400.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.util" version="1.0.500.v20130404-1337"/>
+      <unit id="org.eclipse.equinox.weaving.caching" version="1.1.0.v20161007-1415"/>
+      <unit id="org.eclipse.equinox.weaving.caching.j9" version="1.1.0.v20160929-1449"/>
+      <unit id="org.eclipse.equinox.weaving.hook" version="1.2.0.v20160929-1449"/>
+      <unit id="org.eclipse.equinox.wireadmin" version="1.0.600.v20150715-1528"/>
+      <unit id="org.eclipse.help" version="3.8.1.v20170815-1448"/>
+      <unit id="org.eclipse.jetty.continuation" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jetty.http" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jetty.io" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jetty.security" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jetty.server" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jetty.servlet" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jetty.util" version="9.4.5.v20170502"/>
+      <unit id="org.eclipse.jface.databinding" version="1.8.100.v20170503-1507"/>
+      <unit id="org.eclipse.osgi" version="3.12.50.v20170928-1321"/>
+      <unit id="org.eclipse.osgi.compatibility.state" version="1.1.0.v20170516-1513"/>
+      <unit id="org.eclipse.osgi.services" version="3.6.0.v20170228-1906"/>
+      <unit id="org.eclipse.osgi.util" version="3.4.0.v20170111-1608"/>
+      <unit id="org.eclipse.pde.junit.runtime" version="3.5.50.v20170923-0844"/>
+      <unit id="org.eclipse.ui" version="3.109.0.v20170411-1742"/>
+      <unit id="org.eclipse.ui.workbench" version="3.110.1.v20170704-1208"/>
+      <unit id="org.glassfish.hk2.api" version="2.5.0.v20161103-0227"/>
+      <unit id="org.glassfish.hk2.locator" version="2.5.0.v20161103-0227"/>
+      <unit id="org.glassfish.hk2.osgi-resource-locator" version="2.5.0.v20161103-1916"/>
+      <unit id="org.glassfish.hk2.utils" version="2.5.0.v20160210-1508"/>
+      <unit id="org.glassfish.jersey.bundles.repackaged.jersey-guava" version="2.22.1.v20161103-1916"/>
+      <unit id="org.glassfish.jersey.core.jersey-client" version="2.22.1.v20161103-1916"/>
+      <unit id="org.glassfish.jersey.core.jersey-common" version="2.22.1.v20161103-1916"/>
+      <unit id="org.glassfish.jersey.core.jersey-server" version="2.22.1.v20161103-1916"/>
+      <unit id="org.glassfish.jersey.ext.entityfiltering" version="2.22.1.v20161103-0227"/>
+      <unit id="org.glassfish.jersey.media.jersey-media-json-jackson" version="2.22.1.v20161117-2005"/>
+      <unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
+      <unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
+      <unit id="org.objectweb.asm.commons" version="5.2.0.v20170126-0011"/>
+      <unit id="org.sat4j.core" version="2.3.5.v201308161310"/>
+      <unit id="org.sat4j.pb" version="2.3.5.v201404071733"/>
+      <unit id="org.slf4j.api" version="1.7.2.v20121108-1250"/>
+      <unit id="org.slf4j.jcl" version="1.7.2.v20130115-1340"/>
+      <unit id="org.tukaani.xz" version="1.5.0.v20170111-1717"/>
+      <unit id="org.w3c.css.sac" version="1.3.1.v200903091627"/>
+      <repository location="http://boreas.dept07/storage/bamboo/p2/release/eclipse/oxygen"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.ecf.provider.jaxrs" version="1.1.0.201712171251"/>
+      <unit id="org.eclipse.ecf.provider.jaxrs.client" version="1.1.0.201712171251"/>
+      <unit id="org.eclipse.ecf.provider.jaxrs.server" version="1.1.0.201712171251"/>
+      <unit id="org.eclipse.ecf.provider.jersey.client" version="1.1.0.201712171251"/>
+      <unit id="org.eclipse.ecf.provider.jersey.client.feature.feature.group" version="1.1.0.201712171251"/>
+      <unit id="org.eclipse.ecf.provider.jersey.server" version="1.1.0.201712171251"/>
+      <unit id="org.eclipse.ecf.provider.jersey.server.feature.feature.group" version="1.1.0.201712171251"/>
+      <repository location="https://agentlab.ru/p2/jaxrs-jersey-provider_1.1.0"/>
+    </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.8.0"/>
       <unit id="com.fasterxml.jackson.core.jackson-core" version="2.8.7"/>
       <unit id="com.fasterxml.jackson.core.jackson-databind" version="2.8.7"/>
-      <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base" version="2.8.4"/>
-      <unit id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" version="2.8.4"/>
       <unit id="com.fasterxml.jackson.module.jackson-module-jaxb-annotations" version="2.8.4"/>
-      <unit id="javassist" version="3.20.0.GA"/>
       <unit id="javax.validation.api" version="1.1.0.Final"/>
-      <unit id="org.glassfish.hk2.api" version="2.5.0.b32"/>
-      <unit id="org.glassfish.hk2.locator" version="2.5.0.b32"/>
       <unit id="org.glassfish.hk2.osgi-resource-locator" version="1.0.1"/>
-      <unit id="org.glassfish.hk2.utils" version="2.5.0.b32"/>
       <unit id="org.glassfish.jersey.bundles.repackaged.jersey-guava" version="2.25.1"/>
       <unit id="org.glassfish.jersey.containers.jersey-container-servlet" version="2.25.1"/>
       <unit id="org.glassfish.jersey.containers.jersey-container-servlet-core" version="2.25.1"/>
@@ -22,344 +224,112 @@
       <unit id="org.glassfish.jersey.core.jersey-common" version="2.25.1"/>
       <unit id="org.glassfish.jersey.core.jersey-server" version="2.25.1"/>
       <unit id="org.glassfish.jersey.ext.jersey-entity-filtering" version="2.25.1"/>
-      <unit id="org.glassfish.jersey.media.jersey-media-jaxb" version="2.25.1"/>
-      <unit id="org.glassfish.jersey.media.jersey-media-json-jackson" version="2.25.1"/>
       <unit id="org.objenesis" version="2.2.0"/>
-      <unit id="slf4j.api" version="1.7.14"/>
       <repository location="http://agentlab.ru/pd/p2/eclipseorbit/"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="javax.servlet" version="3.1.0.v201410161800"/>
-      <unit id="org.apache.commons.codec" version="1.9.0.v20170208-1614"/>
-      <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-      <unit id="org.apache.httpcomponents.httpclient" version="4.5.2.v20170210-0925"/>
-      <unit id="org.apache.httpcomponents.httpcore" version="4.4.6.v20170210-0925"/>
-      <unit id="org.eclipse.ecf" version="3.8.0.v20170104-0657"/>
-      <unit id="org.eclipse.ecf.core.feature.feature.group" version="1.4.0.v20170516-2248"/>
-      <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="1.1.0.v20170110-1317"/>
-      <unit id="org.eclipse.ecf.discovery" version="5.0.200.v20160905-1122"/>
-      <unit id="org.eclipse.ecf.filetransfer" version="5.0.0.v20160817-1024"/>
-      <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="3.13.7.v20170516-2248"/>
-      <unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="3.13.7.v20170516-2248"/>
-      <unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="1.1.0.v20170110-1317"/>
-      <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="1.1.0.v20170110-1317"/>
-      <unit id="org.eclipse.ecf.identity" version="3.8.0.v20161203-2153"/>
-      <unit id="org.eclipse.ecf.osgi.services.distribution" version="2.1.0.v20160907-0906"/>
-      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin" version="4.5.100.v20170517-0201"/>
-      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy" version="1.0.0.v20160907-0906"/>
-      <unit id="org.eclipse.ecf.provider.filetransfer" version="3.2.300.v20161203-1840"/>
-      <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4" version="1.1.200.v20170314-0133"/>
-      <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl" version="1.1.0.v20160817-1024"/>
-      <unit id="org.eclipse.ecf.provider.filetransfer.ssl" version="1.0.0.v20160817-1024"/>
-      <unit id="org.eclipse.ecf.provider.jmdns" version="4.3.100.v20161228-0059"/>
-      <unit id="org.eclipse.ecf.remoteservice" version="8.12.0.v20170503-0247"/>
-      <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="1.0.100.v20160907-0906"/>
-      <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="2.0.100.v20160907-0906"/>
-      <unit id="org.eclipse.ecf.remoteservice.feature.feature.group" version="2.3.0.v20170503-0247"/>
-      <unit id="org.eclipse.ecf.ssl" version="1.2.0.v20160817-1024"/>
-      <unit id="org.eclipse.osgi.services.remoteserviceadmin" version="1.6.100.v20160907-0906"/>
+      <unit id="ch.qos.logback.classic" version="1.1.2.v20160208-0839"/>
+      <unit id="ch.qos.logback.core" version="1.1.2.v20160208-0839"/>
+      <unit id="ch.qos.logback.slf4j" version="1.1.2.v20160301-0943"/>
+      <unit id="com.google.inject" version="3.0.0.v201605172100"/>
+      <unit id="com.google.inject.multibindings" version="3.0.0.v201605172100"/>
+      <unit id="javax.validation" version="1.0.0.GA_v201205091237"/>
+      <unit id="org.glassfish.jersey.containers.servlet" version="2.22.1.v20161103-0227"/>
+      <unit id="org.glassfish.jersey.containers.servlet.core" version="2.22.1.v20161103-0227"/>
+      <unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
+      <unit id="org.objectweb.asm" version="5.2.0.v20180228-1718"/>
+      <unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
+      <unit id="org.slf4j.apis.jcl" version="1.7.10.v20160208-0839"/>
+      <unit id="org.slf4j.apis.log4j" version="1.7.10.v20160208-0839"/>
+      <unit id="org.slf4j.bridge.jul" version="1.7.10.v20160208-0839"/>
+      <unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
+      <unit id="org.slf4j.jul" version="1.7.2.v20121108-1250"/>
+      <unit id="org.slf4j.log4j" version="1.7.2.v20130115-1340"/>
+      <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20180330011457/repository"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.jetty.client" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.http" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.io" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.security" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.server" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.servlet" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.util" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.websocket.api" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.websocket.client" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.websocket.common" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.websocket.server" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.websocket.servlet" version="9.4.10.v20180503"/>
+      <unit id="org.eclipse.jetty.xml" version="9.4.10.v20180503"/>
+      <repository location="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x"/>
+    </location>
+    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.ecf" version="3.9.0.v20180402-2015"/>
+      <unit id="org.eclipse.ecf.console" version="1.1.0.v20180307-2220"/>
+      <unit id="org.eclipse.ecf.console.feature.feature.group" version="1.1.0.v20180307-2220"/>
+      <unit id="org.eclipse.ecf.core.feature.feature.group" version="1.5.0.v20180426-1936"/>
+      <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="1.1.100.v20180301-0201"/>
+      <unit id="org.eclipse.ecf.discovery" version="5.0.300.v20180306-0211"/>
+      <unit id="org.eclipse.ecf.discovery.feature.feature.group" version="1.0.100.v20180306-0211"/>
+      <unit id="org.eclipse.ecf.filetransfer" version="5.0.100.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="3.14.0.v20180306-0429"/>
+      <unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="3.14.0.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="1.1.100.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="1.1.100.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.identity" version="3.9.0.v20180426-1936"/>
+      <unit id="org.eclipse.ecf.osgi.services.distribution" version="2.1.200.v20180301-0016"/>
+      <unit id="org.eclipse.ecf.osgi.services.feature.feature.group" version="2.3.1.v20180518-0149"/>
+      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin" version="4.6.800.v20180518-0149"/>
+      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin.console" version="1.0.0.v20180307-2227"/>
+      <unit id="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy" version="1.0.100.v20180301-0016"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer" version="3.2.400.v20180306-0429"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4" version="1.1.300.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl" version="1.1.100.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.provider.filetransfer.ssl" version="1.0.100.v20180301-0132"/>
+      <unit id="org.eclipse.ecf.provider.jmdns" version="4.3.200.v20180306-0429"/>
+      <unit id="org.eclipse.ecf.remoteservice" version="8.13.0.v20180406-1915"/>
+      <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="1.1.0.v20180311-0310"/>
+      <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="2.1.0.v20180409-2248"/>
+      <unit id="org.eclipse.ecf.remoteservice.feature.feature.group" version="2.5.0.v20180409-2248"/>
+      <unit id="org.eclipse.ecf.ssl" version="1.2.100.v20180301-0132"/>
+      <unit id="org.eclipse.osgi.services.remoteserviceadmin" version="1.6.200.v20180301-0016"/>
       <repository location="http://download.eclipse.org/rt/ecf/latest/site.p2"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="org.eclipse.ecf.provider.jaxrs" version="1.1.0.201705040812"/>
-      <unit id="org.eclipse.ecf.provider.jaxrs.server" version="1.1.0.201705040812"/>
-      <unit id="org.eclipse.ecf.provider.jersey.server" version="1.0.0.201705040812"/>
-      <unit id="org.eclipse.ecf.provider.jersey.server.aspectj" version="0.0.1.201705040812"/>
-      <unit id="org.eclipse.ecf.provider.jersey.server.feature.feature.group" version="1.1.0.201705040812"/>
-      <repository location="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201705040812/"/>
-    </location>
-    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="org.aspectj.ajde" version="1.8.10.201703272045"/>
-      <unit id="org.aspectj.feature.group" version="1.8.10.201703272045"/>
-      <unit id="org.aspectj.runtime" version="1.8.10.201703272045"/>
-      <unit id="org.aspectj.weaver" version="1.8.10.201703272045"/>
-      <unit id="org.eclipse.ajdt.core" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.ajdt.doc.user" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.ajdt.examples" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.ajdt.feature.group" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.ajdt.mylyn.ui" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.ajdt.ui" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.aspectj" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.contribution.visualiser" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.contribution.weaving.jdt" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.contribution.xref.core" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.contribution.xref.ui" version="2.2.4.201703272045"/>
-      <unit id="org.eclipse.equinox.weaving.aspectj" version="1.0.400.201703272045"/>
-      <unit id="org.eclipse.equinox.weaving.caching" version="1.0.400.v20140529-1734"/>
-      <unit id="org.eclipse.equinox.weaving.hook" version="1.1.200.v20150730-1648"/>
-      <unit id="org.eclipse.equinox.weaving.sdk.feature.group" version="1.2.0.201703272045"/>
-      <repository location="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
-    </location>
-    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="ch.qos.logback.classic" version="1.0.7.v20121108-1250"/>
-      <unit id="ch.qos.logback.core" version="1.0.7.v20121108-1250"/>
-      <unit id="ch.qos.logback.slf4j" version="1.0.7.v201505121915"/>
-      <unit id="com.fasterxml.jackson.datatype.jackson-datatype-guava" version="2.6.2.v20161117-2150"/>
-      <unit id="com.google.inject" version="3.0.0.v201605172100"/>
-      <unit id="com.google.inject.assistedinject" version="3.0.0.v201402270930"/>
-      <unit id="com.google.inject.multibindings" version="3.0.0.v201605172100"/>
-      <unit id="com.ibm.icu" version="58.2.0.v20170208-1743"/>
-      <unit id="javax.annotation" version="1.2.0.v201602091430"/>
-      <unit id="javax.el" version="2.2.0.v201303151357"/>
-      <unit id="javax.inject" version="1.0.0.v20091030"/>
-      <unit id="javax.servlet.jsp" version="2.2.0.v201112011158"/>
-      <unit id="javax.validation" version="1.0.0.GA_v201205091237"/>
-      <unit id="javax.ws.rs" version="2.0.1.v201504171603"/>
-      <unit id="javax.xml" version="1.3.4.v201005080400"/>
-      <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
-      <unit id="org.apache.ant" version="1.9.6.v201510161327"/>
-      <unit id="org.apache.batik.css" version="1.8.0.v20170214-1941"/>
-      <unit id="org.apache.batik.util" version="1.8.0.v20170214-1941"/>
-      <unit id="org.apache.commons.collections" version="3.2.2.v201511171945"/>
-      <unit id="org.apache.commons.io" version="2.2.0.v201405211200"/>
-      <unit id="org.apache.commons.jxpath" version="1.3.0.v200911051830"/>
-      <unit id="org.apache.felix.gogo.command" version="0.10.0.v201209301215"/>
-      <unit id="org.apache.felix.gogo.runtime" version="0.10.0.v201209301036"/>
-      <unit id="org.apache.felix.gogo.shell" version="0.10.0.v201212101605"/>
-      <unit id="org.apache.httpcomponents.httpclient" version="4.3.6.v201511171540"/>
-      <unit id="org.apache.httpcomponents.httpcore" version="4.3.3.v201411290715"/>
-      <unit id="org.apache.jasper.glassfish" version="2.2.2.v201501141630"/>
-      <unit id="org.apache.mina.core" version="2.0.7.v201401071602"/>
-      <unit id="org.apache.sshd.core" version="0.7.0.v201303101611"/>
-      <unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
-      <unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
-      <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
-      <unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
-      <unit id="org.sat4j.core" version="2.3.5.v201308161310"/>
-      <unit id="org.sat4j.pb" version="2.3.5.v201404071733"/>
-      <unit id="org.slf4j.api" version="1.7.2.v20121108-1250"/>
-      <unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
-      <unit id="org.slf4j.jcl" version="1.7.2.v20130115-1340"/>
-      <unit id="org.slf4j.jul" version="1.7.2.v20121108-1250"/>
-      <unit id="org.slf4j.log4j" version="1.7.2.v20130115-1340"/>
-      <unit id="org.tukaani.xz" version="1.5.0.v20170111-1717"/>
-      <unit id="org.w3c.css.sac" version="1.3.1.v200903091627"/>
-      <repository location="http://download.eclipse.org/tools/orbit/R-builds/R20170307180635/repository"/>
+      <unit id="org.apache.aries.spifly.dynamic.bundle" version="1.0.8"/>
+      <unit id="org.apache.aries.util" version="1.1.1"/>
+      <repository location="https://agentlab.ru/pd/p2/repacked"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <unit id="com.google.jsr305" version="1.0.0.201502020347"/>
       <unit id="com.google.jsr305.feature.feature.group" version="1.0.0.201502020347"/>
-      <repository location="http://agentlab.ru/eclipse/update/com.google.jsr305/1.0.0.201502020347"/>
+      <repository location="https://agentlab.ru/eclipse/update/com.google.jsr305/1.0.0.201502020347"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="com.google.guava" version="18.0.0.201502021635"/>
-      <unit id="com.google.guava.feature.feature.group" version="18.0.0.201502021635"/>
-      <repository location="http://agentlab.ru/eclipse/update/com.google.guava/18.0.0.201502021635"/>
-    </location>
-    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="com.codeaffine.osgi.test.util" version="0.1.0.20170519-1200"/>
-      <unit id="com.codeaffine.osgi.test.util.feature.feature.group" version="0.1.0.20170519-1200"/>
-      <unit id="org.mockito.mockito-all" version="1.9.5"/>
-      <repository location="http://fappel.github.io/xiliary"/>
-    </location>
-    <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="org.junit" version="4.12.0.201607081854"/>
-      <unit id="org.junit.feature.feature.group" version="4.12.0.201607081854"/>
-      <repository location="http://agentlab.ru/eclipse/update/org.junit/4.12.0/"/>
+      <unit id="org.eclipse.e4.ui.workbench.renderers.swt" version="0.14.102.v20180117-1153"/>
+      <unit id="org.eclipse.jdt.junit.runtime" version="3.4.651.v20171130-0906"/>
+      <unit id="org.eclipse.jface" version="3.13.2.v20171022-1656"/>
+      <unit id="org.eclipse.swt" version="3.106.3.v20180329-0507"/>
+      <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
+      <unit id="org.objectweb.asm" version="6.0.0.v20180116-1719"/>
+      <unit id="org.objectweb.asm.tree" version="6.0.0.v20180116-1719"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.7/R-4.7.3a-201803300640/"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <unit id="org.mockito" version="1.10.19.201607081817"/>
       <unit id="org.mockito.feature.feature.group" version="1.10.19.201607081817"/>
-      <repository location="http://agentlab.ru/eclipse/update/org.mockito/1.10.19/"/>
+      <repository location="https://agentlab.ru/eclipse/update/org.mockito/1.10.19/"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="a.jre.javase" version="1.6.0"/>
-      <unit id="org.eclipse.ant.core" version="3.4.100.v20160505-0642"/>
-      <unit id="org.eclipse.compare" version="3.7.1.v20170103-1805"/>
-      <unit id="org.eclipse.compare.core" version="3.6.0.v20160418-1534"/>
-      <unit id="org.eclipse.core.commands" version="3.8.1.v20161221-1651"/>
-      <unit id="org.eclipse.core.contenttype" version="3.5.100.v20160418-1621"/>
-      <unit id="org.eclipse.core.databinding" version="1.6.0.v20160412-0910"/>
-      <unit id="org.eclipse.core.databinding.observable" version="1.6.0.v20160511-1747"/>
-      <unit id="org.eclipse.core.databinding.property" version="1.6.0.v20160427-0852"/>
-      <unit id="org.eclipse.core.expressions" version="3.5.100.v20160418-1621"/>
-      <unit id="org.eclipse.core.filebuffers" version="3.6.0.v20160503-1849"/>
-      <unit id="org.eclipse.core.filesystem" version="1.6.1.v20161113-2349"/>
-      <unit id="org.eclipse.core.jobs" version="3.8.0.v20160509-0411"/>
-      <unit id="org.eclipse.core.net" version="1.3.0.v20160418-1534"/>
-      <unit id="org.eclipse.core.net.linux.x86" version="1.2.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.net.linux.x86_64" version="1.2.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.net.win32.x86" version="1.1.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.net.win32.x86_64" version="1.1.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.resources" version="3.11.1.v20161107-2032"/>
-      <unit id="org.eclipse.core.runtime" version="3.12.0.v20160606-1342"/>
-      <unit id="org.eclipse.core.variables" version="3.3.0.v20160419-1720"/>
-      <unit id="org.eclipse.debug.core" version="3.10.100.v20160419-1720"/>
-      <unit id="org.eclipse.debug.ui" version="3.11.202.v20161114-0338"/>
-      <unit id="org.eclipse.e4.core.commands" version="0.11.100.v20160506-0804"/>
-      <unit id="org.eclipse.e4.core.contexts" version="1.5.1.v20170203-1100"/>
-      <unit id="org.eclipse.e4.core.di" version="1.6.1.v20160712-0927"/>
-      <unit id="org.eclipse.e4.core.di.annotations" version="1.5.0.v20151127-1241"/>
-      <unit id="org.eclipse.e4.core.di.extensions" version="0.14.0.v20160211-1614"/>
-      <unit id="org.eclipse.e4.core.services" version="2.0.100.v20160509-1032"/>
-      <unit id="org.eclipse.e4.emf.xpath" version="0.1.200.v20160506-0804"/>
-      <unit id="org.eclipse.e4.ui.bindings" version="0.11.100.v20160509-1025"/>
-      <unit id="org.eclipse.e4.ui.css.core" version="0.12.1.v20161114-0210"/>
-      <unit id="org.eclipse.e4.ui.css.swt" version="0.12.100.v20160517-1505"/>
-      <unit id="org.eclipse.e4.ui.css.swt.theme" version="0.10.100.v20160523-0836"/>
-      <unit id="org.eclipse.e4.ui.di" version="1.1.100.v20160506-0759"/>
-      <unit id="org.eclipse.e4.ui.model.workbench" version="1.2.0.v20160229-1459"/>
-      <unit id="org.eclipse.e4.ui.services" version="1.2.100.v20160506-0759"/>
-      <unit id="org.eclipse.e4.ui.widgets" version="1.1.100.v20160506-0759"/>
-      <unit id="org.eclipse.e4.ui.workbench" version="1.4.0.v20160517-1624"/>
-      <unit id="org.eclipse.e4.ui.workbench.addons.swt" version="1.2.101.v20170206-1129"/>
-      <unit id="org.eclipse.e4.ui.workbench.renderers.swt" version="0.14.1.v20170117-1415"/>
-      <unit id="org.eclipse.e4.ui.workbench.swt" version="0.14.1.v20160829-0832"/>
-      <unit id="org.eclipse.e4.ui.workbench3" version="0.13.100.v20160506-0759"/>
-      <unit id="org.eclipse.emf.common" version="2.12.0.v20160420-0247"/>
-      <unit id="org.eclipse.emf.ecore" version="2.12.0.v20160420-0247"/>
-      <unit id="org.eclipse.emf.ecore.change" version="2.11.0.v20160420-0247"/>
-      <unit id="org.eclipse.emf.ecore.xmi" version="2.12.0.v20160420-0247"/>
-      <unit id="org.eclipse.equinox.app" version="1.3.400.v20150715-1528"/>
-      <unit id="org.eclipse.equinox.bidi" version="1.0.0.v20160307-1318"/>
-      <unit id="org.eclipse.equinox.cm" version="1.1.200.v20160324-1850"/>
-      <unit id="org.eclipse.equinox.common" version="3.8.0.v20160509-1230"/>
-      <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="3.12.0.v20160815-1406"/>
-      <unit id="org.eclipse.equinox.concurrent" version="1.1.0.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.console" version="1.1.200.v20150929-1405"/>
-      <unit id="org.eclipse.equinox.console.jaas.fragment" version="1.0.0.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.console.ssh" version="1.0.100.v20131208-1728"/>
-      <unit id="org.eclipse.equinox.coordinator" version="1.3.200.v20160325-1323"/>
-      <unit id="org.eclipse.equinox.core.feature.feature.group" version="1.3.3.v20170209-1843"/>
-      <unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.12.3.v20170209-1843"/>
-      <unit id="org.eclipse.equinox.device" version="1.0.400.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.ds" version="1.4.400.v20160226-2036"/>
-      <unit id="org.eclipse.equinox.event" version="1.3.200.v20160324-1850"/>
-      <unit id="org.eclipse.equinox.executable.feature.group" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.cocoa.macosx.x86_64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.aix.ppc" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.aix.ppc64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.hpux.ia64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.ppc64le" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.s390" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.s390x" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.x86" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.linux.x86_64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.solaris.sparcv9" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.gtk.solaris.x86_64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.win32.win32.x86" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.executable_root.win32.win32.x86_64" version="3.6.300.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.frameworkadmin" version="2.0.300.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.frameworkadmin.equinox" version="1.0.700.v20160102-2223"/>
-      <unit id="org.eclipse.equinox.http.jetty" version="3.3.0.v20160324-1850"/>
-      <unit id="org.eclipse.equinox.http.registry" version="1.1.400.v20150715-1528"/>
-      <unit id="org.eclipse.equinox.http.servlet" version="1.3.1.v20160808-1329"/>
-      <unit id="org.eclipse.equinox.http.servletbridge" version="1.0.300.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.io" version="1.1.100.v20150430-1834"/>
-      <unit id="org.eclipse.equinox.ip" version="1.1.300.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.jsp.jasper" version="1.0.500.v20150119-1358"/>
-      <unit id="org.eclipse.equinox.jsp.jasper.registry" version="1.0.300.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.launcher" version="1.3.201.v20161025-1711"/>
-      <unit id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.aix.ppc" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.aix.ppc64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.hpux.ia64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.ppc64le" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.s390" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.s390x" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.x86" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.linux.x86_64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.solaris.sparcv9" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.gtk.solaris.x86_64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.win32.win32.x86" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.launcher.win32.win32.x86_64" version="1.1.401.v20161122-1740"/>
-      <unit id="org.eclipse.equinox.metatype" version="1.4.200.v20160324-1850"/>
-      <unit id="org.eclipse.equinox.p2.artifact.repository" version="1.1.500.v20160419-0834"/>
-      <unit id="org.eclipse.equinox.p2.console" version="1.0.500.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.p2.core" version="2.4.100.v20160419-0834"/>
-      <unit id="org.eclipse.equinox.p2.director" version="2.3.300.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.p2.engine" version="2.4.100.v20160419-0834"/>
-      <unit id="org.eclipse.equinox.p2.garbagecollector" version="1.0.300.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.p2.jarprocessor" version="1.0.500.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.p2.metadata" version="2.3.100.v20160427-2220"/>
-      <unit id="org.eclipse.equinox.p2.metadata.repository" version="1.2.300.v20160419-0834"/>
-      <unit id="org.eclipse.equinox.p2.repository" version="2.3.200.v20160421-0324"/>
-      <unit id="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.1.400.v20160419-0834"/>
-      <unit id="org.eclipse.equinox.p2.touchpoint.natives" version="1.2.100.v20160419-0834"/>
-      <unit id="org.eclipse.equinox.p2.transport.ecf" version="1.1.201.v20161115-1927"/>
-      <unit id="org.eclipse.equinox.preferences" version="3.6.1.v20160815-1406"/>
-      <unit id="org.eclipse.equinox.region" version="1.3.2.v20170118-1930"/>
-      <unit id="org.eclipse.equinox.registry" version="3.6.100.v20160223-2218"/>
-      <unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20170209-1843"/>
-      <unit id="org.eclipse.equinox.security" version="1.2.200.v20150715-1528"/>
-      <unit id="org.eclipse.equinox.security.macosx" version="1.100.200.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.security.ui" version="1.1.300.v20150803-1225"/>
-      <unit id="org.eclipse.equinox.security.win32.x86" version="1.0.300.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.security.win32.x86_64" version="1.0.100.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.server.core.feature.group" version="1.4.3.v20170209-1843"/>
-      <unit id="org.eclipse.equinox.server.jetty.feature.group" version="1.3.1.v20160829-1338"/>
-      <unit id="org.eclipse.equinox.server.p2.feature.group" version="1.2.303.v20170131-1440"/>
-      <unit id="org.eclipse.equinox.serverside.sdk.feature.group" version="3.12.3.v20170209-1843"/>
-      <unit id="org.eclipse.equinox.servletbridge" version="1.3.200.v20160128-1435"/>
-      <unit id="org.eclipse.equinox.simpleconfigurator" version="1.1.200.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.0.200.v20160504-1450"/>
-      <unit id="org.eclipse.equinox.supplement" version="1.6.100.v20160504-1419"/>
-      <unit id="org.eclipse.equinox.transforms.hook" version="1.1.0.v20131021-1933"/>
-      <unit id="org.eclipse.equinox.transforms.xslt" version="1.0.300.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.useradmin" version="1.1.400.v20130327-1442"/>
-      <unit id="org.eclipse.equinox.util" version="1.0.500.v20130404-1337"/>
-      <unit id="org.eclipse.equinox.weaving.caching.j9" version="1.0.200.v20140529-1734"/>
-      <unit id="org.eclipse.equinox.wireadmin" version="1.0.600.v20150715-1528"/>
-      <unit id="org.eclipse.help" version="3.7.0.v20160602-1307"/>
-      <unit id="org.eclipse.jdt.apt.core" version="3.4.100.v20160525-0952"/>
-      <unit id="org.eclipse.jdt.core" version="3.12.3.v20170228-1205"/>
-      <unit id="org.eclipse.jdt.core.manipulation" version="1.7.0.v20160419-0705"/>
-      <unit id="org.eclipse.jdt.debug" version="3.10.1.v20160811-0441"/>
-      <unit id="org.eclipse.jdt.debug.ui" version="3.7.201.v20160811-0450"/>
-      <unit id="org.eclipse.jdt.junit.core" version="3.8.0.v20160421-1701"/>
-      <unit id="org.eclipse.jdt.junit.runtime" version="3.4.600.v20160505-0715"/>
-      <unit id="org.eclipse.jdt.launching" version="3.8.101.v20161111-2014"/>
-      <unit id="org.eclipse.jdt.ui" version="3.12.2.v20160929-0804"/>
-      <unit id="org.eclipse.jetty.continuation" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jetty.http" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jetty.io" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jetty.security" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jetty.server" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jetty.servlet" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jetty.util" version="9.3.9.v20160517"/>
-      <unit id="org.eclipse.jface" version="3.12.2.v20170113-2113"/>
-      <unit id="org.eclipse.jface.databinding" version="1.8.1.v20161026-1531"/>
-      <unit id="org.eclipse.jface.text" version="3.11.2.v20170220-1911"/>
-      <unit id="org.eclipse.ltk.core.refactoring" version="3.7.0.v20160419-0705"/>
-      <unit id="org.eclipse.ltk.ui.refactoring" version="3.8.0.v20160518-1817"/>
-      <unit id="org.eclipse.osgi" version="3.11.3.v20170209-1843"/>
-      <unit id="org.eclipse.osgi.compatibility.state" version="1.0.200.v20160504-1419"/>
-      <unit id="org.eclipse.osgi.services" version="3.5.100.v20160504-1419"/>
-      <unit id="org.eclipse.osgi.util" version="3.3.100.v20150423-1351"/>
-      <unit id="org.eclipse.pde.junit.runtime" version="3.5.0.v20151013-0625"/>
-      <unit id="org.eclipse.search" version="3.11.1.v20161113-1700"/>
-      <unit id="org.eclipse.swt" version="3.105.3.v20170228-0512"/>
-      <unit id="org.eclipse.team.core" version="3.8.0.v20160418-1534"/>
-      <unit id="org.eclipse.team.ui" version="3.8.0.v20160518-1906"/>
-      <unit id="org.eclipse.text" version="3.6.0.v20160503-1849"/>
-      <unit id="org.eclipse.ui" version="3.108.1.v20160929-1045"/>
-      <unit id="org.eclipse.ui.browser" version="3.5.2.v20161114-0210"/>
-      <unit id="org.eclipse.ui.cheatsheets" version="3.5.0.v20160504-0839"/>
-      <unit id="org.eclipse.ui.console" version="3.6.201.v20161107-0337"/>
-      <unit id="org.eclipse.ui.editors" version="3.10.1.v20161106-1856"/>
-      <unit id="org.eclipse.ui.forms" version="3.7.1.v20161220-1635"/>
-      <unit id="org.eclipse.ui.ide" version="3.12.3.v20170119-0935"/>
-      <unit id="org.eclipse.ui.ide.application" version="1.1.101.v20160829-0827"/>
-      <unit id="org.eclipse.ui.intro" version="3.5.2.v20161116-1147"/>
-      <unit id="org.eclipse.ui.navigator" version="3.6.101.v20161006-1120"/>
-      <unit id="org.eclipse.ui.navigator.resources" version="3.5.101.v20161006-0640"/>
-      <unit id="org.eclipse.ui.views" version="3.8.102.v20170111-0801"/>
-      <unit id="org.eclipse.ui.views.properties.tabbed" version="3.7.0.v20160310-0903"/>
-      <unit id="org.eclipse.ui.workbench" version="3.108.3.v20170216-1539"/>
-      <unit id="org.eclipse.ui.workbench.texteditor" version="3.10.1.v20160818-1626"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.6/"/>
+      <unit id="com.codeaffine.osgi.test.util" version="0.1.0.20170706-1138"/>
+      <unit id="com.codeaffine.osgi.test.util.feature.feature.group" version="0.1.0.20170706-1138"/>
+      <unit id="org.mockito.mockito-all" version="1.9.5"/>
+      <repository location="http://fappel.github.io/xiliary/0.6/"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="org.eclipse.swt.dummyfragments.feature.group" version="3.105.3.v20170228-0512"/>
-      <unit id="org.eclipse.swt.gtk.linux.aarch64" version="3.105.3.v20170228-0512"/>
-      <unit id="org.eclipse.swt.gtk.linux.arm" version="3.105.3.v20170228-0512"/>
-      <unit id="org.eclipse.swt.gtk.solaris.sparc" version="3.105.3.v20170228-0512"/>
-      <unit id="org.eclipse.swt.gtk.solaris.x86" version="3.105.3.v20170228-0512"/>
-      <repository location="http://agentlab.ru/p2/orbit/missing-swt-fragments/updates/nightly/"/>
+      <unit id="org.junit" version="4.12.0.201607081854"/>
+      <unit id="org.junit.feature.feature.group" version="4.12.0.201607081854"/>
+      <repository location="https://agentlab.ru/eclipse/update/org.junit/4.12.0/"/>
     </location>
   </locations>
 </target>
