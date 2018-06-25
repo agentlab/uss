@@ -221,7 +221,7 @@
       value="generate">
     <description></description>
   </setupTask>
-  <stream name="jax-rs"
-      label="jax-rs"/>
+  <stream name="jax-rs-without-ajdt"
+      label="jax-rs-without-ajdt"/>
   <description>User Storage Service provides cool stuff.</description>
 </setup:Project>
