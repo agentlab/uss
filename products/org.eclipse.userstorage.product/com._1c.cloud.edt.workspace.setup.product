@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Workspace SEtup Service Product" uid="com._1c.cloud.edt.workspace.setup.product" application="org.eclipse.oomph.setup.core.SetupArchiver" version="0.3.0.qualifier" useFeatures="true" includeLaunchers="true">
-
+<product name="User Storage Service" uid="org.eclipse.userstorage.product" application="org.eclipse.oomph.setup.core.SetupArchiver" version="1.0.0.0" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
@@ -11,12 +10,18 @@
       <programArgs>-nosplash
 -consoleLog -console -debug -clean
       </programArgs>
-      <vmArgs>-Dorg.osgi.service.http.port=8989
--Dorg.eclipse.equinox.http.jetty.http.port=8989
--Dosgi.noShutdown=true
--Declipse.ignoreApp=true
--Dlogback.configurationFile=logback.xml
--Declipse.log.level=ALL
+      <vmArgs>-Xms1024m -Xmx2048m
+ -Declipse.ignoreApp=true
+ -Dosgi.noShutdown=true
+ -Dorg.eclipse.equinox.http.jetty.http.port=8080
+ -Declipse.log.level=ALL
+ -Dlogback.configurationFile=logback.xml
+ -Dosgi.noShutdown=true
+ -Declipse.ignoreApp=true
+ -Dosgi.framework.extensions=org.eclipse.equinox.weaving.hook
+ -Daj.weaving.verbose=true
+ -Dorg.aspectj.weaver.showWeaveInfo=true
+ -Dorg.aspectj.osgi.verbose=true
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -24,13 +29,11 @@
 
    <windowImages/>
 
-
    <launcher>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>

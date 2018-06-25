@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Eclipse User Storage Service" sequenceNumber="16">
+<target name="Generated from Eclipse User Storage Service" sequenceNumber="20">
   <locations>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-      <unit id="a.jre.javase" version="1.6.0"/>
       <unit id="ch.ethz.iks.slp" version="1.1.100.v20170506-2012"/>
       <unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.6.2.v20161117-2150"/>
       <unit id="com.fasterxml.jackson.core.jackson-core" version="2.6.2.v20161117-2150"/>
@@ -22,7 +21,6 @@
       <unit id="javax.servlet" version="3.1.0.v201410161800"/>
       <unit id="javax.servlet.jsp" version="2.2.0.v201112011158"/>
       <unit id="javax.ws.rs" version="2.0.1.v201504171603"/>
-      <unit id="javax.xml" version="1.3.4.v201005080400"/>
       <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
       <unit id="org.apache.ant" version="1.10.1.v20170504-0840"/>
       <unit id="org.apache.batik.css" version="1.8.0.v20170214-1941"/>
@@ -37,7 +35,6 @@
       <unit id="org.apache.felix.gogo.runtime" version="0.10.0.v201209301036"/>
       <unit id="org.apache.felix.gogo.shell" version="0.10.0.v201212101605"/>
       <unit id="org.apache.felix.scr" version="2.0.10.v20170501-2007"/>
-      <unit id="org.apache.httpcomponents.httpclient" version="4.3.6.v201511171540"/>
       <unit id="org.apache.httpcomponents.httpclient" version="4.5.2.v20170210-0925"/>
       <unit id="org.apache.httpcomponents.httpcore" version="4.4.6.v20170210-0925"/>
       <unit id="org.apache.jasper.glassfish" version="2.2.2.v201501141630"/>
@@ -51,10 +48,6 @@
       <unit id="org.eclipse.core.expressions" version="3.6.0.v20170207-1037"/>
       <unit id="org.eclipse.core.jobs" version="3.9.1.v20170714-0547"/>
       <unit id="org.eclipse.core.net" version="1.3.100.v20170516-0820"/>
-      <unit id="org.eclipse.core.net.linux.x86" version="1.2.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.net.linux.x86_64" version="1.2.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.net.win32.x86" version="1.1.0.v20160323-1650"/>
-      <unit id="org.eclipse.core.net.win32.x86_64" version="1.1.0.v20160323-1650"/>
       <unit id="org.eclipse.core.runtime" version="3.13.0.v20170207-1030"/>
       <unit id="org.eclipse.core.runtime.feature.feature.group" version="1.2.1.v20170928-1321"/>
       <unit id="org.eclipse.core.variables" version="3.4.0.v20170113-2056"/>
@@ -191,10 +184,10 @@
       <unit id="org.glassfish.jersey.media.jersey-media-json-jackson" version="2.22.1.v20161117-2005"/>
       <unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
       <unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
+      <unit id="org.objectweb.asm.commons" version="5.2.0.v20170126-0011"/>
       <unit id="org.sat4j.core" version="2.3.5.v201308161310"/>
       <unit id="org.sat4j.pb" version="2.3.5.v201404071733"/>
       <unit id="org.slf4j.api" version="1.7.2.v20121108-1250"/>
-      <unit id="org.slf4j.jcl" version="1.7.2.v20130115-1340"/>
       <unit id="org.tukaani.xz" version="1.5.0.v20170111-1717"/>
       <unit id="org.w3c.css.sac" version="1.3.1.v200903091627"/>
       <repository location="http://boreas.dept07/storage/bamboo/p2/release/eclipse/oxygen"/>
@@ -215,20 +208,15 @@
       <unit id="ch.qos.logback.slf4j" version="1.1.2.v20160301-0943"/>
       <unit id="com.google.inject" version="3.0.0.v201605172100"/>
       <unit id="com.google.inject.multibindings" version="3.0.0.v201605172100"/>
-      <unit id="javax.validation" version="1.0.0.GA_v201205091237"/>
       <unit id="org.glassfish.jersey.containers.servlet" version="2.22.1.v20161103-0227"/>
       <unit id="org.glassfish.jersey.containers.servlet.core" version="2.22.1.v20161103-0227"/>
       <unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
       <unit id="org.objectweb.asm" version="5.2.0.v20180228-1718"/>
-      <unit id="org.objectweb.asm.commons" version="5.2.0.v20180228-1718"/>
-      <unit id="org.objectweb.asm.tree" version="5.2.0.v20180228-1718"/>
       <unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
       <unit id="org.slf4j.apis.jcl" version="1.7.10.v20160208-0839"/>
       <unit id="org.slf4j.apis.log4j" version="1.7.10.v20160208-0839"/>
       <unit id="org.slf4j.bridge.jul" version="1.7.10.v20160208-0839"/>
       <unit id="org.slf4j.ext" version="1.7.10.v20170224-1220"/>
-      <unit id="org.slf4j.jul" version="1.7.2.v20121108-1250"/>
-      <unit id="org.slf4j.log4j" version="1.7.2.v20130115-1340"/>
       <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20180330011457/repository"/>
     </location>
     <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -270,7 +258,6 @@
       <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4" version="1.1.300.v20180301-0132"/>
       <unit id="org.eclipse.ecf.provider.filetransfer.httpclient4.ssl" version="1.1.100.v20180301-0132"/>
       <unit id="org.eclipse.ecf.provider.filetransfer.ssl" version="1.0.100.v20180301-0132"/>
-      <unit id="org.eclipse.ecf.provider.jmdns" version="4.3.200.v20180306-0429"/>
       <unit id="org.eclipse.ecf.remoteservice" version="8.13.0.v20180406-1915"/>
       <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="1.1.0.v20180311-0310"/>
       <unit id="org.eclipse.ecf.remoteservice.asyncproxy" version="2.1.0.v20180409-2248"/>
@@ -296,6 +283,8 @@
       <unit id="org.eclipse.jface" version="3.13.2.v20171022-1656"/>
       <unit id="org.eclipse.swt" version="3.106.3.v20180329-0507"/>
       <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
+      <unit id="org.objectweb.asm" version="6.0.0.v20180116-1719"/>
+      <unit id="org.objectweb.asm.tree" version="6.0.0.v20180116-1719"/>
       <unit id="org.objenesis" version="1.0.0.v201505121915"/>
       <repository location="http://download.eclipse.org/eclipse/updates/4.7/R-4.7.3a-201803300640/"/>
     </location>
