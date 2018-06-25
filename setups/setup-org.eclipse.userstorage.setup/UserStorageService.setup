@@ -242,6 +242,19 @@
         <repository
             url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
       </repositoryList>
+      <repositoryList
+          name="Oxygen">
+        <repository
+            url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
+        <repository
+            url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.3.10.v20160621"/>
+        <repository
+            url="http://download.eclipse.org/rt/ecf/latest/site.p2"/>
+        <repository
+            url="http://agentlab.ru/p2/org.eclipse.ecf.provider.jaxrs/1.1.0.201705040812/"/>
+        <repository
+            url="http://download.eclipse.org/tools/ajdt/46/dev/update"/>
+      </repositoryList>
     </targlet>
     <targlet
         name="swt.missing.fragments"
@@ -320,7 +333,7 @@
       value="generate">
     <description></description>
   </setupTask>
-  <stream name="dmaven"
-      label="dmaven"/>
+  <stream name="jax-rs"
+      label="jax-rs"/>
   <description>User Storage Service provides cool stuff.</description>
 </setup:Project>
