@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
@@ -41,9 +44,13 @@ import com.google.common.cache.LoadingCache;
  *
  */
 
-@Component(enabled = true, immediate = true,
-	property = { "service.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService", "service.exported.configs=ecf.jaxrs.jersey.server", "ecf.jaxrs.jersey.server.uri=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api", "ecf.jaxrs.jersey.server.service.alias=/user", "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService", "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
-
+@Component(property= {
+	"service.exported.interfaces:String=*"
+	, "service.exported.configs:String=ecf.jaxrs.jersey.server"
+	, "ecf.jaxrs.jersey.server.uri:String=http://localhost:8080/api/user"
+	, "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.login.service.IUserStorageLoginService"}
+	, immediate=true)
+@Path("/")
 public class UserStorageLoginComponent implements IUserStorageLoginService, IUserStorageSessionService {
 
 	private final Map<String, User> users = new HashMap<>();
@@ -51,6 +58,8 @@ public class UserStorageLoginComponent implements IUserStorageLoginService, IUse
 	private LoadingCache<String, Session> sessions;
 
 	@Override
+    @PUT
+    @Path("login")
 	public Response postLogin(InputStream creditianals) {
 
 		Map<String, Object> requestObject = this.parseJson(creditianals);
@@ -84,6 +93,8 @@ public class UserStorageLoginComponent implements IUserStorageLoginService, IUse
 	}
 
 	@Override
+    @POST
+    @Path("create")
 	public Response postCreate(InputStream creditianals) {
 
 		Map<String, Object> requestObject = this.parseJson(creditianals);
