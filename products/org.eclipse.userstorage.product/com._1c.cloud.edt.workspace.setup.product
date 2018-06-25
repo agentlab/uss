@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Workspace SEtup Service Product" uid="com._1c.cloud.edt.workspace.setup.product" application="org.eclipse.oomph.setup.core.SetupArchiver" version="0.3.0.qualifier" useFeatures="true" includeLaunchers="true">
+
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-nosplash
+-consoleLog -console -debug -clean
+      </programArgs>
+      <vmArgs>-Dorg.osgi.service.http.port=8989
+-Dorg.eclipse.equinox.http.jetty.http.port=8989
+-Dosgi.noShutdown=true
+-Declipse.ignoreApp=true
+-Dlogback.configurationFile=logback.xml
+-Declipse.log.level=ALL
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
+   </launcherArgs>
+
+   <windowImages/>
+
+
+   <launcher>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+
+   <vm>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="org.eclipse.userstorage.feature" version="1.0.0.qualifier"/>
+   </features>
+
+   <configurations>
+      <plugin id="org.eclipse.core.commands" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.ecf" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.ecf.osgi.services.distribution" autoStart="true" startLevel="5" />
+      <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin" autoStart="true" startLevel="5" />
+      <plugin id="org.eclipse.ecf.osgi.services.remoteserviceadmin.proxy" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.ecf.provider.jaxrs" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.ecf.provider.jaxrs.server" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.ecf.provider.jersey.server" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.app" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.http.jetty" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.jetty.server" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+      <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.osgi.services.remoteserviceadmin" autoStart="true" startLevel="4" />
+      <plugin id="org.glassfish.jersey.core.jersey-client" autoStart="true" startLevel="5" />
+      <plugin id="org.glassfish.jersey.core.jersey-common" autoStart="true" startLevel="4" />
+      <plugin id="org.glassfish.jersey.core.jersey-server" autoStart="true" startLevel="4" />
+   </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
+</product>

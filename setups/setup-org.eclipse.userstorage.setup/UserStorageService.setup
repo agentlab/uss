@@ -103,8 +103,6 @@
       <requirement
           name="*"/>
       <requirement
-          name="com.fasterxml.jackson.core.jackson-core"/>
-      <requirement
           name="org.apache.commons.beanutils"/>
       <requirement
           name="org.eclipse.ecf.osgi.services.feature.feature.group"/>
@@ -144,8 +142,6 @@
           name="Oxygen">
         <repository
             url="http://boreas.dept07/storage/bamboo/p2/release/eclipse/oxygen"/>
-        <repository
-            url="http://agentlab.ru/pd/p2/eclipseorbit/"/>
       </repositoryList>
     </targlet>
     <targlet
