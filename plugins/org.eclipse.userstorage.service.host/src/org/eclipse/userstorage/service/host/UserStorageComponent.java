@@ -19,6 +19,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -44,9 +52,13 @@ import org.osgi.service.component.annotations.Reference;
  *
  */
 
-@Component(enabled = true, immediate = true,
-	property = { "service.exported.interfaces=*", "service.exported.configs=ecf.jaxrs.jersey.server", "ecf.jaxrs.jersey.server.uri=http://localhost:8080", "ecf.jaxrs.jersey.server.server.alias=/api", "ecf.jaxrs.jersey.server.service.alias=/blob", "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.service.IApiBlobService", "service.pid=org.eclipse.userstorage.service.host.UserStorageComponent" })
-
+@Component(property= {
+	"service.exported.interfaces:String=*"
+	, "service.exported.configs:String=ecf.jaxrs.jersey.server"
+	, "ecf.jaxrs.jersey.server.uri:String=http://localhost:8080/api/blob"
+	, "ecf.jaxrs.jersey.server.exported.interfaces=org.eclipse.userstorage.service.IApiBlobService"}
+	, immediate=true)
+@Path("/")
 public class UserStorageComponent implements ManagedService, IApiBlobService {
 
 	private String id;
@@ -65,7 +77,11 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 	private IUserStorageSessionService ussSessionsService;
 
 	@Override
-	public Response put(String urltoken, String urlfilename, InputStream blob, String headerIfMatch, String headerxCsrfToken, String cookieSESSION) throws IOException {
+	@PUT
+	@Path("{token}/{filename}")
+	public Response put(@PathParam("token") String urltoken, @PathParam("filename") String urlfilename,
+		InputStream blob, @HeaderParam("If-Match") String headerIfMatch,
+		@HeaderParam("X-CSRF-Token") String headerxCsrfToken, @CookieParam("SESSION") String cookieSESSION) throws IOException {
 
 		if (!this.isAutorized(headerxCsrfToken, cookieSESSION)) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
@@ -118,7 +134,11 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 	}
 
 	@Override
-	public Response delete(String token, String filename, String headerIfMatch, String headerxCsrfToken, String cookieSESSION) {
+	@DELETE
+	@Path("{token}/{filename}")
+	public Response delete(@PathParam("token") String token, @PathParam("filename") String filename,
+		@HeaderParam("If-Match") String headerIfMatch, @HeaderParam("X-CSRF-Token") String headerxCsrfToken,
+		@CookieParam("SESSION") String cookieSESSION) {
 
 		if (!this.isAutorized(headerxCsrfToken, cookieSESSION)) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
@@ -147,7 +167,12 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 	}
 
 	@Override
-	public Response get(String urltoken, String urlfilename, String headerIfNoneMatch, String queryPageSize, String queryPage, String headerxCsrfToken, String cookieSESSION) throws IOException {
+	@GET
+	@Path("{token}/{filename}")
+	public Response get(@PathParam("token") String urltoken, @PathParam("filename") String urlfilename,
+		@HeaderParam("If-None-Match") String headerIfNoneMatch, @QueryParam("pageSize") String queryPageSize,
+		@QueryParam("page") String queryPage, @HeaderParam("X-CSRF-Token") String headerxCsrfToken,
+		@CookieParam("SESSION") String cookieSESSION) throws IOException {
 
 		if (!this.isAutorized(headerxCsrfToken, cookieSESSION)) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();

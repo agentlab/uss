@@ -8,9 +8,6 @@
    <reference bind="bindSessionService" cardinality="1..1" interface="org.eclipse.userstorage.session.service.IUserStorageSessionService" name="SessionService" policy="static" unbind="unbindSessionService"/>
    <property name="service.exported.interfaces" type="String" value="*"/>
    <property name="service.exported.configs" type="String" value="ecf.jaxrs.jersey.server"/>
-   <property name="ecf.jaxrs.jersey.server.uri" value="http://localhost:8080"/>
-   <property name="ecf.jaxrs.jersey.server.server.alias" value="/api"/>
-   <property name="ecf.jaxrs.jersey.server.service.alias" value="/blob"/>
+   <property name="ecf.jaxrs.jersey.server.uri" type="String" value="http://localhost:8080/api/blob"/>
    <property name="ecf.jaxrs.jersey.server.exported.interfaces" value="org.eclipse.userstorage.service.IApiBlobService"/>
-   <property name="service.pid" type="String" value="org.eclipse.userstorage.service.host.UserStorageComponent"/>
 </scr:component>
