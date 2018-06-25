@@ -22,6 +22,46 @@
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-source-feature-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<id>source-feature</id>
+						<goals>
+							<goal>source-feature</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<plugin id="javax.persistence"/>
+								<plugin id="javax.ws.rs"/>
+								<plugin id="javax.xml"/>
+								<plugin id="org.aopalliance"/>
+								<plugin id="org.apache.httpcomponents.httpclient"/>
+								<plugin id="org.eclipse.ecf.remoteservice.asyncproxy"/>
+								<plugin id="org.glassfish.hk2.osgi-resource-locator"/>
+								<plugin id="org.json"/>
+								<plugin id="javaewah"/>
+								<!-- BouncyCastle -->
+								<plugin id="org.bouncycastle.bcpkix"/>
+								<plugin id="org.bouncycastle.bcprov"/>
+								<plugin id="com.fasterxml.jackson.core.jackson-core.source"/>
+								<plugin id="com.fasterxml.jackson.core.jackson-databind.source"/>
+								<plugin id="com.fasterxml.jackson.datatype.jackson-datatype-guava.source"/>
+								<plugin id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-base.source"/>
+								<plugin id="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider.source"/>
+								<plugin id="com.fasterxml.jackson.core.jackson-annotations.source"/>
+								<plugin id="org.apache.commons.beanutils"/>
+								<plugin id="com.google.guava"/>
+								<plugin id="org.eclipse.ecf.provider.jaxrs.server"/>
+								<plugin id="org.eclipse.ecf.provider.jersey.server"/>
+								<plugin id="org.glassfish.hk2.api"/>
+								<plugin id="org.glassfish.hk2.locator"/>
+								<plugin id="org.glassfish.hk2.utils"/>
+								<plugin id="org.apache.httpcomponents.httpcore"/>
+								<plugin id="org.apache.commons.codec"/>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
