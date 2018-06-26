@@ -115,6 +115,9 @@
           name="org.glassfish.jersey.ext.entityfiltering"/>
       <requirement
           name="org.eclipse.core.net"/>
+      <requirement
+          name="org.eclipse.platform.feature.group"
+          versionRange="[4.7.1.v20171009-0410,4.7.1.v20171009-0410]"/>
       <sourceLocator
           rootFolder="${git.clone.uss.location}"
           locateNestedProjects="true">
