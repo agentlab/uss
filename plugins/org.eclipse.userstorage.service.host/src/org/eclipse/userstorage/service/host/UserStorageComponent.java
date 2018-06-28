@@ -19,7 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -46,6 +45,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
+
+import com._1c.cloud.edt.workspace.setup.security.keycloak.KeycloakRestConstants;
 
 /**
  * @author admin
@@ -81,9 +82,9 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 	@Path("{token}/{filename}")
 	public Response put(@PathParam("token") String urltoken, @PathParam("filename") String urlfilename,
 		InputStream blob, @HeaderParam("If-Match") String headerIfMatch,
-		@HeaderParam("X-CSRF-Token") String headerxCsrfToken, @CookieParam("SESSION") String cookieSESSION) throws IOException {
+		@HeaderParam("X-CSRF-Token") String headerxCsrfToken, @HeaderParam(KeycloakRestConstants.AUTH_HEADER) String authorization) throws IOException {
 
-		if (!this.isAutorized(headerxCsrfToken, cookieSESSION)) {
+		if (authorization == null || !this.isAutorized(headerxCsrfToken, authorization)) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
 		}
 
@@ -91,7 +92,7 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
 		}
 
-		File etagFile = getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
+		File etagFile = getUserFile(this.getUserFolder(authorization), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
 		headerIfMatch = getEtag(headerIfMatch);
 
@@ -105,7 +106,7 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 
 		String etag = UUID.randomUUID().toString();
 
-		File blobFile = getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
+		File blobFile = getUserFile(this.getUserFolder(authorization), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
 		IOUtil.mkdirs(blobFile.getParentFile());
 
 		Map<String, InputStream> value = null;
@@ -138,13 +139,13 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 	@Path("{token}/{filename}")
 	public Response delete(@PathParam("token") String token, @PathParam("filename") String filename,
 		@HeaderParam("If-Match") String headerIfMatch, @HeaderParam("X-CSRF-Token") String headerxCsrfToken,
-		@CookieParam("SESSION") String cookieSESSION) {
+		@HeaderParam(KeycloakRestConstants.AUTH_HEADER) String authorization) {
 
-		if (!this.isAutorized(headerxCsrfToken, cookieSESSION)) {
+		if (authorization == null || !this.isAutorized(headerxCsrfToken, authorization)) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
 		}
 
-		File etagFile = getUserFile(this.getUserFolder(cookieSESSION), token, filename, ServiceUtils.ETAG_EXTENSION);
+		File etagFile = getUserFile(this.getUserFolder(authorization), token, filename, ServiceUtils.ETAG_EXTENSION);
 
 		if (!this.isExistAppToken(token) || !etagFile.exists()) {
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
@@ -156,7 +157,7 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 			return Response.status(494).build();
 		}
 
-		File blobFile = getUserFile(this.getUserFolder(cookieSESSION), token, filename, ServiceUtils.BLOB_EXTENSION);
+		File blobFile = getUserFile(this.getUserFolder(authorization), token, filename, ServiceUtils.BLOB_EXTENSION);
 
 		if (blobFile.exists()) {
 			IOUtil.delete(blobFile);
@@ -172,13 +173,13 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 	public Response get(@PathParam("token") String urltoken, @PathParam("filename") String urlfilename,
 		@HeaderParam("If-None-Match") String headerIfNoneMatch, @QueryParam("pageSize") String queryPageSize,
 		@QueryParam("page") String queryPage, @HeaderParam("X-CSRF-Token") String headerxCsrfToken,
-		@CookieParam("SESSION") String cookieSESSION) throws IOException {
+		@HeaderParam(KeycloakRestConstants.AUTH_HEADER) String authorization) throws IOException {
 
-		if (!this.isAutorized(headerxCsrfToken, cookieSESSION)) {
+		if (authorization == null ||!this.isAutorized(headerxCsrfToken, authorization)) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
 		}
 
-		File etagFile = getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
+		File etagFile = getUserFile(this.getUserFolder(authorization), urltoken, urlfilename, ServiceUtils.ETAG_EXTENSION);
 
 		if (!this.isExistAppToken(urltoken) || !etagFile.exists()) {
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).build();
@@ -197,7 +198,7 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 			return retrieveProperties(applicationFolder, queryPageSize, queryPage);
 		}
 
-		File blobFile = getUserFile(this.getUserFolder(cookieSESSION), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
+		File blobFile = getUserFile(this.getUserFolder(authorization), urltoken, urlfilename, ServiceUtils.BLOB_EXTENSION);
 
 		FileInputStream blobInputStream = new FileInputStream(blobFile);
 
@@ -340,8 +341,9 @@ public class UserStorageComponent implements ManagedService, IApiBlobService {
 		return defValue;
 	}
 
-	private boolean isAutorized(String csrfToken, String sessionID) {
-		return this.ussSessionsService.isAuth(csrfToken, sessionID);
+	private boolean isAutorized(String csrfToken, String keycloackToken) {
+		keycloackToken = keycloackToken.replace(KeycloakRestConstants.BEARER, "");
+		return this.ussSessionsService.isAuth(csrfToken, keycloackToken);
 	}
 
 	private String getUserFolder(String sessionID) {

@@ -6,38 +6,29 @@ package org.eclipse.userstorage.login.component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.eclipse.userstorage.internal.util.IOUtil;
 import org.eclipse.userstorage.internal.util.JSONUtil;
 import org.eclipse.userstorage.login.service.IUserStorageLoginService;
-import org.eclipse.userstorage.login.session.Session;
-import org.eclipse.userstorage.login.user.User;
 import org.eclipse.userstorage.session.service.IUserStorageSessionService;
-import org.eclipse.userstorage.spi.Credentials;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com._1c.cloud.edt.workspace.setup.security.keycloak.KeycloakAuthenticationException;
+import com._1c.cloud.edt.workspace.setup.security.keycloak.KeycloakRestRequester;
+import com._1c.cloud.edt.workspace.setup.security.keycloak.transfer.Credentials;
 
 /**
  * @author Zagrebaev_D
@@ -53,9 +44,7 @@ import com.google.common.cache.LoadingCache;
 @Path("/")
 public class UserStorageLoginComponent implements IUserStorageLoginService, IUserStorageSessionService {
 
-	private final Map<String, User> users = new HashMap<>();
-
-	private LoadingCache<String, Session> sessions;
+	private KeycloakRestRequester keycloakRestRequester = new KeycloakRestRequester();
 
 	@Override
     @PUT
@@ -71,81 +60,22 @@ public class UserStorageLoginComponent implements IUserStorageLoginService, IUse
 		String username = (String)requestObject.get("username"); //$NON-NLS-1$
 		String password = (String)requestObject.get("password"); //$NON-NLS-1$
 
-		User user = users.get(username);
-		if (user == null || password == null || !password.equals(user.getPassword())) {
+		Credentials credentials;
+
+		try {
+
+			credentials = keycloakRestRequester.getToken(username, password);
+
+		} catch(KeycloakAuthenticationException e) {
 			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
 		}
 
-		Session session = addSession(user);
+		return Response.ok().entity(credentials).type(MediaType.APPLICATION_JSON).build();
 
-//        NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 100000000, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		NewCookie cookie = new NewCookie(new Cookie("SESSION", session.getID(), "/", null)); //$NON-NLS-1$ //$NON-NLS-2$
-
-		Map<String, Object> responseObject = new LinkedHashMap<>();
-		responseObject.put("sessid", session.getID()); //$NON-NLS-1$
-		responseObject.put("token", session.getCSRFToken()); //$NON-NLS-1$
-
-		System.err.println(session.getID());
-
-		StreamingOutput stream = buildResponseStream(responseObject);
-
-		return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).cookie(cookie).build();
-	}
-
-	@Override
-    @POST
-    @Path("create")
-	public Response postCreate(InputStream creditianals) {
-
-		Map<String, Object> requestObject = this.parseJson(creditianals);
-
-		if (requestObject == null) {
-			return Response.status(HttpServletResponse.SC_UNAUTHORIZED).build();
-		}
-
-		String username = (String)requestObject.get("username"); //$NON-NLS-1$
-		String password = (String)requestObject.get("password"); //$NON-NLS-1$
-		String confirmPassword = (String)requestObject.get("confirmPassword"); //$NON-NLS-1$
-
-		if (this.users.containsKey(username) || !password.equals(confirmPassword)) {
-			return Response.status(HttpServletResponse.SC_FORBIDDEN).build();
-		}
-
-		User user = addUser(new Credentials(username, password));
-
-		Session session = addSession(user);
-		NewCookie cookie = new NewCookie("SESSION", session.getID(), "/", "", "uss", 10, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
-		return Response.status(HttpServletResponse.SC_CREATED).cookie(cookie).build();
-	}
-
-	public User addUser(Credentials credentials) {
-		return addUser(credentials.getUsername(), credentials.getPassword());
-	}
-
-	public User addUser(String username, String password) {
-		User user = new User(username, password);
-		users.put(user.getUsername(), user);
-		return user;
-	}
-
-	private Session addSession(User user) {
-		Session session = new Session(user);
-		sessions.put(session.getID(), session);
-		return session;
 	}
 
 	@Activate
 	public void activate(ComponentContext context) throws IOException {
-		addUser(new Credentials("1", "1")); //$NON-NLS-1$ //$NON-NLS-2$
-
-		this.sessions = CacheBuilder.newBuilder().concurrencyLevel(4).expireAfterWrite(10, TimeUnit.MINUTES).build(new CacheLoader<String, Session>() {
-			@Override
-			public Session load(String key) throws Exception {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
 	}
 
 	@Deactivate
@@ -156,29 +86,6 @@ public class UserStorageLoginComponent implements IUserStorageLoginService, IUse
 	@Modified
 	public void modify() {
 		System.out.println("Login service modified"); //$NON-NLS-1$
-	}
-
-	@Override
-	public boolean isAuth(String csrfToken, String sessionID) {
-		return getSession(csrfToken, sessionID) != null ? true : false;
-	}
-
-	@Override
-	public String getUserLogin(String sessionID) {
-		Session session = sessions.getIfPresent(sessionID);
-		return session == null ? null : session.getUser().getUsername();
-	}
-
-	private Session getSession(String csrfToken, String sessionID) {
-		if (csrfToken != null && sessionID != null) {
-			Session session = sessions.getIfPresent(sessionID);
-
-			if (session != null && session.getCSRFToken().equals(csrfToken)) {
-				return session;
-			}
-		}
-
-		return null;
 	}
 
 	private Map<String, Object> parseJson(InputStream json) {
@@ -211,6 +118,26 @@ public class UserStorageLoginComponent implements IUserStorageLoginService, IUse
 		};
 
 		return stream;
+	}
+
+	@Override
+	public boolean isAuth(String csrfToken, String keycloackToken) {
+		try {
+			Credentials credentials = keycloakRestRequester.validateToken(keycloackToken);
+			return true;
+		} catch(KeycloakAuthenticationException e) {
+			return false;
+		}
+	}
+
+	@Override
+	public String getUserLogin(String keycloackToken) {
+		try {
+			Credentials credentials = keycloakRestRequester.validateToken(keycloackToken);
+				return credentials.getUserId();
+			} catch(KeycloakAuthenticationException e) {
+				return null;
+			}
 	}
 
 }

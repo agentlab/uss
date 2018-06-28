@@ -15,5 +15,4 @@ public interface IUserStorageLoginService {
 
     public Response postLogin(InputStream creditianals);
 
-    public Response postCreate(InputStream creditianals);
 }

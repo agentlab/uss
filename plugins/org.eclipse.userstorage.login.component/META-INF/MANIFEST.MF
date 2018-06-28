@@ -5,7 +5,9 @@ Bundle-SymbolicName: org.eclipse.login.userstorage.component
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Import-Package: com.google.common.cache;version="15.0.0",
+Import-Package: com._1c.cloud.edt.workspace.setup.security.keycloak,
+ com._1c.cloud.edt.workspace.setup.security.keycloak.transfer,
+ com.google.common.cache;version="15.0.0",
  com.google.common.collect;version="15.0.0",
  javax.servlet.http;version="3.1.0",
  javax.ws.rs;version="2.0.1",
