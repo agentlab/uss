@@ -22,6 +22,7 @@
 		<module>org.eclipse.userstorage.service.host</module>
 		<module>org.eclipse.userstorage.service.model</module>
 		<module>org.eclipse.userstorage.session.service</module>
+		<module>org.eclipse.userstorage.ui</module>
 	</modules>
 
 	<build>
